@@ -42,10 +42,10 @@ export default function ParticleName({
     const canvas = canvasRef.current;
     if (!wrap || !h1 || !canvas) return;
 
-    // Desktop-only enhancement; touch and reduced-motion keep the plain <h1>.
-    const enabled =
-      window.matchMedia("(hover: hover) and (pointer: fine)").matches &&
-      !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    // Runs on desktop and touch; reduced-motion keeps the plain <h1>.
+    const enabled = !window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
     if (!enabled) return;
 
     const ctx = canvas.getContext("2d");
@@ -243,7 +243,25 @@ export default function ParticleName({
         burst();
       }
     };
-    const onDown = (e: PointerEvent) => tryBurst(e.clientX, e.clientY);
+    // mouse/pen explode on press; touch explodes on a tap, not a scroll
+    let touchStart: { x: number; y: number; t: number } | null = null;
+    const onDown = (e: PointerEvent) => {
+      if (e.pointerType === "touch") {
+        touchStart = { x: e.clientX, y: e.clientY, t: performance.now() };
+      } else {
+        tryBurst(e.clientX, e.clientY);
+      }
+    };
+    const onUp = (e: PointerEvent) => {
+      if (e.pointerType !== "touch" || !touchStart) return;
+      const moved =
+        Math.abs(e.clientX - touchStart.x) +
+        Math.abs(e.clientY - touchStart.y);
+      if (moved < 14 && performance.now() - touchStart.t < 500) {
+        tryBurst(e.clientX, e.clientY);
+      }
+      touchStart = null;
+    };
     const onClick = (e: MouseEvent) => tryBurst(e.clientX, e.clientY);
 
     const onResize = () => {
@@ -260,6 +278,7 @@ export default function ParticleName({
     h1.style.opacity = "0";
     window.addEventListener("pointermove", onMove, { passive: true });
     window.addEventListener("pointerdown", onDown, { passive: true });
+    window.addEventListener("pointerup", onUp, { passive: true });
     window.addEventListener("click", onClick);
     window.addEventListener("resize", onResize);
     raf = requestAnimationFrame(tick);
@@ -277,6 +296,7 @@ export default function ParticleName({
     return () => {
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("pointerdown", onDown);
+      window.removeEventListener("pointerup", onUp);
       window.removeEventListener("click", onClick);
       window.removeEventListener("resize", onResize);
       themeObserver.disconnect();

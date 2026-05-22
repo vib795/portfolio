@@ -16,6 +16,7 @@ export const profile = {
     "I'm a lead engineer with 11+ years building production systems in financial services — now leading the design and delivery of GenAI and agentic AI end to end.",
 };
 
+
 export const socials = [
   { label: "GitHub", url: "https://github.com/vib795" },
   {
