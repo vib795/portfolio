@@ -13,7 +13,7 @@ export const profile = {
   availability: "Open to new opportunities",
   email: "hello@singhcodes.dev",
   intro:
-    "I'm a senior software engineer with 11+ years building production systems in financial services — now designing and shipping GenAI and agentic AI features end to end.",
+    "I'm a lead engineer with 11+ years building production systems in financial services — now leading the design and delivery of GenAI and agentic AI end to end.",
 };
 
 export const socials = [
