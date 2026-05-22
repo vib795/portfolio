@@ -138,7 +138,7 @@ export const projects: Project[] = [
     blurb:
       "A web app bundling 16+ everyday developer tools — JSON validators and schema generators, regex helpers, string and time utilities, encoding and fake-data tools, and Markdown ⇄ PDF conversion. A FastAPI backend exposes each tool as a typed JSON endpoint; a Vite + React frontend ships alongside it in a single Docker image.",
     stack: ["FastAPI", "React", "Docker"],
-    link: "https://wrench.tools",
+    link: "https://everyday-developer-tools.onrender.com",
   },
   {
     name: "Feast Factor",
