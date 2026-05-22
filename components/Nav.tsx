@@ -4,6 +4,7 @@ import { useEffect, useState, type ComponentType } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { navLinks, profile, socials } from "@/lib/content";
 import { ArrowRight, GitHubIcon, LinkedInIcon, Logo, MediumIcon } from "./icons";
+import ThemeToggle from "./ThemeToggle";
 
 const socialIcons: Record<string, ComponentType<{ className?: string }>> = {
   GitHub: GitHubIcon,
@@ -83,9 +84,10 @@ export default function Nav() {
           </div>
 
           <div className="flex items-center gap-2">
+            <ThemeToggle />
             <a
               href="#contact"
-              className="group hidden items-center gap-2 rounded-full bg-ink py-2.5 pl-5 pr-4 font-mono text-[0.78rem] uppercase tracking-[0.14em] text-cream transition-colors hover:bg-accent md:inline-flex"
+              className="group hidden items-center gap-2 rounded-full bg-ink py-2.5 pl-5 pr-4 font-mono text-[0.78rem] uppercase tracking-[0.14em] text-paper transition-colors hover:bg-accent md:inline-flex"
             >
               Contact
               <ArrowRight className="size-3.5 transition-transform duration-300 group-hover:translate-x-0.5" />
@@ -143,7 +145,7 @@ export default function Nav() {
                 <a
                   href="#contact"
                   onClick={() => setMenuOpen(false)}
-                  className="flex items-center justify-between rounded-full bg-ink px-6 py-4 font-mono text-sm uppercase tracking-[0.14em] text-cream"
+                  className="flex items-center justify-between rounded-full bg-ink px-6 py-4 font-mono text-sm uppercase tracking-[0.14em] text-paper"
                 >
                   Get in touch
                   <ArrowRight className="size-4" />

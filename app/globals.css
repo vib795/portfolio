@@ -1,9 +1,12 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* ════════════════════════════════════════════════════════════════
    DESIGN TOKENS — warm "localhost" paper aesthetic
    ════════════════════════════════════════════════════════════════ */
 :root {
+  color-scheme: light;
   --paper: #f2efe7;
   --paper-dim: #ece8dc;
   --surface: #fbfaf4;
@@ -20,6 +23,20 @@
   --dark-line: #3a342b;
   --cream: #f2efe7;
   --cream-soft: #9c9385;
+}
+
+/* dark mode — warm espresso tones, in the spirit of the footer */
+.dark {
+  color-scheme: dark;
+  --paper: #15120e;
+  --paper-dim: #1c1712;
+  --surface: #241e17;
+  --surface-sunken: #221c15;
+  --ink: #f1ece1;
+  --ink-soft: #b3a896;
+  --ink-faint: #8a8070;
+  --line: #332c22;
+  --line-strong: #4c4233;
 }
 
 @theme inline {
@@ -47,6 +64,7 @@
    BASE
    ════════════════════════════════════════════════════════════════ */
 html {
+  background-color: var(--paper);
   scroll-behavior: smooth;
   scroll-padding-top: 5.5rem;
   -webkit-text-size-adjust: 100%;
@@ -101,6 +119,12 @@ body {
   opacity: 0.05;
   mix-blend-mode: multiply;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* dark mode keeps a faint grain — multiply is invisible on dark */
+.dark .grain {
+  mix-blend-mode: screen;
+  opacity: 0.04;
 }
 
 /* blueprint grid */

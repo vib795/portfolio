@@ -22,7 +22,6 @@ const RADIUS = 130; // cursor influence radius
 const JITTER = 4.6; // random grain agitation near the cursor
 const PUSH = 1.5; // gentle displacement away from the cursor
 const CURSOR_DECAY = 0.88; // cursor influence fades when the mouse stops
-const INK32 = 0xff13161b; // #1b1613 as little-endian RGBA
 
 export default function ParticleName({
   first,
@@ -66,6 +65,18 @@ export default function ParticleName({
     let img: ImageData | null = null;
     let buf32: Uint32Array | null = null;
     let resizeTimer = 0;
+
+    // particle ink follows the active theme's --ink token
+    const readInk = () => {
+      const hex = getComputedStyle(document.documentElement)
+        .getPropertyValue("--ink")
+        .trim();
+      const r = parseInt(hex.slice(1, 3), 16);
+      const g = parseInt(hex.slice(3, 5), 16);
+      const b = parseInt(hex.slice(5, 7), 16);
+      return ((0xff << 24) | (b << 16) | (g << 8) | r) >>> 0;
+    };
+    let ink32 = readInk();
 
     const layout = () => {
       const r = wrap.getBoundingClientRect();
@@ -131,7 +142,7 @@ export default function ParticleName({
           const row = yy * W;
           for (let ox = 0; ox < block; ox++) {
             const xx = bx + ox;
-            if (xx >= 0 && xx < W) buf32[row + xx] = INK32;
+            if (xx >= 0 && xx < W) buf32[row + xx] = ink32;
           }
         }
       }
@@ -253,11 +264,22 @@ export default function ParticleName({
     window.addEventListener("resize", onResize);
     raf = requestAnimationFrame(tick);
 
+    // repaint with the new ink color when the theme is toggled
+    const themeObserver = new MutationObserver(() => {
+      ink32 = readInk();
+      render();
+    });
+    themeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+
     return () => {
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("pointerdown", onDown);
       window.removeEventListener("click", onClick);
       window.removeEventListener("resize", onResize);
+      themeObserver.disconnect();
       clearTimeout(resizeTimer);
       cancelAnimationFrame(raf);
       h1.style.opacity = "1";

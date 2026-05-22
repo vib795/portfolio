@@ -58,7 +58,7 @@ export default function Hero() {
             <div className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-3">
               <a
                 href="#work"
-                className="group inline-flex items-center gap-2.5 rounded-full bg-ink px-6 py-3.5 font-mono text-xs uppercase tracking-[0.16em] text-cream transition-colors hover:bg-accent"
+                className="group inline-flex items-center gap-2.5 rounded-full bg-ink px-6 py-3.5 font-mono text-xs uppercase tracking-[0.16em] text-paper transition-colors hover:bg-accent"
               >
                 Selected work
                 <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" />
