@@ -138,7 +138,16 @@ export const projects: Project[] = [
     blurb:
       "A web app bundling 16+ everyday developer tools — JSON validators and schema generators, regex helpers, string and time utilities, encoding and fake-data tools, and Markdown ⇄ PDF conversion. A FastAPI backend exposes each tool as a typed JSON endpoint; a Vite + React frontend ships alongside it in a single Docker image.",
     stack: ["FastAPI", "React", "Docker"],
-    link: "https://github.com/vib795/everyday-developer-tools",
+    link: "https://wrench.tools",
+  },
+  {
+    name: "Feast Factor",
+    year: "2024",
+    category: "Web App",
+    blurb:
+      "A macro calculator for weight-loss and fitness goals — it turns age, weight, height, and activity level into daily protein, carb, fat, and calorie targets to plan meals against. A responsive Next.js app deployed on Vercel.",
+    stack: ["Next.js", "React", "Vercel"],
+    link: "https://feastfactor.xyz",
   },
   {
     name: "copilot-anatomy",
