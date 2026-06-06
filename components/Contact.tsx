@@ -42,6 +42,18 @@ export default function Contact() {
           </a>
         </Reveal>
 
+        <Reveal delay={0.18} className="mt-6">
+          <a
+            href={contact.calendly}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group inline-flex items-center gap-2 font-mono text-sm uppercase tracking-[0.12em] text-cream-soft transition-colors hover:text-cream"
+          >
+            <span className="link-line">Or book a 30-min call</span>
+            <ArrowUpRight className="size-3.5 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+          </a>
+        </Reveal>
+
         <Reveal
           delay={0.2}
           className="mt-14 flex flex-wrap gap-x-8 gap-y-3 border-t border-dark-line pt-7 lg:mt-20"

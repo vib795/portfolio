@@ -267,4 +267,5 @@ export const experience: Role[] = [
 export const contact = {
   heading: { lead: "Let's build", tail: "something good." },
   body: "Have a project, a role, or an idea worth chasing? My inbox is open — I read everything and reply to most.",
+  calendly: "https://calendly.com/connect-with-utkarsh-singh/30min",
 };
