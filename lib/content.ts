@@ -183,7 +183,7 @@ export const projects: Project[] = [
     blurb:
       "A reference implementation for configuring GitHub Copilot across a multi-model, polyglot team — every customisation primitive (instructions, prompts, skills, agents, chat modes) plus governance tooling. One script scaffolds the full .github/ structure into any repo, and an interactive browser visualisation maps how the pieces fit together.",
     stack: ["Shell", "GitHub Copilot", "HTML"],
-    link: "https://github.com/vib795/copilot-anatomy",
+    link: "https://vib795.github.io/copilot-anatomy/",
   },
   {
     name: "Copilot How To",
