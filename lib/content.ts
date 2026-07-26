@@ -211,7 +211,7 @@ export const experience: Role[] = [
   {
     role: "Lead Engineer, AI & Platform",
     company: "EY",
-    period: "Oct 2025 — Present",
+    period: "Aug 2025 — Present",
     summary:
       "Designing agentic systems that automate enterprise infrastructure and onboarding.",
     points: [
