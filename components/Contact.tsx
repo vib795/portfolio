@@ -12,7 +12,7 @@ export default function Contact() {
       <div className="absolute inset-0 -z-10 bg-grid-dark opacity-60 [mask-image:radial-gradient(ellipse_60%_60%_at_50%_0%,#000,transparent)]" />
       <div className="mx-auto max-w-[88rem] px-5 py-24 sm:px-8 sm:py-32 lg:px-12 lg:py-44">
         <Reveal>
-          <SectionTag index="04" label="Contact" tone="cream" />
+          <SectionTag index="05" label="Contact" tone="cream" />
         </Reveal>
 
         <Reveal delay={0.05} className="mt-9">

@@ -26,10 +26,13 @@ export const socials = [
   { label: "Medium", url: "https://medium.com/@connectwithutkarshsingh" },
 ];
 
+// Root-relative so these resolve from /blog and /blog/<slug> as well as the
+// homepage, where the browser still treats them as same-page anchors.
 export const navLinks = [
-  { label: "About", href: "#about" },
-  { label: "Work", href: "#work" },
-  { label: "Experience", href: "#experience" },
+  { label: "About", href: "/#about" },
+  { label: "Work", href: "/#work" },
+  { label: "Experience", href: "/#experience" },
+  { label: "Writing", href: "/blog" },
 ];
 
 export const marquee = [

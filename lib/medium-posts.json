@@ -1,0 +1,327 @@
+[
+  {
+    "slug": "llm-evals-the-complete-field-guide",
+    "title": "LLM evals: the complete field guide",
+    "date": "2026-07-26",
+    "excerpt": "Here’s a confession it took me years of writing software to even notice: I have almost never had to wonder whether my code’s output was correct. Something always told me. The compiler…",
+    "tags": [
+      "large-language-models",
+      "artificial-intelligence",
+      "machine-learning",
+      "generative-ai-tools"
+    ],
+    "readingMinutes": 23,
+    "url": "https://connectwithutkarshsingh.medium.com/llm-evals-the-complete-field-guide-c94f6156426d"
+  },
+  {
+    "slug": "i-built-a-second-brain-that-runs-on-my-iphone-and-the-cloud-does-almost",
+    "title": "I built a second brain that runs on my iPhone — and the cloud does almost nothing",
+    "date": "2026-05-31",
+    "excerpt": "I wanted a notes app I could talk to. Not a chatbot stapled to a text box. A real place where everything I capture during the day — a voice memo on a walk, a meeting, a journal entry, a…",
+    "tags": [
+      "generative-ai-tools",
+      "productivity",
+      "second-brain",
+      "ios"
+    ],
+    "readingMinutes": 7,
+    "url": "https://blog.stackademic.com/i-built-a-second-brain-that-runs-on-my-iphone-and-the-cloud-does-almost-nothing-d7c5009812be"
+  },
+  {
+    "slug": "nine-seconds-to-zero",
+    "title": "Nine Seconds to Zero",
+    "date": "2026-04-28",
+    "excerpt": "A credential mismatch in a staging environment is small, ordinary friction. You notice it, you fix the config, you move on. On Friday afternoon, the AI coding agent running at PocketOS, an…",
+    "tags": [
+      "claude-opus",
+      "dbdelete",
+      "ai-agent",
+      "incident"
+    ],
+    "readingMinutes": 5,
+    "url": "https://blog.stackademic.com/nine-seconds-to-zero-6e4f062d759b"
+  },
+  {
+    "slug": "most-developers-at-work-use-github-copilot",
+    "title": "Most developers at work use GitHub Copilot.",
+    "date": "2026-04-06",
+    "excerpt": "Most developers at work use GitHub Copilot. The best learning resources were built for something else. There’s a gap that nobody talks about, and I want to close it. At my company, we have…",
+    "tags": [
+      "co-pilot",
+      "github-copilot",
+      "ai",
+      "claude"
+    ],
+    "readingMinutes": 5,
+    "url": "https://blog.stackademic.com/most-developers-at-work-use-github-copilot-5aac3b23d817"
+  },
+  {
+    "slug": "from-a-raspberry-pi-travel-router-to-a-full-self-hosted-home-lab",
+    "title": "From a Raspberry Pi Travel Router to a Full Self-Hosted Home Lab",
+    "date": "2026-03-09",
+    "excerpt": "How I evolved a weekend project into a complete private media and privacy stack — with Go CLI tools, Plex, Tailscale, Pi-hole, and a purpose-built travel router About a year ago, I wrote…",
+    "tags": [
+      "plex",
+      "pihole",
+      "raspberry-pi",
+      "travel-router"
+    ],
+    "readingMinutes": 9,
+    "url": "https://blog.stackademic.com/from-a-raspberry-pi-travel-router-to-a-full-self-hosted-home-lab-da5a13e40188"
+  },
+  {
+    "slug": "shipping-two-go-clis-a-home-media-pipeline",
+    "title": "Shipping Two Go CLIs + a Home Media Pipeline",
+    "date": "2026-01-03",
+    "excerpt": "Two tools ( pull-vids + convert-vid), one Mac mini, and a surprisingly painful lesson: the code isn’t the hard part — shipping is. I didn’t start by trying to “build a home server.” I…",
+    "tags": [
+      "claude",
+      "golang",
+      "learning",
+      "command-line"
+    ],
+    "readingMinutes": 8,
+    "url": "https://blog.stackademic.com/shipping-two-go-clis-a-home-media-pipeline-4fceac431b3f"
+  },
+  {
+    "slug": "flaunt-your-code-celebrate-your-github-journey-year-round",
+    "title": "Flaunt Your Code: Celebrate Your GitHub Journey Year-Round",
+    "date": "2025-02-10",
+    "excerpt": "Every developer knows the thrill of seeing that colorful GitHub contribution chart at the end of the year — a visual mosaic of late-night coding, debugging marathons, and breakthrough…",
+    "tags": [
+      "vscode",
+      "git",
+      "automation",
+      "github"
+    ],
+    "readingMinutes": 4,
+    "url": "https://blog.stackademic.com/flaunt-your-code-celebrate-your-github-journey-year-round-344161db0b7d"
+  },
+  {
+    "slug": "building-a-next-js-macro-calculator-a-fun-on-time-adventure-to-weight-lo",
+    "title": "Building a Next.js Macro Calculator: A Fun, on Time Adventure to Weight Loss Goals",
+    "date": "2025-01-01",
+    "excerpt": "Ah, the dawn of a new year-scratch that, a new half-decade! As 2025 peeks over the horizon, many of us are already racking our brains to come up with innovative ways to actually keep this…",
+    "tags": [
+      "react",
+      "macro",
+      "nextjs",
+      "weight-loss"
+    ],
+    "readingMinutes": 5,
+    "url": "https://connectwithutkarshsingh.medium.com/building-a-next-js-macro-calculator-a-fun-on-time-adventure-to-weight-loss-goals-b7edebbedea3"
+  },
+  {
+    "slug": "simplicity-is-the-ultimate-sophistication",
+    "title": "Simplicity is the ultimate sophistication",
+    "date": "2024-11-26",
+    "excerpt": "Let me start by saying this: “I know this is not something new and I know you can do this using the very first Google search link that pops up. But what if you have to do something like…",
+    "tags": [
+      "pdf",
+      "python",
+      "docx",
+      "tools"
+    ],
+    "readingMinutes": 4,
+    "url": "https://connectwithutkarshsingh.medium.com/simplicity-is-the-ultimate-sophistication-2d73c650d0f9"
+  },
+  {
+    "slug": "advanced-guide-to-asyncio-threading-and-multiprocessing-in-python",
+    "title": "Advanced Guide to Asyncio, Threading, and Multiprocessing in Python",
+    "date": "2024-09-24",
+    "excerpt": "Explore the key differences and uses of Asyncio, Threading, and Multiprocessing in Python. Master these vital concepts for efficient coding.",
+    "tags": [],
+    "readingMinutes": 3,
+    "url": "https://blog.stackademic.com/advanced-guide-to-asyncio-threading-and-multiprocessing-in-python-c4dc50971d24"
+  },
+  {
+    "slug": "serverless-101-a-crash-course-in-building-scalable-resilient-application",
+    "title": "Serverless 101: A Crash Course in Building Scalable, Resilient Applications with AWS",
+    "date": "2024-08-23",
+    "excerpt": "In today’s fast-paced tech environment, building scalable, cost-effective, and reliable applications is a top priority. AWS Serverless architecture offers developers a way to achieve this…",
+    "tags": [
+      "aws",
+      "digital-transformation",
+      "serverless",
+      "innovation"
+    ],
+    "readingMinutes": 6,
+    "url": "https://connectwithutkarshsingh.medium.com/serverless-101-a-crash-course-in-building-scalable-resilient-applications-with-aws-9144c0a21b45"
+  },
+  {
+    "slug": "how-to-turn-your-raspberry-pi-into-a-secure-travel-router",
+    "title": "How to Turn Your Raspberry Pi into a Secure Travel Router",
+    "date": "2024-07-10",
+    "excerpt": "Traveling can be a lot of fun, but staying connected to the internet securely while on the road is crucial. Whether you’re staying at hotels, Airbnbs, or connecting at places like…",
+    "tags": [
+      "vpn",
+      "raspberry-pi",
+      "router",
+      "secure"
+    ],
+    "readingMinutes": 3,
+    "url": "https://connectwithutkarshsingh.medium.com/how-to-turn-your-raspberry-pi-into-a-secure-travel-router-138377eb7e02"
+  },
+  {
+    "slug": "how-uuid-generates-unique-ids-is-it-0-f-hexadecimal-only",
+    "title": "How UUID Generates Unique IDs: Is it 0-f Hexadecimal Only?",
+    "date": "2024-06-06",
+    "excerpt": "How UUID Generates Unique IDs: Is it 0-f Hexadecimal Only? Can It Run Out of Unique IDs for High Throughput Applications? Introduction In a recent meeting, a crucial question arose: “How…",
+    "tags": [],
+    "readingMinutes": 3,
+    "url": "https://connectwithutkarshsingh.medium.com/how-uuid-generates-unique-ids-is-it-0-f-hexadecimal-only-cc9407bd2305"
+  },
+  {
+    "slug": "unlocking-the-power-of-secure-shell-ssh-a-comprehensive-guide",
+    "title": "Unlocking the Power of Secure Shell (SSH): A Comprehensive Guide",
+    "date": "2024-05-31",
+    "excerpt": "Unlocking the Power of Secure Shell (SSH): A Comprehensive Guide Secure Shell (SSH) is an indispensable protocol for secure network communications, used extensively by system administrators…",
+    "tags": [],
+    "readingMinutes": 5,
+    "url": "https://connectwithutkarshsingh.medium.com/unlocking-the-power-of-secure-shell-ssh-a-comprehensive-guide-25a3051f4666"
+  },
+  {
+    "slug": "seven-techniques-to-master-the-art-of-living-a-guide-to-transforming-you",
+    "title": "Seven Techniques to Master the Art of Living: A Guide to Transforming Your Life",
+    "date": "2024-02-16",
+    "excerpt": "Explore 7 transformative Japanese practices for self-improvement, including Ikigai, Kaizen, and Kintsugi, to enhance productivity, mindfulness, and well-being.",
+    "tags": [],
+    "readingMinutes": 3,
+    "url": "https://connectwithutkarshsingh.medium.com/seven-techniques-to-master-the-art-of-living-a-guide-to-transforming-your-life-c9773d4f112b"
+  },
+  {
+    "slug": "advanced-testing-techniques-in-python-a-deep-dive-into-monkeypatching-mo",
+    "title": "Advanced Testing Techniques in Python: A Deep Dive into Monkeypatching, Mocking, and Pytest",
+    "date": "2024-01-29",
+    "excerpt": "Unlock advanced Python testing techniques with this guide on mocks, monkeypatching, and the Faker library. Elevate your coding skills for better test cases.",
+    "tags": [],
+    "readingMinutes": 4,
+    "url": "https://blog.stackademic.com/advanced-testing-techniques-in-python-a-deep-dive-into-monkeypatching-mocking-and-pytest-ebd9264a69eb"
+  },
+  {
+    "slug": "demystifying-git-hooks-a-comprehensive-guide-with-python-examples-for-de",
+    "title": "Demystifying Git Hooks: A Comprehensive Guide with Python Examples for Developers",
+    "date": "2023-12-22",
+    "excerpt": "Git, the ubiquitous version control system, empowers developers to collaborate seamlessly on projects. While its core functionalities are robust, Git provides an additional layer of…",
+    "tags": [],
+    "readingMinutes": 7,
+    "url": "https://blog.stackademic.com/demystifying-git-hooks-a-comprehensive-guide-with-python-examples-for-developers-43ca5466f150"
+  },
+  {
+    "slug": "mastering-git-amend-a-comprehensive-guide",
+    "title": "Mastering `git amend`: A Comprehensive Guide",
+    "date": "2023-12-21",
+    "excerpt": "Explore the essentials of 'git amend' in this comprehensive guide. Learn to refine commits and maintain clean project history effectively.",
+    "tags": [],
+    "readingMinutes": 3,
+    "url": "https://connectwithutkarshsingh.medium.com/mastering-git-amend-a-comprehensive-guide-95591e38ad42"
+  },
+  {
+    "slug": "the-lazy-genius-s-guide-to-faux-ductivity-mastering-the-art-of-looking-b",
+    "title": "The Lazy Genius’s Guide to Faux-ductivity: Mastering the Art of Looking Busy with Automation…",
+    "date": "2023-12-20",
+    "excerpt": "Discover the lighter side of automation with our witty guide on using Python scripts to effortlessly maintain productivity. Perfect for tech enthusiasts!",
+    "tags": [],
+    "readingMinutes": 3,
+    "url": "https://connectwithutkarshsingh.medium.com/the-lazy-geniuss-guide-to-faux-ductivity-mastering-the-art-of-looking-busy-with-automation-fd75b7c3824b"
+  },
+  {
+    "slug": "understanding-and-setting-up-cron-jobs-in-aws-for-batch-job-automation",
+    "title": "Understanding and Setting Up Cron Jobs in AWS for Batch Job Automation",
+    "date": "2023-12-19",
+    "excerpt": "Explore the essentials of setting up cron jobs in AWS for efficient batch job automation. Learn tips for optimizing cloud-based operations and scheduling.",
+    "tags": [],
+    "readingMinutes": 3,
+    "url": "https://connectwithutkarshsingh.medium.com/understanding-and-setting-up-cron-jobs-in-aws-for-batch-job-automation-d15cdf334596"
+  },
+  {
+    "slug": "securing-data-in-organizations-a-tale-of-two-applications",
+    "title": "Securing Data in Organizations: A Tale of Two Applications",
+    "date": "2023-12-13",
+    "excerpt": "Securing Data in Organizations: A Tale of Two Applications In the age of information, data security has become paramount for organizations of all sizes. With increasing concerns over data…",
+    "tags": [],
+    "readingMinutes": 3,
+    "url": "https://connectwithutkarshsingh.medium.com/securing-data-in-organizations-a-tale-of-two-applications-b6de53bf72c7"
+  },
+  {
+    "slug": "navigating-the-nuances-of-numeric-precision-a-deep-dive-into-python-floa",
+    "title": "Navigating the Nuances of Numeric Precision: A Deep Dive into Python Floats and Decimals",
+    "date": "2023-12-07",
+    "excerpt": "Python’s versatile nature as a programming language brings with it an array of numeric types, each tailored to specific use cases. Among these, the float and decimal.Decimal types stand out…",
+    "tags": [],
+    "readingMinutes": 3,
+    "url": "https://connectwithutkarshsingh.medium.com/navigating-the-nuances-of-numeric-precision-a-deep-dive-into-python-floats-and-decimals-8408b5849a89"
+  },
+  {
+    "slug": "python-decorators-decoded-a-comprehensive-guide-for-developers",
+    "title": "Python Decorators Decoded: A Comprehensive Guide for Developers",
+    "date": "2023-11-29",
+    "excerpt": "Dive into the world of Python decorators! From static methods to async coroutines, discover how decorators elevate your code. A comprehensive guide for developers.",
+    "tags": [],
+    "readingMinutes": 6,
+    "url": "https://connectwithutkarshsingh.medium.com/python-decorators-decoded-a-comprehensive-guide-for-developers-323bed76bc8a"
+  },
+  {
+    "slug": "the-pythonic-odyssey-crafting-epic-code-tales-in-the-enchanted-realm-of",
+    "title": "The Pythonic Odyssey: Crafting Epic Code Tales in the Enchanted Realm of Python",
+    "date": "2023-11-28",
+    "excerpt": "Embark on a Pythonic Odyssey with this comprehensive guide to crafting epic projects. Explore best practices in Python development, from clean syntax to secure deployment. Your journey to…",
+    "tags": [],
+    "readingMinutes": 4,
+    "url": "https://connectwithutkarshsingh.medium.com/the-pythonic-odyssey-crafting-epic-code-tales-in-the-enchanted-realm-of-python-15c9d598a6d6"
+  },
+  {
+    "slug": "coding-chronicles-unveiling-the-password-panacea",
+    "title": "Coding Chronicles: Unveiling the Password Panacea",
+    "date": "2023-11-28",
+    "excerpt": "Discover the heartwarming journey of creating a personalized password manager for a forgetful mother. Uncover the magic of coding and contribute to the open-source project on GitHub…",
+    "tags": [],
+    "readingMinutes": 2,
+    "url": "https://connectwithutkarshsingh.medium.com/coding-chronicles-unveiling-the-password-panacea-0986d1166c28"
+  },
+  {
+    "slug": "a-comprehensive-guide-to-contributing-to-open-source-projects",
+    "title": "A Comprehensive Guide to Contributing to Open Source Projects",
+    "date": "2023-11-28",
+    "excerpt": "Unlock the world of open source contributions with our step-by-step guide! Learn to choose projects, set up your environment, and find good-first-issues with GitHub Repository Finder. Dive…",
+    "tags": [],
+    "readingMinutes": 2,
+    "url": "https://connectwithutkarshsingh.medium.com/a-comprehensive-guide-to-contributing-to-open-source-projects-87de553bb12c"
+  },
+  {
+    "slug": "navigating-the-code-seas-a-thanksgiving-tale-of-conquering-technical-deb",
+    "title": "Navigating the Code Seas: A Thanksgiving Tale of Conquering Technical Debt",
+    "date": "2023-11-22",
+    "excerpt": "Embark on a coding adventure this Thanksgiving as Captain CodeMaster and his team navigate stormy seas, conquer legacy swamps, and tame the Dragon of Documentation Neglect. Learn valuable…",
+    "tags": [],
+    "readingMinutes": 2,
+    "url": "https://connectwithutkarshsingh.medium.com/navigating-the-code-seas-a-thanksgiving-tale-of-conquering-technical-debt-b8c04f960299"
+  },
+  {
+    "slug": "epic-wisdom-for-the-digital-warriors-unveiling-the-bhagwad-gita-s-timele",
+    "title": "“Epic Wisdom for the Digital Warriors: Unveiling the Bhagwad Gita’s Timeless Lessons in Software…",
+    "date": "2023-11-16",
+    "excerpt": "“Epic Wisdom for the Digital Warriors: Unveiling the Bhagwad Gita’s Timeless Lessons in Software Development” Introduction In the ever-evolving world of software development, where every…",
+    "tags": [],
+    "readingMinutes": 6,
+    "url": "https://connectwithutkarshsingh.medium.com/epic-wisdom-for-the-digital-warriors-unveiling-the-bhagwad-gitas-timeless-lessons-in-software-806af8a7919f"
+  },
+  {
+    "slug": "unraveling-the-magic-a-journey-through-the-makefile-mystique-in-python-p",
+    "title": "Unraveling the Magic: A Journey Through the Makefile Mystique in Python Projects",
+    "date": "2023-11-16",
+    "excerpt": "Unlock the secrets of Makefiles for Python development in this immersive guide. Harness automation, manage dependencies, and streamline workflows with this comprehensive tutorial. Dive into…",
+    "tags": [],
+    "readingMinutes": 5,
+    "url": "https://connectwithutkarshsingh.medium.com/unraveling-the-magic-a-journey-through-the-makefile-mystique-in-python-projects-a2da6cfbe16c"
+  },
+  {
+    "slug": "mastering-code-observability-with-datadog-a-comprehensive-journey-into-l",
+    "title": "Mastering Code Observability with Datadog: A Comprehensive Journey into Logging and Monitoring",
+    "date": "2023-11-16",
+    "excerpt": "Unlock the secrets of seamless code observability with Datadog. Dive into logging, monitoring, and analytics. Optimize performance and enhance security. Your guide to mastering the art of…",
+    "tags": [],
+    "readingMinutes": 4,
+    "url": "https://connectwithutkarshsingh.medium.com/mastering-code-observability-with-datadog-a-comprehensive-journey-into-logging-and-monitoring-c0caa5a8b98b"
+  }
+]

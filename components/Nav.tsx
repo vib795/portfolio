@@ -41,7 +41,7 @@ export default function Nav() {
       >
         <nav className="mx-auto flex h-[4.5rem] max-w-[88rem] items-center justify-between px-5 sm:px-8 lg:px-12">
           <a
-            href="#top"
+            href="/#top"
             onClick={() => setMenuOpen(false)}
             className="flex items-center gap-2.5"
             aria-label={`${profile.name} — back to top`}
@@ -86,7 +86,7 @@ export default function Nav() {
           <div className="flex items-center gap-2">
             <ThemeToggle />
             <a
-              href="#contact"
+              href="/#contact"
               className="group hidden items-center gap-2 rounded-full bg-ink py-2.5 pl-5 pr-4 font-mono text-[0.78rem] uppercase tracking-[0.14em] text-paper transition-colors hover:bg-accent md:inline-flex"
             >
               Contact
@@ -143,7 +143,7 @@ export default function Nav() {
               </nav>
               <div className="flex flex-col gap-5">
                 <a
-                  href="#contact"
+                  href="/#contact"
                   onClick={() => setMenuOpen(false)}
                   className="flex items-center justify-between rounded-full bg-ink px-6 py-4 font-mono text-sm uppercase tracking-[0.14em] text-paper"
                 >

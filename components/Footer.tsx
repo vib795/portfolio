@@ -8,7 +8,7 @@ export default function Footer() {
       <div className="mx-auto max-w-[88rem] border-t border-dark-line px-5 py-12 sm:px-8 lg:px-12">
         <div className="flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between">
           <div className="max-w-xs">
-            <a href="#top" className="inline-flex items-center gap-2.5">
+            <a href="/#top" className="inline-flex items-center gap-2.5">
               <Logo className="size-8" tone="cream" />
               <span className="font-mono text-sm font-medium">
                 {profile.first.toLowerCase()}
@@ -36,7 +36,7 @@ export default function Footer() {
                 </a>
               ))}
               <a
-                href="#contact"
+                href="/#contact"
                 className="link-line w-fit text-sm text-cream-soft transition-colors hover:text-cream"
               >
                 Contact

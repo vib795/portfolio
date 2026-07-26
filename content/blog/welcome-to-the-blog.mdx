@@ -1,0 +1,76 @@
+---
+title: "Writing here now, too"
+date: "2026-07-25"
+excerpt: "A short note on why some posts live on singhcodes.dev and some stay on Medium — and a reference for everything this editor supports."
+tags: ["meta", "writing"]
+draft: true
+---
+
+This post is a template. It is set to `draft: true`, so it shows up while you
+run `npm run dev` and never appears on the live site. Copy it, rename it, flip
+the flag, and it publishes.
+
+Everything below is a reference for what the renderer supports.
+
+## Headings and text
+
+Headings from `##` down to `####` are styled. Regular prose supports **bold**,
+*italic*, `inline code`, and [links](https://singhcodes.dev) that underline on
+hover.
+
+> Blockquotes get an accent rule on the left. Good for pulling out the one
+> sentence you want someone to remember.
+
+## Code
+
+Fenced blocks are syntax-highlighted with Shiki, and the theme follows the
+site's light/dark toggle automatically.
+
+```python
+async def summarize(chunks: list[str]) -> str:
+    """Fan out, then reduce. The model never sees the whole corpus at once."""
+    partials = await asyncio.gather(*(model.summarize(c) for c in chunks))
+    return await model.summarize("\n\n".join(partials))
+```
+
+```bash
+npm run sync:medium   # refresh the Medium snapshot
+git add -A && git commit -m "post: new essay" && git push
+```
+
+## Lists
+
+1. Write the file in `content/blog/`.
+2. Fill in the frontmatter.
+3. Push.
+
+- Bullets work
+- So do nested ones
+  - like this
+- And task lists:
+
+- [x] Pull Medium posts
+- [ ] Write something new
+
+## Tables
+
+| Frontmatter | Required | Notes                                   |
+| ----------- | -------- | --------------------------------------- |
+| `title`     | yes      | Shown on the card and as the `<h1>`      |
+| `date`      | yes      | `YYYY-MM-DD` — the build fails if wrong  |
+| `excerpt`   | yes      | Card copy and the meta description       |
+| `tags`      | no       | Rendered as chips                        |
+| `draft`     | no       | `true` hides it from production          |
+
+## Images
+
+Drop images in `public/blog/` and reference them from the site root:
+
+```md
+![Alt text that actually describes the image](/blog/architecture.png)
+```
+
+---
+
+That's the whole surface area. The file you are reading is
+`content/blog/welcome-to-the-blog.mdx` — start there.
