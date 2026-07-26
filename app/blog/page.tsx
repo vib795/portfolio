@@ -6,6 +6,7 @@ import Reveal from "@/components/Reveal";
 import SectionTag from "@/components/SectionTag";
 import { getAllPosts } from "@/lib/blog";
 import { profile } from "@/lib/content";
+import { blogSchema, jsonLd } from "@/lib/schema";
 
 const DESCRIPTION =
   "Essays and field notes on AI systems, agents, backend engineering, and the things I build on the side.";
@@ -30,6 +31,10 @@ export default function BlogIndex() {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLd(blogSchema()) }}
+      />
       <Nav />
       <main id="top">
         <section className="border-b border-line">

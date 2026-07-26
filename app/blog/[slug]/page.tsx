@@ -19,6 +19,7 @@ import {
   type Post,
 } from "@/lib/blog";
 import { profile, socials } from "@/lib/content";
+import { blogPostingSchema, jsonLd } from "@/lib/schema";
 
 // Every post — on-site or Medium — is known at build time, so anything
 // else is a real 404.
@@ -193,9 +194,16 @@ export default async function BlogPost({
   const site = getSitePost(slug);
   if (site) {
     return (
-      <PostShell>
-        <SiteArticle post={site.post} body={site.body} />
-      </PostShell>
+      <>
+        {/* Only posts hosted here get BlogPosting markup — see lib/schema.ts. */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: jsonLd(blogPostingSchema(site.post)) }}
+        />
+        <PostShell>
+          <SiteArticle post={site.post} body={site.body} />
+        </PostShell>
+      </>
     );
   }
 
