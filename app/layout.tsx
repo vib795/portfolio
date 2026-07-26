@@ -30,6 +30,13 @@ export const metadata: Metadata = {
     url: "https://singhcodes.dev",
     type: "website",
   },
+  // The generated card (app/opengraph-image.tsx) is 1200×630; without this X
+  // renders it as a small square thumbnail instead of a full-width card.
+  twitter: {
+    card: "summary_large_image",
+    title: `${profile.name} — ${profile.role}`,
+    description: profile.intro,
+  },
 };
 
 export const viewport: Viewport = {

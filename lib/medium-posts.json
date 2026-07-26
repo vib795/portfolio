@@ -10,8 +10,8 @@
       "machine-learning",
       "generative-ai-tools"
     ],
-    "readingMinutes": 23,
-    "url": "https://connectwithutkarshsingh.medium.com/llm-evals-the-complete-field-guide-c94f6156426d"
+    "readingMinutes": 24,
+    "url": "https://blog.stackademic.com/llm-evals-the-complete-field-guide-c94f6156426d"
   },
   {
     "slug": "i-built-a-second-brain-that-runs-on-my-iphone-and-the-cloud-does-almost",
@@ -262,13 +262,13 @@
     "url": "https://connectwithutkarshsingh.medium.com/python-decorators-decoded-a-comprehensive-guide-for-developers-323bed76bc8a"
   },
   {
-    "slug": "the-pythonic-odyssey-crafting-epic-code-tales-in-the-enchanted-realm-of",
-    "title": "The Pythonic Odyssey: Crafting Epic Code Tales in the Enchanted Realm of Python",
+    "slug": "a-comprehensive-guide-to-contributing-to-open-source-projects",
+    "title": "A Comprehensive Guide to Contributing to Open Source Projects",
     "date": "2023-11-28",
-    "excerpt": "Embark on a Pythonic Odyssey with this comprehensive guide to crafting epic projects. Explore best practices in Python development, from clean syntax to secure deployment. Your journey to…",
+    "excerpt": "Unlock the world of open source contributions with our step-by-step guide! Learn to choose projects, set up your environment, and find good-first-issues with GitHub Repository Finder. Dive…",
     "tags": [],
-    "readingMinutes": 4,
-    "url": "https://connectwithutkarshsingh.medium.com/the-pythonic-odyssey-crafting-epic-code-tales-in-the-enchanted-realm-of-python-15c9d598a6d6"
+    "readingMinutes": 2,
+    "url": "https://connectwithutkarshsingh.medium.com/a-comprehensive-guide-to-contributing-to-open-source-projects-87de553bb12c"
   },
   {
     "slug": "coding-chronicles-unveiling-the-password-panacea",
@@ -280,13 +280,13 @@
     "url": "https://connectwithutkarshsingh.medium.com/coding-chronicles-unveiling-the-password-panacea-0986d1166c28"
   },
   {
-    "slug": "a-comprehensive-guide-to-contributing-to-open-source-projects",
-    "title": "A Comprehensive Guide to Contributing to Open Source Projects",
+    "slug": "the-pythonic-odyssey-crafting-epic-code-tales-in-the-enchanted-realm-of",
+    "title": "The Pythonic Odyssey: Crafting Epic Code Tales in the Enchanted Realm of Python",
     "date": "2023-11-28",
-    "excerpt": "Unlock the world of open source contributions with our step-by-step guide! Learn to choose projects, set up your environment, and find good-first-issues with GitHub Repository Finder. Dive…",
+    "excerpt": "Embark on a Pythonic Odyssey with this comprehensive guide to crafting epic projects. Explore best practices in Python development, from clean syntax to secure deployment. Your journey to…",
     "tags": [],
-    "readingMinutes": 2,
-    "url": "https://connectwithutkarshsingh.medium.com/a-comprehensive-guide-to-contributing-to-open-source-projects-87de553bb12c"
+    "readingMinutes": 4,
+    "url": "https://connectwithutkarshsingh.medium.com/the-pythonic-odyssey-crafting-epic-code-tales-in-the-enchanted-realm-of-python-15c9d598a6d6"
   },
   {
     "slug": "navigating-the-code-seas-a-thanksgiving-tale-of-conquering-technical-deb",
@@ -307,15 +307,6 @@
     "url": "https://connectwithutkarshsingh.medium.com/epic-wisdom-for-the-digital-warriors-unveiling-the-bhagwad-gitas-timeless-lessons-in-software-806af8a7919f"
   },
   {
-    "slug": "unraveling-the-magic-a-journey-through-the-makefile-mystique-in-python-p",
-    "title": "Unraveling the Magic: A Journey Through the Makefile Mystique in Python Projects",
-    "date": "2023-11-16",
-    "excerpt": "Unlock the secrets of Makefiles for Python development in this immersive guide. Harness automation, manage dependencies, and streamline workflows with this comprehensive tutorial. Dive into…",
-    "tags": [],
-    "readingMinutes": 5,
-    "url": "https://connectwithutkarshsingh.medium.com/unraveling-the-magic-a-journey-through-the-makefile-mystique-in-python-projects-a2da6cfbe16c"
-  },
-  {
     "slug": "mastering-code-observability-with-datadog-a-comprehensive-journey-into-l",
     "title": "Mastering Code Observability with Datadog: A Comprehensive Journey into Logging and Monitoring",
     "date": "2023-11-16",
@@ -323,5 +314,14 @@
     "tags": [],
     "readingMinutes": 4,
     "url": "https://connectwithutkarshsingh.medium.com/mastering-code-observability-with-datadog-a-comprehensive-journey-into-logging-and-monitoring-c0caa5a8b98b"
+  },
+  {
+    "slug": "unraveling-the-magic-a-journey-through-the-makefile-mystique-in-python-p",
+    "title": "Unraveling the Magic: A Journey Through the Makefile Mystique in Python Projects",
+    "date": "2023-11-16",
+    "excerpt": "Unlock the secrets of Makefiles for Python development in this immersive guide. Harness automation, manage dependencies, and streamline workflows with this comprehensive tutorial. Dive into…",
+    "tags": [],
+    "readingMinutes": 5,
+    "url": "https://connectwithutkarshsingh.medium.com/unraveling-the-magic-a-journey-through-the-makefile-mystique-in-python-projects-a2da6cfbe16c"
   }
 ]

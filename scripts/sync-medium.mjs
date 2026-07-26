@@ -10,7 +10,7 @@
 //      npm run sync:medium
 // ════════════════════════════════════════════════════════════════════
 
-import { writeFile, readFile } from "node:fs/promises";
+import { writeFile, readFile, mkdir } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { XMLParser } from "fast-xml-parser";
@@ -20,9 +20,13 @@ const FEED_URL = `https://medium.com/feed/${HANDLE}`;
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const SNAPSHOT = path.join(root, "lib", "medium-posts.json");
+const ARCHIVE_DIR = path.join(root, "content", "medium-archive");
 
 const WORDS_PER_MINUTE = 220;
 const EXCERPT_MAX = 190;
+
+/** Below this, <content:encoded> is a paywall teaser rather than a real post. */
+const MIN_ARCHIVE_BYTES = 1500;
 
 /** Decode the handful of entities Medium actually emits, then drop all markup. */
 function htmlToText(html) {
@@ -64,6 +68,23 @@ function cleanUrl(link) {
   } catch {
     return String(link ?? "").trim();
   }
+}
+
+/**
+ * Identity for the merge.
+ *
+ * A Medium URL ends in the story's 12-hex ID, and that ID survives the story
+ * being accepted into a publication — at which point the hostname changes
+ * from the personal subdomain to e.g. blog.stackademic.com. Keying on the
+ * full URL treats that as a brand new post and files the same story twice,
+ * which is exactly what happened to "LLM evals: the complete field guide".
+ *
+ * Falls back to the whole URL for anything without an ID, so a hand-added
+ * entry still merges predictably.
+ */
+function postKey(url) {
+  const match = /-([0-9a-f]{12})$/i.exec(String(url ?? ""));
+  return match ? match[1].toLowerCase() : String(url ?? "");
 }
 
 function toSlug(title) {
@@ -152,7 +173,8 @@ function parseItems(xml) {
     const url = cleanUrl(item.link);
     const title = htmlToText(item.title);
     const date = toIsoDate(item.pubDate);
-    const bodyText = htmlToText(item["content:encoded"] ?? item.description);
+    const bodyHtml = String(item["content:encoded"] ?? "");
+    const bodyText = htmlToText(bodyHtml || item.description);
 
     if (!url || !title || !date) {
       console.warn(`  ! skipped item with missing title/link/date: ${title || url || "(empty)"}`);
@@ -163,43 +185,84 @@ function parseItems(xml) {
 
     return [
       {
-        slug: toSlug(title),
-        title,
-        date,
-        excerpt: toExcerpt(bodyText),
-        tags: asArray(item.category).map(htmlToText).filter(Boolean).slice(0, 4),
-        readingMinutes: Math.max(1, Math.round(words / WORDS_PER_MINUTE)),
-        url,
+        post: {
+          slug: toSlug(title),
+          title,
+          date,
+          excerpt: toExcerpt(bodyText),
+          tags: asArray(item.category).map(htmlToText).filter(Boolean).slice(0, 4),
+          readingMinutes: Math.max(1, Math.round(words / WORDS_PER_MINUTE)),
+          url,
+        },
+        bodyHtml,
       },
     ];
   });
 }
 
+/**
+ * Medium's RSS carries the full post body in <content:encoded> — the same
+ * value the excerpt is sliced from, otherwise discarded. Keeping a copy costs
+ * nothing and means the writing survives independently of Medium.
+ *
+ * Nothing here is rendered on the site; it is insurance, not content. Only
+ * the ~10 posts currently in the feed can be captured, so this protects
+ * everything published from now on rather than backfilling the archive.
+ */
+async function archiveBodies(entries) {
+  await mkdir(ARCHIVE_DIR, { recursive: true });
+
+  let written = 0;
+  let skipped = 0;
+
+  for (const { post, bodyHtml } of entries) {
+    if (bodyHtml.length < MIN_ARCHIVE_BYTES) {
+      console.warn(
+        `  ! body came through truncated (${bodyHtml.length}B) — not archived: ${post.title}`,
+      );
+      skipped += 1;
+      continue;
+    }
+
+    await writeFile(path.join(ARCHIVE_DIR, `${post.slug}.html`), `${bodyHtml}\n`, "utf8");
+    written += 1;
+  }
+
+  return { written, skipped };
+}
+
 async function main() {
   console.log(`→ fetching ${FEED_URL}`);
-  const items = parseItems(await fetchFeed());
+  const entries = parseItems(await fetchFeed());
+  const items = entries.map((entry) => entry.post);
   console.log(`  feed returned ${items.length} post(s)`);
 
   const existing = await readSnapshot();
-  const byUrl = new Map(existing.map((post) => [post.url, post]));
+  const byId = new Map(existing.map((post) => [postKey(post.url), post]));
 
   let added = 0;
   let updated = 0;
+  let moved = 0;
 
   for (const item of items) {
-    const prior = byUrl.get(item.url);
+    const key = postKey(item.url);
+    const prior = byId.get(key);
+
     if (!prior) {
       added += 1;
     } else if (JSON.stringify(prior) !== JSON.stringify(item)) {
+      // The feed is authoritative about where a story currently lives, so a
+      // publication move overwrites the older personal-domain URL.
+      if (prior.url !== item.url) moved += 1;
       updated += 1;
     }
-    byUrl.set(item.url, item);
+    byId.set(key, item);
   }
 
-  const feedUrls = new Set(items.map((i) => i.url));
-  const kept = existing.filter((post) => !feedUrls.has(post.url)).length;
+  const feedIds = new Set(items.map((i) => postKey(i.url)));
+  const kept = existing.filter((post) => !feedIds.has(postKey(post.url))).length;
 
-  const merged = [...byUrl.values()].sort(
+  const merged = [...byId.values()].sort(
     (a, b) => b.date.localeCompare(a.date) || a.title.localeCompare(b.title),
   );
 
@@ -208,6 +271,16 @@ async function main() {
   console.log(
     `✓ lib/medium-posts.json — ${merged.length} total (${added} added, ${updated} updated, ${kept} kept off-feed)`,
   );
+  if (moved) {
+    console.log(`  ${moved} post(s) moved to a publication URL — links updated.`);
+  }
+
+  const archive = await archiveBodies(entries);
+  console.log(
+    `✓ content/medium-archive/ — ${archive.written} bodies archived` +
+      (archive.skipped ? `, ${archive.skipped} truncated and skipped` : ""),
+  );
+
   if (added || updated) console.log("  commit the JSON to publish the change.");
 }
 

@@ -46,8 +46,8 @@ export default function BlogIndex() {
             <Reveal delay={0.1} className="mt-7">
               <p className="max-w-prose leading-relaxed text-ink-soft">
                 {posts.length} posts on AI systems, agents, backend engineering,
-                and side projects. Some live here, some on Medium — the Medium
-                ones open in a new tab.
+                and side projects. Most are published on Medium — each one has a
+                page here that links straight through.
               </p>
             </Reveal>
           </div>

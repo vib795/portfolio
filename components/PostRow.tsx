@@ -1,6 +1,7 @@
+import Link from "next/link";
 import type { Post } from "@/lib/blog";
 import { formatPostDate } from "@/lib/blog";
-import { ArrowRight, ArrowUpRight, MediumIcon } from "./icons";
+import { ArrowRight, MediumIcon } from "./icons";
 
 function SourceBadge({ post }: { post: Post }) {
   if (post.source === "medium") {
@@ -21,17 +22,13 @@ function SourceBadge({ post }: { post: Post }) {
 
 export default function PostRow({ post, index }: { post: Post; index: number }) {
   const num = String(index + 1).padStart(2, "0");
-  const Arrow = post.external ? ArrowUpRight : ArrowRight;
-
-  const external = post.external
-    ? { target: "_blank" as const, rel: "noopener noreferrer" }
-    : {};
 
   return (
     <article>
-      <a
+      {/* Every row is internal now — Medium posts route through a landing
+          page on this domain, so a shared link carries our preview card. */}
+      <Link
         href={post.href}
-        {...external}
         className="group grid grid-cols-[1fr_auto] items-start gap-x-6 gap-y-4 border-t border-line py-9 md:grid-cols-[3.25rem_1fr_auto] md:gap-x-8"
       >
         <span
@@ -80,9 +77,9 @@ export default function PostRow({ post, index }: { post: Post; index: number }) 
         </div>
 
         <span className="mt-1 flex size-11 shrink-0 items-center justify-center rounded-full border border-line bg-paper text-ink transition-all duration-300 group-hover:border-accent group-hover:bg-accent group-hover:text-cream">
-          <Arrow className="size-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+          <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5" />
         </span>
-      </a>
+      </Link>
     </article>
   );
 }
