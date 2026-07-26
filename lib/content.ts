@@ -9,7 +9,7 @@ export const profile = {
   first: "Utkarsh",
   last: "Singh",
   role: "AI & Platform Engineer",
-  location: "Austin, TX",
+  location: "New York, NY",
   availability: "Open to new opportunities",
   email: "hello@singhcodes.dev",
   intro:
