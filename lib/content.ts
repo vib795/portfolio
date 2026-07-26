@@ -23,7 +23,7 @@ export const socials = [
     label: "LinkedIn",
     url: "https://www.linkedin.com/in/connectwithutkarshsingh/",
   },
-  { label: "Medium", url: "https://medium.com/@connectwithutkarshsingh" },
+  { label: "Medium", url: "https://connectwithutkarshsingh.medium.com/" },
 ];
 
 // Root-relative so these resolve from /blog and /blog/<slug> as well as the
