@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useState, type ComponentType } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { useEffect, useState, type CSSProperties, type ComponentType } from "react";
 import { navLinks, profile, socials } from "@/lib/content";
 import { ArrowRight, GitHubIcon, LinkedInIcon, Logo, MediumIcon } from "./icons";
 import ThemeToggle from "./ThemeToggle";
@@ -99,15 +98,18 @@ export default function Nav() {
               aria-label={menuOpen ? "Close menu" : "Open menu"}
               aria-expanded={menuOpen}
             >
+              {/* Both bars share one origin and are separated by transform.
+                  The previous version animated `top` through transition-all,
+                  which relayouts every frame for a purely visual morph. */}
               <span className="relative block h-3 w-6">
                 <span
-                  className={`absolute left-0 block h-[2px] w-6 bg-ink transition-all duration-300 ${
-                    menuOpen ? "top-1.5 rotate-45" : "top-0"
+                  className={`absolute left-0 top-1.5 block h-[2px] w-6 bg-ink transition-transform duration-200 ease-out ${
+                    menuOpen ? "rotate-45" : "-translate-y-1.5"
                   }`}
                 />
                 <span
-                  className={`absolute left-0 block h-[2px] w-6 bg-ink transition-all duration-300 ${
-                    menuOpen ? "top-1.5 -rotate-45" : "top-3"
+                  className={`absolute left-0 top-1.5 block h-[2px] w-6 bg-ink transition-transform duration-200 ease-out ${
+                    menuOpen ? "-rotate-45" : "translate-y-1.5"
                   }`}
                 />
               </span>
@@ -116,66 +118,61 @@ export default function Nav() {
         </nav>
       </header>
 
-      <AnimatePresence>
-        {menuOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.25 }}
-            className="fixed inset-0 z-40 bg-paper md:hidden"
-          >
-            <div className="flex h-full flex-col justify-between px-5 pb-10 pt-28">
-              <nav className="flex flex-col">
-                {navLinks.map((l, i) => (
-                  <motion.a
-                    key={l.href}
-                    href={l.href}
+      {/* Stays mounted; CSS handles enter/exit via @starting-style and
+          allow-discrete (see `.mobile-menu` in globals.css). `inert` keeps
+          the closed menu out of the tab order and off screen readers. */}
+      <div
+        className="mobile-menu fixed inset-0 z-40 bg-paper md:hidden"
+        data-open={menuOpen}
+        inert={!menuOpen}
+      >
+        <div className="flex h-full flex-col justify-between px-5 pb-10 pt-28">
+          <nav className="flex flex-col">
+            {navLinks.map((l, i) => (
+              <a
+                key={l.href}
+                href={l.href}
+                onClick={() => setMenuOpen(false)}
+                style={{ "--i": i } as CSSProperties}
+                className="mobile-menu-link border-b border-line py-5 text-4xl font-medium tracking-tight"
+              >
+                {l.label}
+              </a>
+            ))}
+          </nav>
+          <div className="flex flex-col gap-5">
+            <a
+              href="/#contact"
+              onClick={() => setMenuOpen(false)}
+              className="flex items-center justify-between rounded-full bg-ink px-6 py-4 font-mono text-sm uppercase tracking-[0.14em] text-paper"
+            >
+              Get in touch
+              <ArrowRight className="size-4" />
+            </a>
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
+              {socials.map((s) => {
+                const Icon = socialIcons[s.label];
+                return (
+                  <a
+                    key={s.label}
+                    href={s.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     onClick={() => setMenuOpen(false)}
-                    initial={{ opacity: 0, y: 16 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.08 + i * 0.06, duration: 0.4 }}
-                    className="border-b border-line py-5 text-4xl font-medium tracking-tight"
+                    className="flex items-center gap-2 font-mono text-xs uppercase tracking-[0.16em] text-ink-soft transition-colors hover:text-ink"
                   >
-                    {l.label}
-                  </motion.a>
-                ))}
-              </nav>
-              <div className="flex flex-col gap-5">
-                <a
-                  href="/#contact"
-                  onClick={() => setMenuOpen(false)}
-                  className="flex items-center justify-between rounded-full bg-ink px-6 py-4 font-mono text-sm uppercase tracking-[0.14em] text-paper"
-                >
-                  Get in touch
-                  <ArrowRight className="size-4" />
-                </a>
-                <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
-                  {socials.map((s) => {
-                    const Icon = socialIcons[s.label];
-                    return (
-                      <a
-                        key={s.label}
-                        href={s.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={() => setMenuOpen(false)}
-                        className="flex items-center gap-2 font-mono text-xs uppercase tracking-[0.16em] text-ink-soft transition-colors hover:text-ink"
-                      >
-                        {Icon && <Icon className="size-4" />}
-                        {s.label}
-                      </a>
-                    );
-                  })}
-                </div>
-                <p className="font-mono text-xs uppercase tracking-[0.16em] text-ink-faint">
-                  {profile.availability}
-                </p>
-              </div>
+                    {Icon && <Icon className="size-4" />}
+                    {s.label}
+                  </a>
+                );
+              })}
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            <p className="font-mono text-xs uppercase tracking-[0.16em] text-ink-faint">
+              {profile.availability}
+            </p>
+          </div>
+        </div>
+      </div>
     </>
   );
 }

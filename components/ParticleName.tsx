@@ -65,6 +65,28 @@ export default function ParticleName({
     let img: ImageData | null = null;
     let buf32: Uint32Array | null = null;
     let resizeTimer = 0;
+    // Cached canvas offset, refreshed on scroll/resize instead of per move.
+    let rectLeft = 0;
+    let rectTop = 0;
+    // The hero is only animated while it is actually on screen.
+    let visible = true;
+
+    const readRect = () => {
+      const r = canvas.getBoundingClientRect();
+      rectLeft = r.left;
+      rectTop = r.top;
+    };
+
+    /**
+     * Restart the loop after it has parked.
+     *
+     * `tick` stops scheduling once the name has settled and the cursor has
+     * decayed, so an untouched hero costs nothing. Anything that disturbs
+     * the particles has to wake it again.
+     */
+    const wake = () => {
+      if (!raf && visible) raf = requestAnimationFrame(tick);
+    };
 
     // particle ink follows the active theme's --ink token
     const readInk = () => {
@@ -194,8 +216,12 @@ export default function ParticleName({
           idle = false;
         }
         render();
+        raf = requestAnimationFrame(tick);
+      } else {
+        // Settled and untouched — park instead of burning a frame a tick
+        // forever. `wake()` restarts it.
+        raf = 0;
       }
-      raf = requestAnimationFrame(tick);
     };
 
     // Detonate the whole wordmark — every particle gets an outward kick.
@@ -207,6 +233,7 @@ export default function ParticleName({
         p.vy = Math.sin(a) * s;
       }
       idle = false;
+      wake();
     };
 
     const insideName = (clientX: number, clientY: number) => {
@@ -219,18 +246,16 @@ export default function ParticleName({
       );
     };
 
+    // The canvas rect is cached rather than measured per event. This handler
+    // is bound to `window`, so it previously forced a layout read on every
+    // pointer move anywhere on the page — including while reading the footer.
     const onMove = (e: PointerEvent) => {
-      const cr = canvas.getBoundingClientRect();
-      cx = e.clientX - cr.left;
-      cy = e.clientY - cr.top;
-      if (
-        e.clientX >= cr.left &&
-        e.clientX <= cr.right &&
-        e.clientY >= cr.top &&
-        e.clientY <= cr.bottom
-      ) {
+      cx = e.clientX - rectLeft;
+      cy = e.clientY - rectTop;
+      if (cx >= 0 && cx <= cssW && cy >= 0 && cy <= cssH) {
         cursorStrength = 1;
         idle = false;
+        wake();
       }
     };
 
@@ -268,11 +293,17 @@ export default function ParticleName({
       clearTimeout(resizeTimer);
       resizeTimer = window.setTimeout(() => {
         sample();
+        readRect();
         render();
       }, 200);
     };
 
+    // Scrolling moves the canvas in viewport space, so the cached offset has
+    // to follow it — still far cheaper than measuring on every pointer move.
+    const onScroll = () => readRect();
+
     sample();
+    readRect();
     render(); // paint the solid name immediately
     canvas.style.opacity = "1";
     h1.style.opacity = "0";
@@ -281,6 +312,25 @@ export default function ParticleName({
     window.addEventListener("pointerup", onUp, { passive: true });
     window.addEventListener("click", onClick);
     window.addEventListener("resize", onResize);
+    window.addEventListener("scroll", onScroll, { passive: true });
+
+    // Nothing simulates while the hero is off screen. Without this the loop
+    // kept running the whole way down the page.
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        visible = entry.isIntersecting;
+        if (visible) {
+          readRect();
+          wake();
+        } else if (raf) {
+          cancelAnimationFrame(raf);
+          raf = 0;
+        }
+      },
+      { rootMargin: "100px" },
+    );
+    io.observe(wrap);
+
     raf = requestAnimationFrame(tick);
 
     // repaint with the new ink color when the theme is toggled
@@ -299,6 +349,8 @@ export default function ParticleName({
       window.removeEventListener("pointerup", onUp);
       window.removeEventListener("click", onClick);
       window.removeEventListener("resize", onResize);
+      window.removeEventListener("scroll", onScroll);
+      io.disconnect();
       themeObserver.disconnect();
       clearTimeout(resizeTimer);
       cancelAnimationFrame(raf);
@@ -314,10 +366,10 @@ export default function ParticleName({
         className="font-bold leading-[0.9] tracking-[-0.04em] text-[clamp(3.6rem,12vw,10.5rem)]"
         style={{ transition: "opacity 0.3s ease" }}
       >
-        <span className="rise-in block" style={{ animationDelay: "0.12s" }}>
+        <span className="rise-in block" style={{ animationDelay: "0.1s" }}>
           {first}
         </span>
-        <span className="rise-in block" style={{ animationDelay: "0.2s" }}>
+        <span className="rise-in block" style={{ animationDelay: "0.16s" }}>
           {last}
         </span>
       </h1>

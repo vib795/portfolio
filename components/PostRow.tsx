@@ -76,8 +76,9 @@ export default function PostRow({ post, index }: { post: Post; index: number }) 
           )}
         </div>
 
-        <span className="mt-1 flex size-11 shrink-0 items-center justify-center rounded-full border border-line bg-paper text-ink transition-all duration-300 group-hover:border-accent group-hover:bg-accent group-hover:text-cream">
-          <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+        {/* Colours only — see the matching badge in Work.tsx. */}
+        <span className="mt-1 flex size-11 shrink-0 items-center justify-center rounded-full border border-line bg-paper text-ink transition-colors duration-200 group-hover:border-accent group-hover:bg-accent group-hover:text-cream">
+          <ArrowRight className="size-4 transition-transform duration-200 ease-out group-hover:translate-x-0.5" />
         </span>
       </Link>
     </article>
