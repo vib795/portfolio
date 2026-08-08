@@ -1,5 +1,19 @@
 [
   {
+    "slug": "your-coding-agent-has-a-memory-problem-storing-more-won-t-fix-it",
+    "title": "Your Coding Agent Has a Memory Problem. Storing More Won’t Fix It.",
+    "date": "2026-08-08",
+    "excerpt": "Four rules I built into a memory system for Copilot and Claude Code, after concluding that a confidently wrong note is worse than no note at all. Open a second window. Your agent knows…",
+    "tags": [
+      "ai",
+      "github-copilot",
+      "software-engineering",
+      "nodejs"
+    ],
+    "readingMinutes": 10,
+    "url": "https://blog.stackademic.com/your-coding-agent-has-a-memory-problem-storing-more-wont-fix-it-b819b7f93447"
+  },
+  {
     "slug": "llm-evals-the-complete-field-guide",
     "title": "LLM evals: the complete field guide",
     "date": "2026-07-26",
