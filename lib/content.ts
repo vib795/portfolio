@@ -100,6 +100,15 @@ export const projects: Project[] = [
     stack: ["FastAPI", "Embeddings", "MinHash / LSH"],
   },
   {
+    name: "Agent Memory",
+    year: "2026",
+    category: "npm Package",
+    blurb:
+      "Durable cross-repo memory for Claude Code and GitHub Copilot, shipped as three agent skills — /handoff, /remember and /recall — over one local store. Markdown is the source of truth, the SQLite index is disposable, and traversal is a recursive CTE rather than a graph layer on top. 2,600 lines of JavaScript, zero runtime dependencies, no network calls — small enough to read rather than procure.",
+    stack: ["Node.js", "node:sqlite", "Agent Skills"],
+    link: "https://www.npmjs.com/package/@vib795/agent-memory",
+  },
+  {
     name: "Costco Price Match",
     year: "2026",
     category: "AI Agent",
