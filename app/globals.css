@@ -39,6 +39,25 @@
   --line-strong: #4c4233;
 }
 
+/* ════════════════════════════════════════════════════════════════
+   MOTION TOKENS
+   One source for every curve and duration. Declared in a plain
+   @theme block (not `inline`) so the custom properties are emitted
+   on :root and the hand-written rules further down can var() them.
+   ════════════════════════════════════════════════════════════════ */
+@theme {
+  /* The built-in CSS keywords are too weak to read as deliberate.
+     Entering/exiting → ease-out. Moving on screen → ease-in-out.
+     Hover and colour changes stay on plain `ease`. */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+
+  /* UI motion stays under 300ms. Anything slower reads as lag. */
+  --duration-fast: 160ms; /* icon nudges, press feedback */
+  --duration-base: 220ms; /* hover, colour, small popovers */
+  --duration-slow: 300ms; /* accordions, overlays */
+}
+
 @theme inline {
   --color-paper: var(--paper);
   --color-paper-dim: var(--paper-dim);
@@ -315,10 +334,21 @@ body {
   background-size: 0% 1.5px;
   background-position: 0% 100%;
   background-repeat: no-repeat;
-  transition: background-size 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: background-size var(--duration-base) ease;
 }
-.link-line:hover,
-.group:hover .link-line {
+/* Gated on a real pointer. Tailwind v4 already wraps its own hover:
+   variants in this query; hand-written rules are not covered, so
+   without it a touch tap leaves the underline stuck open. */
+@media (hover: hover) and (pointer: fine) {
+  .link-line:hover,
+  .group:hover .link-line {
+    background-size: 100% 1.5px;
+  }
+}
+/* Keyboard users get the same affordance the mouse gets. */
+.link-line:focus-visible,
+a:focus-visible .link-line,
+button:focus-visible .link-line {
   background-size: 100% 1.5px;
 }
 
@@ -334,7 +364,118 @@ body {
   }
 }
 .rise-in {
-  animation: rise-in 0.85s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: rise-in 0.6s var(--ease-out) both;
+}
+
+/* ── scroll reveal ────────────────────────────────────────────────
+   Scroll-linked, not hydration-triggered.
+
+   The previous implementation was a Framer Motion `whileInView` that
+   emitted `opacity:0` into the server HTML — 36 elements on the
+   homepage and the entire body of /blog (h1, intro, all 30 posts)
+   were invisible until the JS bundle ran. A view() timeline needs no
+   JS at all, and where it is unsupported the @supports guard simply
+   leaves the content visible. Failure mode is "no animation", never
+   "no content".
+   ────────────────────────────────────────────────────────────────── */
+.reveal {
+  /* No hidden initial state on purpose — see above. */
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      animation: reveal-in linear both;
+      animation-timeline: view();
+      /* Progress is driven by scroll position, so `linear` is right —
+         the user's scroll supplies the easing. The range ends early
+         so content is fully opaque well before it reaches the middle
+         of the viewport, and so the last element on a page still
+         completes at maximum scroll.
+         Shifting the range start staggers a group without ever
+         delaying interaction — the element is already in the DOM. */
+      animation-range: entry calc(2% + var(--reveal-shift, 0%)) entry
+        calc(38% + var(--reveal-shift, 0%));
+    }
+  }
+}
+
+@keyframes reveal-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ── mobile menu ──────────────────────────────────────────────────
+   Enter and exit without a JS animation library. `allow-discrete`
+   defers `display:none` until the fade finishes, and @starting-style
+   supplies the entry values. Where either is unsupported the menu
+   simply appears and disappears instantly, which is a fine fallback
+   for something opened by a deliberate tap.
+   ────────────────────────────────────────────────────────────────── */
+.mobile-menu {
+  display: none;
+  opacity: 0;
+  /* Never scale(0) — the panel shrinks slightly, it does not wink out. */
+  transform: scale(0.98);
+  transition:
+    opacity var(--duration-slow) var(--ease-out),
+    transform var(--duration-slow) var(--ease-out),
+    display var(--duration-slow) allow-discrete;
+}
+.mobile-menu[data-open="true"] {
+  display: block;
+  opacity: 1;
+  transform: none;
+}
+@starting-style {
+  .mobile-menu[data-open="true"] {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+}
+
+.mobile-menu-link {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity var(--duration-slow) var(--ease-out),
+    transform var(--duration-slow) var(--ease-out);
+}
+/* Asymmetric on purpose: opening staggers, closing does not — the
+   dismissal is the system responding, and it should just go. */
+.mobile-menu[data-open="true"] .mobile-menu-link {
+  opacity: 1;
+  transform: none;
+  transition-delay: calc(60ms + var(--i, 0) * 45ms);
+}
+
+/* ── accordion panel ──────────────────────────────────────────────
+   grid-template-rows 0fr→1fr opens the row without anything having to
+   measure and write `height` on every frame, and a CSS transition
+   retargets from wherever it is when the row is toggled mid-flight —
+   the Framer version restarted from its keyframe origin.
+   ────────────────────────────────────────────────────────────────── */
+.accordion-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition:
+    grid-template-rows var(--duration-slow) var(--ease-out),
+    opacity var(--duration-slow) var(--ease-out);
+}
+.accordion-panel[data-open="true"] {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+/* The inner wrapper is what actually clips while the row is short. */
+.accordion-panel > * {
+  overflow: hidden;
 }
 
 /* marquee */
@@ -346,20 +487,39 @@ body {
 .animate-marquee {
   animation: marquee 38s linear infinite;
 }
-.marquee-group:hover .animate-marquee {
-  animation-play-state: paused;
+@media (hover: hover) and (pointer: fine) {
+  .marquee-group:hover .animate-marquee {
+    animation-play-state: paused;
+  }
 }
 
+/* ════════════════════════════════════════════════════════════════
+   REDUCED MOTION
+   Fewer and gentler, not zero. Movement and looping animation go;
+   colour, opacity and focus feedback stay, because those carry
+   meaning rather than decoration.
+   ════════════════════════════════════════════════════════════════ */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
+
+  /* Decorative and looping motion is removed outright. */
+  .rise-in,
+  .reveal,
+  .animate-marquee,
+  .animate-ping {
+    animation: none !important;
+  }
+
+  /* Everything else keeps its transition, but only for properties
+     that do not move anything. Transform/size transitions resolve
+     instantly instead of being animated. */
   *,
   *::before,
   *::after {
-    animation-duration: 0.01ms !important;
-    animation-delay: 0ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+    transition-property: opacity, color, background-color, border-color,
+      box-shadow, outline-color, fill, stroke !important;
+    transition-duration: var(--duration-fast) !important;
   }
 }

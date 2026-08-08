@@ -28,14 +28,30 @@ export default function ThemeToggle() {
       type="button"
       onClick={toggle}
       aria-label="Toggle dark mode"
-      className="flex size-9 shrink-0 items-center justify-center rounded-full border border-line text-ink-soft transition-colors hover:border-ink hover:text-ink"
+      className="relative flex size-9 shrink-0 items-center justify-center rounded-full border border-line text-ink-soft transition-colors hover:border-ink hover:text-ink"
     >
-      {mounted &&
-        (isDark ? (
-          <SunIcon className="size-[1.05rem]" />
-        ) : (
-          <MoonIcon className="size-[1.05rem]" />
-        ))}
+      {/* Both icons stay mounted and cross-rotate. Swapping the element
+          outright made the one visibly-stateful control on the page the
+          only thing that changed with no transition at all.
+          Scaled to 0.75 rather than 0 — nothing appears from nothing. */}
+      {mounted && (
+        <>
+          <SunIcon
+            className={`absolute size-[1.05rem] transition-[opacity,transform] duration-200 ease-out ${
+              isDark
+                ? "rotate-0 scale-100 opacity-100"
+                : "-rotate-90 scale-75 opacity-0"
+            }`}
+          />
+          <MoonIcon
+            className={`absolute size-[1.05rem] transition-[opacity,transform] duration-200 ease-out ${
+              isDark
+                ? "rotate-90 scale-75 opacity-0"
+                : "rotate-0 scale-100 opacity-100"
+            }`}
+          />
+        </>
+      )}
     </button>
   );
 }

@@ -6,8 +6,9 @@ import { ArrowUpRight } from "./icons";
 function Motif({ index }: { index: number }) {
   const base = "var(--line-strong)";
   const accent = "var(--accent)";
+  // 500ms on a hover read as lag; hover motion belongs under the 300ms budget.
   const cls =
-    "absolute inset-0 size-full transition-transform duration-500 group-hover:scale-[1.04]";
+    "absolute inset-0 size-full transition-transform duration-300 ease-out group-hover:scale-[1.04]";
 
   switch (index % 6) {
     case 0:
@@ -131,9 +132,11 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
         <span className="absolute right-5 top-4 font-mono text-xs uppercase tracking-[0.16em] text-ink-soft">
           {project.category}
         </span>
+        {/* Only colours change on the badge — transition-all would also
+            animate layout and transform properties nothing asked for. */}
         {project.link && (
-          <span className="absolute bottom-4 right-4 flex size-11 items-center justify-center rounded-full border border-line bg-paper text-ink transition-all duration-300 group-hover:border-accent group-hover:bg-accent group-hover:text-cream">
-            <ArrowUpRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          <span className="absolute bottom-4 right-4 flex size-11 items-center justify-center rounded-full border border-line bg-paper text-ink transition-colors duration-200 group-hover:border-accent group-hover:bg-accent group-hover:text-cream">
+            <ArrowUpRight className="size-4 transition-transform duration-200 ease-out group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </span>
         )}
       </div>

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
 import { experience } from "@/lib/content";
 import Reveal from "./Reveal";
 import SectionTag from "./SectionTag";
@@ -65,31 +64,30 @@ export default function Experience() {
                     <PlusMinus open={isOpen} />
                   </button>
                 </h3>
-                <AnimatePresence initial={false}>
-                  {isOpen && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.4, ease: "easeOut" }}
-                      className="overflow-hidden"
-                    >
-                      <div className="pb-8 sm:pl-40">
-                        <p className="max-w-2xl text-ink-soft">{role.summary}</p>
-                        <ul className="mt-4 space-y-2.5">
-                          {role.points.map((pt) => (
-                            <li key={pt} className="flex gap-3">
-                              <span className="mt-[0.6rem] size-1.5 shrink-0 rounded-full bg-accent" />
-                              <span className="max-w-2xl leading-relaxed text-ink-soft">
-                                {pt}
-                              </span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                {/* Stays mounted and is collapsed by CSS, so the text is in
+                    the server HTML rather than appearing only once a bundle
+                    has run. See `.accordion-panel` in globals.css. */}
+                <div
+                  className="accordion-panel"
+                  data-open={isOpen}
+                  aria-hidden={!isOpen}
+                >
+                  <div>
+                    <div className="pb-8 sm:pl-40">
+                      <p className="max-w-2xl text-ink-soft">{role.summary}</p>
+                      <ul className="mt-4 space-y-2.5">
+                        {role.points.map((pt) => (
+                          <li key={pt} className="flex gap-3">
+                            <span className="mt-[0.6rem] size-1.5 shrink-0 rounded-full bg-accent" />
+                            <span className="max-w-2xl leading-relaxed text-ink-soft">
+                              {pt}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
               </div>
             );
           })}

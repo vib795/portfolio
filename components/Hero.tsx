@@ -31,7 +31,7 @@ export default function Hero() {
       <div className="mx-auto w-full max-w-[88rem] px-5 sm:px-8 lg:px-12">
         <div
           className="rise-in flex items-center gap-3"
-          style={{ animationDelay: "0.05s" }}
+          style={{ animationDelay: "0.04s" }}
         >
           <span className="size-2 rounded-full bg-accent" />
           <span className="font-mono text-xs uppercase tracking-[0.22em] text-ink-soft">
@@ -49,7 +49,7 @@ export default function Hero() {
 
           <div
             className="rise-in lg:col-span-5 lg:pb-3"
-            style={{ animationDelay: "0.34s" }}
+            style={{ animationDelay: "0.24s" }}
           >
             <p className="max-w-md text-lg leading-relaxed text-ink-soft sm:text-xl">
               {profile.intro}
@@ -90,7 +90,7 @@ export default function Hero() {
 
         <div
           className="rise-in mt-14 flex items-center justify-between border-t border-line pt-5 lg:mt-20"
-          style={{ animationDelay: "0.48s" }}
+          style={{ animationDelay: "0.32s" }}
         >
           <span className="flex items-center gap-2.5 font-mono text-xs uppercase tracking-[0.16em] text-ink-soft">
             <span className="relative flex size-2">
