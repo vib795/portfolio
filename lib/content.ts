@@ -84,6 +84,15 @@ export type Project = {
 
 export const projects: Project[] = [
   {
+    name: "Agent Memory",
+    year: "2026",
+    category: "npm Package",
+    blurb:
+      "Durable cross-repo memory for Claude Code and GitHub Copilot. Each client engagement is a separate store rather than a filtered view, so one engagement's notes are unreachable from another even by exact id. Knowledge exports at global scope by default — what you learned travels between machines, the client's architecture does not. The agent captures unasked when a decision settles, and a repo nobody has written in reports how long it has gone uncaptured rather than reading as covered. Zero runtime dependencies, no network calls.",
+    stack: ["Node.js", "node:sqlite", "Agent Skills"],
+    link: "https://www.npmjs.com/package/@vib795/agent-memory",
+  },
+  {
     name: "Code Analyzer",
     year: "2025",
     category: "RAG Platform",
@@ -98,15 +107,6 @@ export const projects: Project[] = [
     blurb:
       "An AI resume-evaluation system on FastAPI that flags exact duplicates, near-duplicates, and semantic plagiarism through a multi-signal pipeline of hashing, lexical overlap, and embeddings — with PII-aware ingestion and human-reviewable evidence reports.",
     stack: ["FastAPI", "Embeddings", "MinHash / LSH"],
-  },
-  {
-    name: "Agent Memory",
-    year: "2026",
-    category: "npm Package",
-    blurb:
-      "Durable cross-repo memory for Claude Code and GitHub Copilot. Each client engagement is a separate store rather than a filtered view, so one engagement's notes are unreachable from another even by exact id. Knowledge exports at global scope by default — what you learned travels between machines, the client's architecture does not. The agent captures unasked when a decision settles, and a repo nobody has written in reports how long it has gone uncaptured rather than reading as covered. Zero runtime dependencies, no network calls.",
-    stack: ["Node.js", "node:sqlite", "Agent Skills"],
-    link: "https://www.npmjs.com/package/@vib795/agent-memory",
   },
   {
     name: "Costco Price Match",
