@@ -104,7 +104,7 @@ export const projects: Project[] = [
     year: "2026",
     category: "npm Package",
     blurb:
-      "Durable cross-repo memory for Claude Code and GitHub Copilot, shipped as three agent skills — /handoff, /remember and /recall — over one local store. Markdown is the source of truth, the SQLite index is disposable, and traversal is a recursive CTE rather than a graph layer on top. 2,600 lines of JavaScript, zero runtime dependencies, no network calls — small enough to read rather than procure.",
+      "Durable cross-repo memory for Claude Code and GitHub Copilot, shipped as three agent skills — /handoff, /remember and /recall — over one local store. Markdown is the source of truth, the SQLite index is disposable, and traversal is a recursive CTE rather than a graph layer on top. Each client engagement is a separate store rather than a filtered view, so one engagement's notes are unreachable from another even by exact id, and knowledge exports at global scope by default — what you learned travels, the client's architecture does not. 3,100 lines of JavaScript, zero runtime dependencies, no network calls.",
     stack: ["Node.js", "node:sqlite", "Agent Skills"],
     link: "https://www.npmjs.com/package/@vib795/agent-memory",
   },
