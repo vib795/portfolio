@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { experience } from "@/lib/content";
+import { certifications, education, experience } from "@/lib/content";
 import Reveal from "./Reveal";
 import SectionTag from "./SectionTag";
 
@@ -55,6 +55,12 @@ export default function Experience() {
                       </span>
                       <span className="mt-0.5 block font-mono text-sm text-ink-soft">
                         {role.company}
+                        {role.client && (
+                          <span className="text-ink-faint">
+                            {" · "}
+                            {role.client}
+                          </span>
+                        )}
                         <span className="text-ink-faint sm:hidden">
                           {" · "}
                           {role.period}
@@ -91,6 +97,56 @@ export default function Experience() {
               </div>
             );
           })}
+        </Reveal>
+
+        {/* Education sits directly under the roles: the accordion jumps from
+            Nov 2018 to Mar 2021, and the M.S. is what fills that gap. */}
+        <Reveal
+          delay={0.15}
+          className="mt-16 grid gap-x-12 gap-y-10 lg:mt-20 lg:grid-cols-12"
+        >
+          <div className="lg:col-span-6">
+            <p className="font-mono text-xs uppercase tracking-[0.2em] text-ink-faint">
+              / Education
+            </p>
+            <dl className="mt-3">
+              {education.map((e) => (
+                <div
+                  key={e.title}
+                  className="flex flex-col gap-1 border-t border-line py-4 sm:flex-row sm:gap-6"
+                >
+                  <dt className="font-mono text-sm text-ink-faint sm:w-28 sm:shrink-0 sm:pt-0.5">
+                    {e.period}
+                  </dt>
+                  <dd>
+                    <span className="block font-medium tracking-tight">
+                      {e.title}
+                    </span>
+                    <span className="mt-0.5 block font-mono text-sm text-ink-soft">
+                      {e.org}
+                    </span>
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+
+          <div className="lg:col-span-5 lg:col-start-8">
+            <p className="font-mono text-xs uppercase tracking-[0.2em] text-ink-faint">
+              / Certifications
+            </p>
+            <ul className="mt-3">
+              {certifications.map((c) => (
+                <li
+                  key={c}
+                  className="flex gap-3 border-t border-line py-4 leading-relaxed text-ink-soft"
+                >
+                  <span className="mt-[0.55rem] size-1.5 shrink-0 rounded-full bg-accent" />
+                  <span>{c}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
         </Reveal>
       </div>
     </section>
