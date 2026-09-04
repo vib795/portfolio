@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { contact, profile } from "@/lib/content";
+import ScrambleLink from "./ScrambleLink";
 
 /** The outlined cross the reference parks in the empty cell beside its
  *  closing call to action. */
@@ -82,7 +83,7 @@ export default function Contact() {
               href={`mailto:${profile.email}`}
               className="notch-lg block bg-accent px-6 py-4 text-center text-sm uppercase tracking-[0.14em] text-accent-ink transition-colors hover:bg-accent-deep"
             >
-              Email me
+              <ScrambleLink text="Email me" />
             </a>
             {/* Outlined notch: a 1px-padded parent supplies the border and
                 the clipped child supplies the fill. A clipped element
@@ -94,7 +95,7 @@ export default function Contact() {
               className="notch-lg block bg-accent p-px"
             >
               <span className="notch-lg block bg-paper px-6 py-4 text-center text-sm uppercase tracking-[0.14em] text-ink transition-colors hover:text-accent">
-                Book a call
+                <ScrambleLink text="Book a call" />
               </span>
             </a>
           </div>

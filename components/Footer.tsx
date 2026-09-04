@@ -1,5 +1,6 @@
 import { navLinks, profile, socials } from "@/lib/content";
 import { ArrowUpRight } from "./icons";
+import ScrambleLink from "./ScrambleLink";
 import Wordmark from "./Wordmark";
 
 const year = new Date().getFullYear();
@@ -18,7 +19,7 @@ export default function Footer() {
                     href={l.href}
                     className="text-sm text-ink-soft transition-colors hover:text-accent"
                   >
-                    {l.label}
+                    <ScrambleLink text={l.label} />
                   </a>
                 </li>
               ))}
@@ -33,7 +34,7 @@ export default function Footer() {
                   href={`mailto:${profile.email}`}
                   className="text-sm text-ink-soft transition-colors hover:text-accent"
                 >
-                  {profile.email}
+                  <ScrambleLink text={profile.email} />
                 </a>
               </li>
               <li className="text-sm text-ink-soft">{profile.location}</li>
@@ -61,7 +62,7 @@ export default function Footer() {
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1.5 text-sm uppercase tracking-[0.12em] text-ink-soft transition-colors hover:text-accent"
                   >
-                    {s.label}
+                    <ScrambleLink text={s.label} />
                     <ArrowUpRight className="size-3" />
                   </a>
                 </li>

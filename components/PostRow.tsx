@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Post } from "@/lib/blog";
 import { formatPostDate } from "@/lib/blog";
 import { ArrowRight, MediumIcon } from "./icons";
+import ScrambleLink from "./ScrambleLink";
 
 function SourceBadge({ post }: { post: Post }) {
   if (post.source === "medium") {
@@ -49,7 +50,7 @@ export default function PostRow({ post, index }: { post: Post; index: number }) 
           </div>
 
           <h3 className="mt-3 text-[1.45rem] font-medium leading-snug tracking-tight transition-colors duration-300 group-hover:text-accent sm:text-[1.7rem]">
-            {post.title}
+            <ScrambleLink text={post.title} />
           </h3>
 
           <p className="mt-2 font-mono text-xs tracking-[0.04em] text-ink-faint">

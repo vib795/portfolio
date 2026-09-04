@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getAllPosts } from "@/lib/blog";
 import PostRow from "./PostRow";
 import Scramble from "./Scramble";
+import ScrambleLink from "./ScrambleLink";
 import { ArrowRight } from "./icons";
 
 const HOMEPAGE_LIMIT = 5;
@@ -47,9 +48,13 @@ export default function Writing() {
             className="group inline-flex items-center gap-3 text-[0.78rem] uppercase tracking-[0.16em] text-ink transition-colors hover:text-accent"
           >
             <span className="link-line">
-              {posts.length > featured.length
-                ? `All ${posts.length} posts`
-                : "All posts"}
+              <ScrambleLink
+                text={
+                  posts.length > featured.length
+                    ? `All ${posts.length} posts`
+                    : "All posts"
+                }
+              />
             </span>
             <ArrowRight className="size-3.5 transition-transform duration-300 group-hover:translate-x-1" />
           </Link>

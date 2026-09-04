@@ -1,92 +1,121 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { HEADING_CHARS, motionOK, runScramble, seeded } from "@/lib/scramble";
 
-// The reference loads GSAP + ScrambleTextPlugin (~60KB) to cycle random
-// glyphs into a heading as it settles. This is the same effect without the
-// dependency: one rAF loop, one string, resolved left to right.
+/** Seconds. The reference's heading tween. */
+const DURATION = 0.8;
 
-const POOL = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/\\<>[]{}#*+-_=";
-
-/** ms each character spends scrambling before it locks to its real value */
-const DWELL = 34;
+/** ms the reference waits after a heading crosses its trigger line. */
+const HOLD = 300;
 
 type Props = {
   text: string;
   className?: string;
-  /** Delay before the run starts, so several marks can cascade. */
+  /** Extra delay, so several marks can cascade. */
   delay?: number;
 };
 
 /**
- * Scrambles `text` into place once, when it first scrolls into view.
+ * Scrambles a heading into place the first time it scrolls into view.
  *
- * The real string is always in the DOM on the server render and is what a
- * screen reader announces — the scramble is a visual overlay on an element
- * marked `aria-hidden`. That keeps the prerendered HTML honest, which the
- * headline invariant in this repo requires: nothing meaningful may depend
- * on a bundle having run.
+ * Two things happen at once, which is how the reference does it and why
+ * its headings arrive the way they do:
+ *
+ *   the string resolves left to right through a pool of glyphs, and
+ *   each character independently flickers up from nothing, in random
+ *   order, on a 0.05s stagger.
+ *
+ * Either alone is a cliché. Together they read as a signal locking on.
+ *
+ * The trigger is `top 92%` on the reference — a heading starts when its
+ * top edge is 8% up from the bottom of the viewport — which is the same
+ * line `Reveal` uses, so a section's heading and its body arrive
+ * together rather than in two waves.
+ *
+ * The real string is always in the server HTML inside a `sr-only` span.
+ * The scrambling copy is `aria-hidden`, so nothing meaningful depends on
+ * this component having run.
  */
 export default function Scramble({ text, className, delay = 0 }: Props) {
   const ref = useRef<HTMLSpanElement>(null);
   const [display, setDisplay] = useState(text);
+  const [running, setRunning] = useState(false);
+
+  // A stable shuffle of character positions. Seeded, not random: this
+  // renders on the server too, and a mismatch would break hydration.
+  const flickerOrder = useMemo(() => {
+    const idx = text.split("").map((_, i) => i);
+    return idx
+      .map((i) => ({ i, k: seeded(i + text.length * 7 + 1) }))
+      .sort((a, b) => a.k - b.k)
+      .reduce<number[]>((acc, entry, position) => {
+        acc[entry.i] = position;
+        return acc;
+      }, []);
+  }, [text]);
 
   useEffect(() => {
     const el = ref.current;
-    if (!el) return;
+    if (!el || !motionOK()) return;
 
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-    let raf = 0;
+    let cancel: (() => void) | null = null;
     let timer = 0;
-    let start = 0;
-
-    const run = (now: number) => {
-      if (!start) start = now;
-      // Characters resolve one after another; each one's scramble window
-      // closes at index * DWELL.
-      const settled = Math.floor((now - start) / DWELL);
-
-      if (settled >= text.length) {
-        setDisplay(text);
-        return;
-      }
-
-      setDisplay(
-        text
-          .split("")
-          .map((ch, i) => {
-            if (i < settled || ch === " ") return ch;
-            return POOL[Math.floor(Math.random() * POOL.length)];
-          })
-          .join(""),
-      );
-      raf = requestAnimationFrame(run);
-    };
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (!entry.isIntersecting) return;
         observer.disconnect();
         timer = window.setTimeout(() => {
-          raf = requestAnimationFrame(run);
-        }, delay);
+          setRunning(true);
+          cancel = runScramble({
+            text,
+            chars: HEADING_CHARS,
+            duration: DURATION,
+            onFrame: setDisplay,
+          });
+        }, HOLD + delay);
       },
-      { threshold: 0.4 },
+      { rootMargin: "0px 0px -8% 0px" },
     );
 
     observer.observe(el);
     return () => {
       observer.disconnect();
-      cancelAnimationFrame(raf);
+      cancel?.();
       clearTimeout(timer);
     };
   }, [text, delay]);
 
   return (
     <span ref={ref} className={className}>
-      <span aria-hidden="true" className="scramble">
-        {display}
+      <span
+        aria-hidden="true"
+        className="scramble"
+        data-run={running ? "1" : undefined}
+      >
+        {display.split("").map((ch, i) =>
+          // A space stays outside the animated element boxes. Wrapped in
+          // one it is still a break opportunity in theory, but keeping it
+          // as plain text is what actually lets a long heading wrap — and
+          // an unwrappable heading floors its grid track at max-content
+          // and pushes the whole page wider than the viewport.
+          ch === " " ? (
+            <span key={i}> </span>
+          ) : (
+            <span
+              key={i}
+              className="scramble-char"
+              style={
+                { "--fd": `${((flickerOrder[i] ?? 0) * 0.05).toFixed(2)}s` } as {
+                  [key: string]: string;
+                }
+              }
+            >
+              {ch}
+            </span>
+          ),
+        )}
       </span>
       <span className="sr-only">{text}</span>
     </span>

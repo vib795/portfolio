@@ -9,6 +9,7 @@ import {
 import { usePathname } from "next/navigation";
 import { navLinks, profile, socials } from "@/lib/content";
 import { ArrowRight, GitHubIcon, LinkedInIcon, MediumIcon } from "./icons";
+import ScrambleLink from "./ScrambleLink";
 import ThemeToggle from "./ThemeToggle";
 import Wordmark from "./Wordmark";
 
@@ -55,7 +56,7 @@ export default function Nav() {
                 <Wordmark text="US" className="h-3 w-auto text-accent-ink" />
               </span>
               <span className="text-[0.95rem] font-medium tracking-tight">
-                {profile.first.toLowerCase()}
+                <ScrambleLink text={profile.first.toLowerCase()} />
                 <span className="text-accent">_</span>
               </span>
             </a>
@@ -66,11 +67,11 @@ export default function Nav() {
                   key={l.href}
                   href={l.href}
                   aria-current={isActive(l.href) ? "page" : undefined}
-                  className={`text-sm transition-colors hover:text-accent ${
-                    isActive(l.href) ? "ticks text-ink" : "text-ink-soft"
+                  className={`link-ticks p-1.5 text-sm transition-colors hover:text-accent ${
+                    isActive(l.href) ? "text-ink" : "text-ink-soft"
                   }`}
                 >
-                  {l.label}
+                  <ScrambleLink text={l.label} />
                 </a>
               ))}
             </div>
@@ -98,7 +99,7 @@ export default function Nav() {
                 href="/#contact"
                 className="notch-sm hidden bg-accent px-5 py-3 text-[0.7rem] uppercase tracking-[0.14em] text-accent-ink transition-colors hover:bg-accent-deep sm:inline-block sm:px-7"
               >
-                Get in touch
+                <ScrambleLink text="Get in touch" />
               </a>
               <button
                 type="button"
@@ -145,7 +146,7 @@ export default function Nav() {
                 style={{ "--i": i } as CSSProperties}
                 className="mobile-menu-link border-b border-line-strong py-5 text-3xl tracking-tight"
               >
-                {l.label}
+                <ScrambleLink text={l.label} />
               </a>
             ))}
           </nav>
@@ -171,7 +172,7 @@ export default function Nav() {
                     className="flex items-center gap-2 text-xs uppercase tracking-[0.16em] text-ink-soft transition-colors hover:text-ink"
                   >
                     {Icon && <Icon className="size-4" />}
-                    {s.label}
+                    <ScrambleLink text={s.label} />
                   </a>
                 );
               })}

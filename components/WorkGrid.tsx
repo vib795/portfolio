@@ -9,6 +9,7 @@ import {
 } from "@/lib/content";
 import { ArrowRight, ArrowUpRight } from "./icons";
 import Scramble from "./Scramble";
+import ScrambleLink from "./ScrambleLink";
 
 /**
  * One project, drawn the way the reference draws a portfolio company: a
@@ -17,7 +18,7 @@ import Scramble from "./Scramble";
  */
 function ProjectCard({ project }: { project: Project }) {
   return (
-    <article className="group">
+    <article className="group" data-scramble-host>
       <div className="flex">
         <span className="-mb-px border border-line-strong bg-paper px-3 py-1.5 text-xs uppercase tracking-[0.12em]">
           {project.facet}
@@ -27,7 +28,7 @@ function ProjectCard({ project }: { project: Project }) {
       <div className="flex min-h-[13rem] flex-col justify-center border border-line-strong bg-surface p-7 transition-colors duration-200 group-hover:bg-surface-sunken">
         <p className="label">{project.category}</p>
         <h3 className="mt-2 text-2xl tracking-tight">
-          {project.name}
+          <ScrambleLink text={project.name} />
           {project.link && (
             <ArrowUpRight className="ml-2 inline size-4 text-ink-faint transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent" />
           )}
@@ -137,7 +138,7 @@ export default function WorkGrid() {
                       : "bg-surface text-ink-soft hover:text-ink"
                   }`}
                 >
-                  {f}
+                  <ScrambleLink text={f} />
                 </button>
               );
             })}

@@ -5,7 +5,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { profile } from "@/lib/content";
 import GridRails from "@/components/GridRails";
 import SmoothScroll from "@/components/SmoothScroll";
-import PageWipe from "@/components/PageWipe";
+import PageTransition from "@/components/PageTransition";
 import SocialRail from "@/components/SocialRail";
 import "./globals.css";
 
@@ -73,7 +73,7 @@ export default function RootLayout({
         />
         <GridRails />
         <SmoothScroll />
-        <PageWipe />
+        <PageTransition />
         <SocialRail />
         {children}
         <Analytics />
