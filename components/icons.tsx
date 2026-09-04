@@ -1,35 +1,5 @@
 type IconProps = { className?: string };
 
-export function Logo({
-  className,
-  tone = "ink",
-}: IconProps & { tone?: "ink" | "cream" }) {
-  const box = tone === "ink" ? "var(--ink)" : "var(--cream)";
-  const mark = tone === "ink" ? "var(--paper)" : "var(--dark)";
-  return (
-    <svg viewBox="0 0 32 32" className={className} aria-hidden="true">
-      <rect width="32" height="32" rx="8" fill={box} />
-      <path
-        d="M9 11l5 5-5 5"
-        fill="none"
-        stroke={mark}
-        strokeWidth="2.6"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <line
-        x1="16.5"
-        y1="22"
-        x2="23"
-        y2="22"
-        stroke="#e8400c"
-        strokeWidth="2.6"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
-
 export function ArrowRight({ className }: IconProps) {
   return (
     <svg

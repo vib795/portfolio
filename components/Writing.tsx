@@ -1,8 +1,7 @@
 import Link from "next/link";
 import { getAllPosts } from "@/lib/blog";
 import PostRow from "./PostRow";
-import Reveal from "./Reveal";
-import SectionTag from "./SectionTag";
+import Scramble from "./Scramble";
 import { ArrowRight } from "./icons";
 
 const HOMEPAGE_LIMIT = 5;
@@ -14,29 +13,38 @@ export default function Writing() {
   const featured = posts.slice(0, HOMEPAGE_LIMIT);
 
   return (
-    <section id="writing" className="border-t border-line bg-paper-dim">
-      <div className="mx-auto max-w-[88rem] px-5 py-24 sm:px-8 sm:py-32 lg:px-12 lg:py-40">
-        <Reveal>
-          <SectionTag index="04" label="Writing" />
-        </Reveal>
-        <Reveal delay={0.05} className="mt-9">
-          <h2 className="text-[clamp(2.2rem,5vw,4.25rem)] font-bold leading-[1.04] tracking-[-0.03em]">
-            Notes from <span className="text-ink-faint">building things.</span>
-          </h2>
-        </Reveal>
+    <section id="writing" className="relative z-10">
+      <div className="shell">
+        <div className="rule-b grid lg:grid-cols-4">
+          <div className="border-line-strong p-6 lg:border-r">
+            <p className="label">/ Writing</p>
+          </div>
+          <div className="border-line-strong p-6 lg:col-span-2 lg:border-r">
+            <h2 className="text-3xl tracking-tight lg:text-4xl">
+              <Scramble text="Notes from building" />
+            </h2>
+          </div>
+          <div className="p-6">
+            <p className="label">Posts</p>
+            <p className="mt-2 text-5xl tracking-tight tabular-nums">
+              {String(posts.length).padStart(2, "0")}
+            </p>
+          </div>
+        </div>
 
-        <div className="mt-12 lg:mt-16">
+        {/* Opaque for the same reason the hero's featured cell is: post
+            excerpts run the full width, and a rail through a line of
+            prose reads as a rendering fault rather than as structure. */}
+        <div className="rule-b bg-paper px-4 lg:px-6">
           {featured.map((post, i) => (
-            <Reveal key={post.href} delay={Math.min(i, 3) * 0.05}>
-              <PostRow post={post} index={i} />
-            </Reveal>
+            <PostRow key={post.href} post={post} index={i} />
           ))}
         </div>
 
-        <Reveal className="border-t border-line pt-9">
+        <div className="rule-b p-6">
           <Link
             href="/blog"
-            className="group inline-flex items-center gap-3 font-mono text-[0.78rem] uppercase tracking-[0.16em] text-ink transition-colors hover:text-accent"
+            className="group inline-flex items-center gap-3 text-[0.78rem] uppercase tracking-[0.16em] text-ink transition-colors hover:text-accent"
           >
             <span className="link-line">
               {posts.length > featured.length
@@ -45,7 +53,7 @@ export default function Writing() {
             </span>
             <ArrowRight className="size-3.5 transition-transform duration-300 group-hover:translate-x-1" />
           </Link>
-        </Reveal>
+        </div>
       </div>
     </section>
   );

@@ -3,40 +3,60 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /* ════════════════════════════════════════════════════════════════
-   DESIGN TOKENS — warm "localhost" paper aesthetic
+   DESIGN TOKENS — module grid / technical-drawing aesthetic
+
+   Light is measured off the reference: a flat #e4e4e4 ground, panels
+   a few points brighter, one hot orange. The rule colour is
+   deliberately dark for a hairline (#9e9e9e on #e4e4e4) — the grid
+   *is* the design, so the lines have to read at 1px.
+
+   Dark is derived, not copied; the reference ships light only. Each
+   token keeps its relationship to the ground rather than its hue, so
+   a panel is still one step up from the page and the rule still sits
+   at roughly the same contrast against whatever is behind it.
+
+   Every name here already existed. Only the values changed, so the
+   209 Tailwind utilities and 25 var() call sites keep working.
    ════════════════════════════════════════════════════════════════ */
 :root {
   color-scheme: light;
-  --paper: #f2efe7;
-  --paper-dim: #ece8dc;
-  --surface: #fbfaf4;
-  --surface-sunken: #e7e2d3;
-  --ink: #1b1613;
-  --ink-soft: #6c625a;
-  --ink-faint: #a59c8d;
-  --line: #ded7c6;
-  --line-strong: #c9bfa8;
-  --accent: #e8400c;
-  --accent-deep: #bd3208;
-  --dark: #14110e;
-  --dark-surface: #201c17;
-  --dark-line: #3a342b;
-  --cream: #f2efe7;
-  --cream-soft: #9c9385;
+  --paper: #e4e4e4;
+  --paper-dim: #dcdcdc;
+  --surface: #f6f6f6;
+  --surface-sunken: #ededed;
+  --ink: #0e0e0e;
+  --ink-soft: #5a5a5a;
+  --ink-faint: #8c8c8c;
+  --line: #c4c4c4;
+  --line-strong: #9e9e9e;
+  --accent: #ff7120;
+  --accent-deep: #c15727;
+  --accent-ink: #0e0e0e;
+  --inverse: #0e0e0e;
+  --inverse-ink: #f6f6f6;
+  --dark: #0e0e0e;
+  --dark-surface: #1b1b1b;
+  --dark-line: #333333;
+  --cream: #e4e4e4;
+  --cream-soft: #8c8c8c;
 }
 
-/* dark mode — warm espresso tones, in the spirit of the footer */
 .dark {
   color-scheme: dark;
-  --paper: #15120e;
-  --paper-dim: #1c1712;
-  --surface: #241e17;
-  --surface-sunken: #221c15;
-  --ink: #f1ece1;
-  --ink-soft: #b3a896;
-  --ink-faint: #8a8070;
-  --line: #332c22;
-  --line-strong: #4c4233;
+  --paper: #131313;
+  --paper-dim: #101010;
+  --surface: #1c1c1c;
+  --surface-sunken: #171717;
+  --ink: #ededed;
+  --ink-soft: #a0a0a0;
+  --ink-faint: #6e6e6e;
+  --line: #2c2c2c;
+  --line-strong: #454545;
+  --accent: #ff7f36;
+  --accent-deep: #ff9354;
+  --accent-ink: #0e0e0e;
+  --inverse: #ededed;
+  --inverse-ink: #0e0e0e;
 }
 
 /* ════════════════════════════════════════════════════════════════
@@ -75,8 +95,14 @@
   --color-dark-line: var(--dark-line);
   --color-cream: var(--cream);
   --color-cream-soft: var(--cream-soft);
-  --font-sans: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-jetbrains-mono), ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --color-accent-ink: var(--accent-ink);
+  --color-inverse: var(--inverse);
+  --color-inverse-ink: var(--inverse-ink);
+  /* One family for the whole UI. --font-sans and --font-mono resolve to
+     the same stack so the existing `font-mono` utilities keep working
+     while nothing on the page is set in a proportional face. */
+  --font-sans: var(--font-roboto-mono), ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --font-mono: var(--font-roboto-mono), ui-monospace, "SFMono-Regular", Menlo, monospace;
 }
 
 /* ════════════════════════════════════════════════════════════════
@@ -522,4 +548,244 @@ button:focus-visible .link-line {
       box-shadow, outline-color, fill, stroke !important;
     transition-duration: var(--duration-fast) !important;
   }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   MODULE GRID
+
+   The reference draws a permanent 4-column ruling over a 1320px
+   container and lets content snap to it, deliberately leaving cells
+   empty. Every other device on the page hangs off these lines.
+
+   The rails are one fixed, non-interactive layer rather than borders
+   on each section, so a line never breaks where two sections meet
+   and never doubles to 2px on a shared edge.
+   ════════════════════════════════════════════════════════════════ */
+:root {
+  --shell: 82.5rem; /* 1320px — 4 × 330px columns */
+  --rail: 1px;
+}
+
+.shell {
+  width: 100%;
+  max-width: var(--shell);
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+}
+
+@media (min-width: 48rem) {
+  .shell {
+    padding-inline: 0;
+  }
+}
+
+/* The fixed hairline layer. Painted under content, never hit-tested. */
+.rails {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  display: flex;
+  justify-content: center;
+}
+
+/* One column on a phone (outer edges only), two from `sm`, four from
+   `lg`. A full-height middle rail at 390px would run straight through
+   body copy — the reference doesn't draw one there either. Each span is
+   a divider that owns the rule on its right edge, so the count of
+   visible spans is always one less than the column count. */
+.rails-inner {
+  width: 100%;
+  max-width: var(--shell);
+  display: grid;
+  grid-template-columns: 1fr;
+  border-inline: var(--rail) solid var(--line-strong);
+}
+
+.rails-inner > span {
+  border-right: var(--rail) solid var(--line-strong);
+}
+
+@media (min-width: 40rem) {
+  .rails-inner {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 64rem) {
+  .rails-inner {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Section rules. `cell` borders are drawn on one edge only so
+   adjacent cells share a single hairline instead of stacking two. */
+.rule-t {
+  border-top: var(--rail) solid var(--line-strong);
+}
+
+.rule-b {
+  border-bottom: var(--rail) solid var(--line-strong);
+}
+
+/* ════════════════════════════════════════════════════════════════
+   NOTCHED SURFACES
+
+   The reference cuts one corner off buttons and panels with
+   clip-path. Two sizes are in use: a 10px cut on chips and nav
+   items, and a ~22px cut on the primary CTAs.
+
+   A clipped element cannot show a border, so an outlined notch is
+   built as a 1px-padded parent (the "border") wrapping a clipped
+   child (the "fill") — which is exactly how the reference does it.
+   ════════════════════════════════════════════════════════════════ */
+.notch-sm {
+  clip-path: polygon(
+    10px 0,
+    100% 0,
+    100% calc(100% - 10px),
+    calc(100% - 10px) 100%,
+    0 100%,
+    0 10px
+  );
+}
+
+.notch-lg {
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% 100%,
+    22px 100%,
+    0 calc(100% - 22px)
+  );
+}
+
+.notch-tr {
+  clip-path: polygon(
+    0 0,
+    calc(100% - 14px) 0,
+    100% 14px,
+    100% 100%,
+    0 100%
+  );
+}
+
+/* ════════════════════════════════════════════════════════════════
+   CORNER TICKS
+
+   Four L-shaped brackets pinned to an element's corners, marking the
+   active nav item and framing figure cells. Drawn with two gradients
+   per corner so they scale without extra DOM.
+   ════════════════════════════════════════════════════════════════ */
+.ticks {
+  position: relative;
+}
+
+.ticks::before,
+.ticks::after {
+  content: "";
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-color: var(--accent);
+  border-style: solid;
+  pointer-events: none;
+}
+
+.ticks::before {
+  top: -4px;
+  left: -5px;
+  border-width: 1px 0 0 1px;
+}
+
+.ticks::after {
+  right: -5px;
+  bottom: -4px;
+  border-width: 0 1px 1px 0;
+}
+
+/* Full four-corner frame, for figure cells. */
+.frame-ticks {
+  position: relative;
+}
+
+.frame-ticks::before,
+.frame-ticks::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-repeat: no-repeat;
+}
+
+.frame-ticks::before {
+  background-image:
+    linear-gradient(var(--ink-faint), var(--ink-faint)),
+    linear-gradient(var(--ink-faint), var(--ink-faint)),
+    linear-gradient(var(--ink-faint), var(--ink-faint)),
+    linear-gradient(var(--ink-faint), var(--ink-faint));
+  background-size:
+    11px 1px,
+    1px 11px,
+    11px 1px,
+    1px 11px;
+  background-position:
+    left top,
+    left top,
+    right bottom,
+    right bottom;
+}
+
+.frame-ticks::after {
+  background-image:
+    linear-gradient(var(--ink-faint), var(--ink-faint)),
+    linear-gradient(var(--ink-faint), var(--ink-faint)),
+    linear-gradient(var(--ink-faint), var(--ink-faint)),
+    linear-gradient(var(--ink-faint), var(--ink-faint));
+  background-size:
+    11px 1px,
+    1px 11px,
+    11px 1px,
+    1px 11px;
+  background-position:
+    right top,
+    right top,
+    left bottom,
+    left bottom;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   TYPE
+   ════════════════════════════════════════════════════════════════ */
+
+/* Inverted highlight — black block, paper text. Used on the one word
+   the reference wants read first in a heading. */
+.invert-mark {
+  background: var(--inverse);
+  color: var(--inverse-ink);
+  padding: 0.1em 0.3em;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+.label {
+  font-size: 0.6875rem;
+  line-height: 1;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+/* ════════════════════════════════════════════════════════════════
+   SCRAMBLE
+
+   The reference runs GSAP's ScrambleTextPlugin on headings. This is
+   the same effect in ~30 lines of CSS-driven React (see
+   components/Scramble.tsx) — no 60KB of GSAP for one flourish.
+   Reserving the inline size stops the cycling glyphs from reflowing
+   the line as they change width.
+   ════════════════════════════════════════════════════════════════ */
+.scramble {
+  display: inline-block;
+  white-space: pre-wrap;
 }

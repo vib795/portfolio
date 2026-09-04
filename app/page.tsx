@@ -1,8 +1,7 @@
 import Nav from "@/components/Nav";
 import Hero from "@/components/Hero";
-import Marquee from "@/components/Marquee";
 import About from "@/components/About";
-import Work from "@/components/Work";
+import WorkGrid from "@/components/WorkGrid";
 import Experience from "@/components/Experience";
 import Writing from "@/components/Writing";
 import Contact from "@/components/Contact";
@@ -19,9 +18,8 @@ export default function Home() {
       <Nav />
       <main>
         <Hero />
-        <Marquee />
         <About />
-        <Work />
+        <WorkGrid />
         <Experience />
         <Writing />
         <Contact />

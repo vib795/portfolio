@@ -1,76 +1,107 @@
-import { contact, profile, socials } from "@/lib/content";
-import Reveal from "./Reveal";
-import SectionTag from "./SectionTag";
-import { ArrowUpRight } from "./icons";
+import type { ReactNode } from "react";
+import { contact, profile } from "@/lib/content";
+
+/** The outlined cross the reference parks in the empty cell beside its
+ *  closing call to action. */
+function Plus({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 120 120"
+      className={className}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.25"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M44 8h32v36h36v32H76v36H44V76H8V44h36Z" />
+    </svg>
+  );
+}
+
+/** A small square glyph box pinned to a grid intersection — the
+ *  reference hangs these off the ruling at section corners. */
+function NodeBox({
+  children,
+  className,
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <span
+      aria-hidden="true"
+      className={`absolute z-10 flex size-11 items-center justify-center border border-line-strong bg-paper text-ink-faint ${className ?? ""}`}
+    >
+      {children}
+    </span>
+  );
+}
 
 export default function Contact() {
   return (
-    <section
-      id="contact"
-      className="relative isolate overflow-hidden bg-dark text-cream"
-    >
-      <div className="absolute inset-0 -z-10 bg-grid-dark opacity-60 [mask-image:radial-gradient(ellipse_60%_60%_at_50%_0%,#000,transparent)]" />
-      <div className="mx-auto max-w-[88rem] px-5 py-24 sm:px-8 sm:py-32 lg:px-12 lg:py-44">
-        <Reveal>
-          <SectionTag index="05" label="Contact" tone="cream" />
-        </Reveal>
+    <section id="contact" className="relative z-10">
+      <div className="shell">
+        <div className="rule-b relative grid lg:grid-cols-4">
+          <NodeBox className="-left-px -top-px">
+            <svg
+              viewBox="0 0 16 16"
+              className="size-4"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+            >
+              <path d="m4 4 8 8M12 4l-8 8" strokeLinecap="round" />
+            </svg>
+          </NodeBox>
 
-        <Reveal delay={0.05} className="mt-9">
-          <h2 className="max-w-[16ch] text-[clamp(2.4rem,6vw,5rem)] font-bold leading-[1.03] tracking-[-0.03em]">
-            {contact.heading.lead}{" "}
-            <span className="text-cream-soft">{contact.heading.tail}</span>
-          </h2>
-        </Reveal>
+          <div className="border-line-strong bg-paper p-6 pt-20 lg:col-span-2 lg:border-r">
+            <p className="flex items-center gap-3 text-2xl uppercase tracking-tight lg:text-3xl">
+              <span className="text-accent" aria-hidden="true">
+                ▸
+              </span>
+              {contact.heading.lead}
+            </p>
+            <h2 className="mt-3 text-2xl uppercase tracking-tight lg:text-3xl">
+              <span className="invert-mark">{contact.heading.tail}</span>
+            </h2>
+            <p className="mt-6 max-w-md leading-relaxed text-ink-soft">
+              {contact.body}
+            </p>
+          </div>
 
-        <Reveal delay={0.1} className="mt-7 max-w-xl">
-          <p className="text-lg leading-relaxed text-cream-soft">
-            {contact.body}
-          </p>
-        </Reveal>
+          <div className="relative hidden items-center justify-center border-r border-line-strong lg:flex">
+            <Plus className="size-32 text-ink-faint" />
+            <NodeBox className="-bottom-px -right-px">
+              <span className="block size-3 rounded-full border border-current" />
+            </NodeBox>
+          </div>
 
-        <Reveal delay={0.15} className="mt-12 lg:mt-16">
-          <a
-            href={`mailto:${profile.email}`}
-            className="group inline-flex items-center gap-3 sm:gap-5"
-          >
-            <span className="link-line text-[clamp(1.6rem,5.4vw,3.6rem)] font-medium tracking-tight">
-              {profile.email}
-            </span>
-            <span className="flex size-12 shrink-0 items-center justify-center rounded-full border border-dark-line transition-colors duration-300 group-hover:border-accent group-hover:bg-accent sm:size-16">
-              <ArrowUpRight className="size-5 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 sm:size-6" />
-            </span>
-          </a>
-        </Reveal>
-
-        <Reveal delay={0.18} className="mt-6">
-          <a
-            href={contact.calendly}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group inline-flex items-center gap-2 font-mono text-sm uppercase tracking-[0.12em] text-cream-soft transition-colors hover:text-cream"
-          >
-            <span className="link-line">Or book a 30-min call</span>
-            <ArrowUpRight className="size-3.5 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-          </a>
-        </Reveal>
-
-        <Reveal
-          delay={0.2}
-          className="mt-14 flex flex-wrap gap-x-8 gap-y-3 border-t border-dark-line pt-7 lg:mt-20"
-        >
-          {socials.map((s) => (
+          <div className="flex flex-col justify-center gap-3 p-6">
             <a
-              key={s.label}
-              href={s.url}
+              href={`mailto:${profile.email}`}
+              className="notch-lg block bg-accent px-6 py-4 text-center text-sm uppercase tracking-[0.14em] text-accent-ink transition-colors hover:bg-accent-deep"
+            >
+              Email me
+            </a>
+            {/* Outlined notch: a 1px-padded parent supplies the border and
+                the clipped child supplies the fill. A clipped element
+                cannot render a border of its own. */}
+            <a
+              href={contact.calendly}
               target="_blank"
               rel="noopener noreferrer"
-              className="group inline-flex items-center gap-2 font-mono text-sm uppercase tracking-[0.12em] text-cream-soft transition-colors hover:text-cream"
+              className="notch-lg block bg-accent p-px"
             >
-              <span className="link-line">{s.label}</span>
-              <ArrowUpRight className="size-3.5 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+              <span className="notch-lg block bg-paper px-6 py-4 text-center text-sm uppercase tracking-[0.14em] text-ink transition-colors hover:text-accent">
+                Book a call
+              </span>
             </a>
-          ))}
-        </Reveal>
+          </div>
+        </div>
+
+        {/* No social row here — the footer's fourth column already
+            carries them, and the reference never repeats a link group. */}
       </div>
     </section>
   );

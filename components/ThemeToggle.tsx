@@ -28,7 +28,7 @@ export default function ThemeToggle() {
       type="button"
       onClick={toggle}
       aria-label="Toggle dark mode"
-      className="relative flex size-9 shrink-0 items-center justify-center rounded-full border border-line text-ink-soft transition-colors hover:border-ink hover:text-ink"
+      className="relative flex size-9 shrink-0 items-center justify-center border border-line-strong text-ink-soft transition-colors hover:border-accent hover:text-accent"
     >
       {/* Both icons stay mounted and cross-rotate. Swapping the element
           outright made the one visibly-stateful control on the page the

@@ -1,80 +1,116 @@
 import { navLinks, profile, socials } from "@/lib/content";
-import { Logo } from "./icons";
+import { ArrowUpRight } from "./icons";
+import Wordmark from "./Wordmark";
+
+const year = new Date().getFullYear();
 
 export default function Footer() {
-  const year = new Date().getFullYear();
   return (
-    <footer className="bg-dark text-cream">
-      <div className="mx-auto max-w-[88rem] border-t border-dark-line px-5 py-12 sm:px-8 lg:px-12">
-        <div className="flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between">
-          <div className="max-w-xs">
-            <a href="/#top" className="inline-flex items-center gap-2.5">
-              <Logo className="size-8" tone="cream" />
-              <span className="font-mono text-sm font-medium">
-                {profile.first.toLowerCase()}
-                <span className="text-accent">_</span>
-              </span>
-            </a>
-            <p className="mt-4 text-sm leading-relaxed text-cream-soft">
-              {profile.role} building considered software for the web. Always
-              happy to talk shop.
-            </p>
+    <footer className="relative z-10">
+      <div className="shell">
+        <div className="rule-t rule-b grid sm:grid-cols-2 lg:grid-cols-4">
+          <nav className="border-line-strong p-6 lg:border-r">
+            <p className="label">Navigate</p>
+            <ul className="mt-5 space-y-3">
+              {navLinks.map((l) => (
+                <li key={l.href}>
+                  <a
+                    href={l.href}
+                    className="text-sm text-ink-soft transition-colors hover:text-accent"
+                  >
+                    {l.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          <div className="border-line-strong p-6 lg:border-r">
+            <p className="label">Contact</p>
+            <ul className="mt-5 space-y-3">
+              <li>
+                <a
+                  href={`mailto:${profile.email}`}
+                  className="text-sm text-ink-soft transition-colors hover:text-accent"
+                >
+                  {profile.email}
+                </a>
+              </li>
+              <li className="text-sm text-ink-soft">{profile.location}</li>
+              <li className="text-sm text-ink-faint">{profile.availability}</li>
+            </ul>
           </div>
 
-          <div className="flex gap-14 sm:gap-24">
-            <nav className="flex flex-col gap-3">
-              <span className="mb-1 font-mono text-[0.7rem] uppercase tracking-[0.2em] text-cream-soft/60">
-                Navigate
-              </span>
-              {navLinks.map((l) => (
-                <a
-                  key={l.href}
-                  href={l.href}
-                  className="link-line w-fit text-sm text-cream-soft transition-colors hover:text-cream"
-                >
-                  {l.label}
-                </a>
-              ))}
-              <a
-                href="/#contact"
-                className="link-line w-fit text-sm text-cream-soft transition-colors hover:text-cream"
-              >
-                Contact
-              </a>
-            </nav>
-            <nav className="flex flex-col gap-3">
-              <span className="mb-1 font-mono text-[0.7rem] uppercase tracking-[0.2em] text-cream-soft/60">
-                Elsewhere
-              </span>
+          <div className="border-line-strong p-6 lg:border-r">
+            <p className="label">Colophon</p>
+            <ul className="mt-5 space-y-3 text-sm text-ink-soft">
+              <li>Next.js · Tailwind</li>
+              <li>Roboto Mono</li>
+              <li>Wordmark drawn as SVG</li>
+            </ul>
+          </div>
+
+          <div className="p-6">
+            <p className="label text-right">Elsewhere</p>
+            <ul className="mt-5 space-y-3 text-right">
               {socials.map((s) => (
-                <a
-                  key={s.label}
-                  href={s.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="link-line w-fit text-sm text-cream-soft transition-colors hover:text-cream"
-                >
-                  {s.label}
-                </a>
+                <li key={s.label}>
+                  <a
+                    href={s.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-sm uppercase tracking-[0.12em] text-ink-soft transition-colors hover:text-accent"
+                  >
+                    {s.label}
+                    <ArrowUpRight className="size-3" />
+                  </a>
+                </li>
               ))}
-            </nav>
+            </ul>
           </div>
         </div>
 
-        <div className="mt-12 flex flex-col gap-3 border-t border-dark-line pt-6 font-mono text-[0.7rem] uppercase tracking-[0.14em] text-cream-soft/60 sm:flex-row sm:items-center sm:justify-between">
-          <span>
-            © {year} {profile.name}
-          </span>
-          <span className="flex items-center gap-1.5">
-            <span className="size-1.5 rounded-full bg-accent" />
-            Built with Next.js + Tailwind
-          </span>
-          <a
-            href="#top"
-            className="link-line w-fit transition-colors hover:text-cream"
-          >
-            Back to top ↑
-          </a>
+        <div className="rule-b grid lg:grid-cols-4">
+          <p className="label border-line-strong p-6 lg:border-r">© {year}</p>
+          <p className="label p-6 lg:col-span-3">
+            All rights reserved by {profile.name}
+          </p>
+        </div>
+
+        {/* The mark is sliced by the column rules rather than centred in a
+            cell — the rules run behind it and reappear in the counters. */}
+        <div className="relative">
+          <div className="grid grid-cols-2 lg:grid-cols-4" aria-hidden="true">
+            <span className="aspect-[2/1] border-r border-line-strong lg:aspect-[3/4]" />
+            <span className="aspect-[2/1] border-line-strong lg:aspect-[3/4] lg:border-r" />
+            <span className="hidden border-r border-line-strong lg:block" />
+            <span className="hidden lg:block" />
+          </div>
+
+          <div className="absolute inset-0 flex items-center px-6 py-10 lg:px-10">
+            <Wordmark
+              text={profile.last}
+              title={profile.name}
+              className="w-full text-ink"
+            />
+          </div>
+
+          <span
+            className="absolute left-5 top-5 size-2.5 bg-accent"
+            aria-hidden="true"
+          />
+          <span
+            className="absolute right-5 top-5 size-2.5 bg-accent"
+            aria-hidden="true"
+          />
+          <span
+            className="absolute bottom-5 left-5 size-2.5 bg-accent"
+            aria-hidden="true"
+          />
+          <span
+            className="absolute bottom-5 right-5 size-2.5 bg-accent"
+            aria-hidden="true"
+          />
         </div>
       </div>
     </footer>

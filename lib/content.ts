@@ -100,10 +100,21 @@ export const about = {
   ],
 };
 
+/** The four facets the work grid filters on. "All" is a UI-only value. */
+export const workFacets = ["All", "AI Systems", "Open Source", "Apps"] as const;
+export type WorkFacet = (typeof workFacets)[number];
+
+/** One cell of a project card's 2x2 stat block. */
+export type Stat = { value: string; label: string };
+
 export type Project = {
   name: string;
   year: string;
   category: string;
+  /** Which filter pill this project answers to. */
+  facet: Exclude<WorkFacet, "All">;
+  /** Exactly four, rendered as the card's 2x2 stat grid. */
+  stats: Stat[];
   blurb: string;
   stack: string[];
   link?: string; // public URL — omitted for internal / private work
@@ -114,6 +125,13 @@ export const projects: Project[] = [
     name: "Agent Memory",
     year: "2026",
     category: "npm Package",
+    facet: "Open Source",
+    stats: [
+      { value: "0", label: "Runtime deps" },
+      { value: "93", label: "Tests" },
+      { value: "12", label: "CI jobs" },
+      { value: "Sigstore", label: "Provenance" },
+    ],
     blurb:
       "Durable cross-repo memory for Claude Code, GitHub Copilot, and Codex. Each client engagement is a separate store rather than a filtered view, so one engagement's notes are unreachable from another even by exact id. Knowledge exports at global scope by default — what you learned travels between machines, the client's architecture does not. Zero runtime and zero dev dependencies, asserted in CI and published to npm with Sigstore provenance attestation.",
     stack: ["Node.js", "node:sqlite", "Agent Skills"],
@@ -123,6 +141,13 @@ export const projects: Project[] = [
     name: "Code Analyzer",
     year: "2025",
     category: "RAG Platform",
+    facet: "AI Systems",
+    stats: [
+      { value: "600+", label: "Repositories" },
+      { value: "73%", label: "Keyword recall" },
+      { value: "520ms", label: "p95 latency" },
+      { value: "3", label: "Retrieval stores" },
+    ],
     blurb:
       "A code-intelligence platform that ingests and queries large multi-repository codebases — 600+ repos at its first engagement — to power software-engineering audits. A tri-store backbone pairs Qdrant for dense semantic search, Neo4j for call graphs and symbol references, and OpenSearch for BM25 exact-match on the rare identifier tokens embeddings handle worst, fused with Reciprocal Rank Fusion and cross-encoder reranking.",
     stack: ["Python", "Qdrant", "Neo4j", "OpenSearch", "LiteLLM"],
@@ -131,6 +156,13 @@ export const projects: Project[] = [
     name: "Resume Screener",
     year: "2025",
     category: "AI System",
+    facet: "AI Systems",
+    stats: [
+      { value: "3", label: "Signal layers" },
+      { value: "LSH", label: "Near-duplicate" },
+      { value: "PII", label: "Aware ingest" },
+      { value: "FastAPI", label: "Runtime" },
+    ],
     blurb:
       "An AI resume-evaluation system on FastAPI that flags exact duplicates, near-duplicates, and semantic plagiarism through a multi-signal pipeline of hashing, lexical overlap, and embeddings — with PII-aware ingestion and human-reviewable evidence reports.",
     stack: ["FastAPI", "Embeddings", "MinHash / LSH"],
@@ -139,6 +171,13 @@ export const projects: Project[] = [
     name: "Costco Price Match",
     year: "2026",
     category: "AI Agent",
+    facet: "AI Systems",
+    stats: [
+      { value: "Nova", label: "Receipt parsing" },
+      { value: "Weekly", label: "Run cadence" },
+      { value: "AgentCore", label: "Runtime" },
+      { value: "App Store", label: "Companion" },
+    ],
     blurb:
       "An AI agent that scans Costco receipts, cross-references each line item against active deals and temporary price drops, and emails a weekly price-adjustment report. Receipt parsing runs on Amazon Nova; the weekly run is an AgentCore Runtime triggered by EventBridge. Ships with a native SwiftUI companion app — CostScanner — on the App Store.",
     stack: ["AWS Lambda", "Amazon Nova", "AgentCore", "SwiftUI"],
@@ -148,6 +187,13 @@ export const projects: Project[] = [
     name: "Yantra: Second Brain",
     year: "2026",
     category: "iOS App",
+    facet: "Apps",
+    stats: [
+      { value: "3", label: "Languages" },
+      { value: "100%", label: "On-device NLP" },
+      { value: "iOS 26", label: "Foundation Models" },
+      { value: "0", label: "Bytes retained" },
+    ],
     blurb:
       "A native iOS app for capturing voice memos, notes, journals, meeting recordings, photos, and saved URLs — then chatting with them. Transcription, embeddings, and summarization all run on-device via Apple Speech, NLEmbedding, and iOS 26 Foundation Models; only the retrieved snippets and the question leave, sent under the user's own Anthropic key through a stateless proxy that persists nothing. Captures English, Hindi, and Hinglish with translation.",
     stack: ["SwiftUI", "Apple Speech", "Foundation Models", "Anthropic"],
@@ -157,6 +203,13 @@ export const projects: Project[] = [
     name: "Passport Tool iOS",
     year: "2026",
     category: "iOS App",
+    facet: "Apps",
+    stats: [
+      { value: "100%", label: "On-device" },
+      { value: "0", label: "Backend" },
+      { value: "Vision", label: "Face detection" },
+      { value: "App Store", label: "Shipped" },
+    ],
     blurb:
       "A fully on-device iOS app for preparing VFS Global / Passport Seva compliant Indian passport photos. Apple's Vision framework handles face detection, real-human verification, and background segmentation, with Core Image for cropping and tone — a SwiftUI port of the Python/OpenCV web original with zero backend.",
     stack: ["SwiftUI", "Vision", "Core Image"],
@@ -166,6 +219,13 @@ export const projects: Project[] = [
     name: "Meeting AI",
     year: "2024",
     category: "AI Platform",
+    facet: "AI Systems",
+    stats: [
+      { value: "6", label: "Model providers" },
+      { value: "RAG", label: "Timestamped" },
+      { value: "pgvector", label: "Vector store" },
+      { value: "Q&A", label: "Conversational" },
+    ],
     blurb:
       "A meeting-intelligence platform that transcribes audio and generates structured minutes, summaries, and conversational Q&A using RAG over timestamped transcript segments, backed by PostgreSQL-native vector search. Inference sits behind a model-agnostic layer spanning OpenAI, Claude, Gemini, DeepSeek, Hugging Face, and Ollama, so quality can be benchmarked against cost and latency on noisy long-form audio.",
     stack: ["Python", "RAG", "pgvector", "Multi-LLM"],
@@ -174,6 +234,13 @@ export const projects: Project[] = [
     name: "Pull Vids",
     year: "2026",
     category: "CLI Tool",
+    facet: "Open Source",
+    stats: [
+      { value: "1000+", label: "Sites" },
+      { value: "4K", label: "Max quality" },
+      { value: "3", label: "Go CLIs" },
+      { value: "Homebrew", label: "Tap" },
+    ],
     blurb:
       "A universal video and audio downloader CLI built in Go — 1000+ sites, 360p to 4K, playlists and channels, progress bars, and cookie-auth bypass. One of three Go CLIs, alongside convert-vid and epub2pdf, installable in one line from a shared Homebrew tap.",
     stack: ["Go", "FFmpeg", "Homebrew"],
@@ -183,6 +250,13 @@ export const projects: Project[] = [
     name: "Flaunt GitHub",
     year: "2026",
     category: "VS Code Extension",
+    facet: "Open Source",
+    stats: [
+      { value: "VS Code", label: "Marketplace" },
+      { value: "Per-save", label: "Capture" },
+      { value: "TypeScript", label: "Built in" },
+      { value: "Chart", label: "Contribution" },
+    ],
     blurb:
       "A VS Code extension that turns every file save into a digital milestone — capturing your coding journey as a living, GitHub-style contribution chart.",
     stack: ["TypeScript", "VS Code API"],
@@ -192,6 +266,13 @@ export const projects: Project[] = [
     name: "Always Decimal",
     year: "2025",
     category: "Python Package",
+    facet: "Open Source",
+    stats: [
+      { value: "PyPI", label: "Published" },
+      { value: "Decimal", label: "Safe casts" },
+      { value: "Postgres", label: "Float parity" },
+      { value: "Python", label: "Package" },
+    ],
     blurb:
       "An open-source Python package on PyPI for safe conversion of floats, strings, and numbers into Decimal objects — resolving the numeric-comparison pitfalls between PostgreSQL values and Python floats.",
     stack: ["Python", "PyPI"],
@@ -201,6 +282,13 @@ export const projects: Project[] = [
     name: "Everyday Developer Tools",
     year: "2024",
     category: "Web App",
+    facet: "Apps",
+    stats: [
+      { value: "16+", label: "Tools" },
+      { value: "1", label: "Docker image" },
+      { value: "FastAPI", label: "Backend" },
+      { value: "Live", label: "wrench.tools" },
+    ],
     blurb:
       "A web app bundling 16+ everyday developer tools — JSON validators and schema generators, regex helpers, string and time utilities, encoding and fake-data tools, and Markdown ⇄ PDF conversion. A FastAPI backend exposes each tool as a typed JSON endpoint; a Vite + React frontend ships alongside it in a single Docker image.",
     stack: ["FastAPI", "React", "Docker"],
@@ -210,6 +298,13 @@ export const projects: Project[] = [
     name: "Feast Factor",
     year: "2024",
     category: "Web App",
+    facet: "Apps",
+    stats: [
+      { value: "4", label: "Macro targets" },
+      { value: "Next.js", label: "Stack" },
+      { value: "Vercel", label: "Deployed" },
+      { value: "Responsive", label: "Layout" },
+    ],
     blurb:
       "A macro calculator for weight-loss and fitness goals — it turns age, weight, height, and activity level into daily protein, carb, fat, and calorie targets to plan meals against. A responsive Next.js app deployed on Vercel.",
     stack: ["Next.js", "React", "Vercel"],
@@ -219,6 +314,13 @@ export const projects: Project[] = [
     name: "Copilot Anatomy",
     year: "2026",
     category: "Dev Tooling",
+    facet: "Open Source",
+    stats: [
+      { value: "5", label: "Primitives" },
+      { value: "1", label: "Scaffold script" },
+      { value: "Interactive", label: "Visualisation" },
+      { value: "Polyglot", label: "Multi-model" },
+    ],
     blurb:
       "A reference implementation for configuring GitHub Copilot across a multi-model, polyglot team — every customisation primitive (instructions, prompts, skills, agents, chat modes) plus governance tooling. One script scaffolds the full .github/ structure into any repo, and an interactive browser visualisation maps how the pieces fit together.",
     stack: ["Shell", "GitHub Copilot", "HTML"],
@@ -228,6 +330,13 @@ export const projects: Project[] = [
     name: "Copilot How To",
     year: "2026",
     category: "Learning Guide",
+    facet: "Open Source",
+    stats: [
+      { value: "16", label: "Modules" },
+      { value: "Mermaid", label: "Diagrams" },
+      { value: "Templates", label: "Copy-paste" },
+      { value: "Beginner+", label: "Progressive path" },
+    ],
     blurb:
       "A structured, visual, example-driven guide to mastering GitHub Copilot — 16 tutorial modules spanning every feature, from slash commands and custom instructions to skills, agents, MCP, and governance. Each module pairs Mermaid diagrams that explain how a feature works under the hood with copy-paste templates and a progressive beginner-to-advanced path.",
     stack: ["GitHub Copilot", "Mermaid", "Markdown"],
