@@ -41,13 +41,22 @@ export async function generateMetadata({
   const shared: Metadata = {
     title: `${post.title} — ${profile.name}`,
     description: post.excerpt,
-    // Must be set on both branches: the root layout declares canonical "/",
-    // and without an override every post page would claim the homepage as
-    // its canonical URL.
-    alternates: { canonical: `/blog/${post.slug}` },
+    // A Medium post is the original and should be the thing that ranks —
+    // the reads belong there. Pointing canonical at Medium consolidates
+    // every signal onto that post while this landing page stays crawlable
+    // and keeps its outbound link.
+    //
+    // Must be set for on-site posts too: the root layout declares canonical
+    // "/", so without an override every post page would claim the homepage
+    // as its canonical URL. An absolute URL bypasses metadataBase; the
+    // relative fallback resolves against it.
+    alternates: { canonical: post.mediumUrl ?? `/blog/${post.slug}` },
     openGraph: {
       title: post.title,
       description: post.excerpt,
+      // Deliberately NOT the Medium URL. This is the branding hook — a
+      // shared link should preview as singhcodes.dev rather than hand the
+      // card straight to Medium. See the header comment in lib/blog.ts.
       url: `/blog/${post.slug}`,
       type: "article",
       publishedTime: post.date,
@@ -56,12 +65,13 @@ export async function generateMetadata({
     },
   };
 
-  // Medium landing pages are indexable and canonical to this domain. They
-  // are excerpt-plus-link rather than the full body, but they carry a real
-  // title, excerpt, tags, date and OG image — enough to be a legitimate
-  // entry point, and they put singhcodes.dev/blog/* in the index instead of
-  // handing every impression to Medium. Listed in the sitemap for the same
-  // reason; see app/sitemap.ts.
+  // No `noindex` on either branch. A Medium landing page is crawlable and
+  // canonical to its Medium original (above), which is the signal that
+  // grows the Medium audience: Google folds the page into that post rather
+  // than either indexing a thin duplicate or ignoring the URL outright.
+  // Search Console reports these as "Alternate page with proper canonical
+  // tag" — an exclusion, not an error. Listed in the sitemap on the same
+  // basis; see app/sitemap.ts.
   return shared;
 }
 
