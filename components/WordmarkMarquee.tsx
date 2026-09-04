@@ -14,8 +14,8 @@ import Wordmark from "./Wordmark";
  *
  * The gap between repeats is a blank glyph slot, not padding. The space
  * glyph is an empty path with a full advance, so the gap is exactly one
- * character wide and scales with the mark — 40px of flex padding under a
- * 168px-tall mark read as no gap at all, which is what it was.
+ * character wide and scales with the mark — a fixed 40px of flex padding
+ * read as no gap at all under a mark this tall, which is what it was.
  */
 export default function WordmarkMarquee({
   text,
@@ -36,7 +36,7 @@ export default function WordmarkMarquee({
                 key={copy}
                 text={`${text} `}
                 title={run === 0 && copy === 0 ? title : undefined}
-                className="h-[10.5rem] w-auto shrink-0 text-ink lg:h-[11.5rem]"
+                className="h-[7rem] w-auto shrink-0 text-ink lg:h-[8rem]"
               />
             ))}
           </div>

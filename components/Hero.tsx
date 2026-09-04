@@ -35,7 +35,7 @@ export default function Hero() {
         {/* The mark scrolls rather than sitting still — the reference
             runs its display wordmark as a 50s linear marquee, and that
             single decision is most of what the hero feels like. */}
-        <div className="rule-b relative py-10 lg:py-14">
+        <div className="rule-b relative py-7 lg:py-9">
           <Drift />
           <WordmarkMarquee
             text="PORTFOLIO"

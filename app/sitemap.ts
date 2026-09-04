@@ -1,17 +1,21 @@
 import type { MetadataRoute } from "next";
-import { getSitePosts } from "@/lib/blog";
+import { getAllPosts } from "@/lib/blog";
 
 const BASE = "https://singhcodes.dev";
 
 /**
- * Only indexable URLs belong here.
+ * Only indexable URLs belong here — which is now every post, from both
+ * sources.
  *
- * The Medium landing pages are `noindex` by design — the real post lives on
- * Medium and should be the thing that ranks. Listing them would earn a
- * "Submitted URL marked 'noindex'" warning in Search Console for every one.
+ * Medium landing pages used to be `noindex`, so listing them would have
+ * earned a "Submitted URL marked 'noindex'" error in Search Console for
+ * each one. They are indexable and canonical to this domain as of this
+ * change, so they belong here — but the two must be kept in step. If a page
+ * is ever set back to `noindex`, drop it from this list in the same commit.
+ * See generateMetadata in app/blog/[slug]/page.tsx.
  */
 export default function sitemap(): MetadataRoute.Sitemap {
-  const posts = getSitePosts()
+  const posts = getAllPosts()
     .filter((post) => !post.draft)
     .map((post) => ({
       url: `${BASE}/blog/${post.slug}`,

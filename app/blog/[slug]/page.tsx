@@ -56,14 +56,12 @@ export async function generateMetadata({
     },
   };
 
-  if (post.source === "medium") {
-    // The body lives on Medium; this page is an excerpt plus a link. Keeping
-    // it out of the index stops a thin page competing with the real post,
-    // which is where the reads should land. `follow` so the outbound link
-    // still carries.
-    return { ...shared, robots: { index: false, follow: true } };
-  }
-
+  // Medium landing pages are indexable and canonical to this domain. They
+  // are excerpt-plus-link rather than the full body, but they carry a real
+  // title, excerpt, tags, date and OG image — enough to be a legitimate
+  // entry point, and they put singhcodes.dev/blog/* in the index instead of
+  // handing every impression to Medium. Listed in the sitemap for the same
+  // reason; see app/sitemap.ts.
   return shared;
 }
 
