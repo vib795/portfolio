@@ -16,12 +16,25 @@ import ScrambleLink from "./ScrambleLink";
  * tag chip sitting on the panel's top rule, a tall panel, then a 2x2
  * block of stats with a full-height arrow cell beside it.
  */
-function ProjectCard({ project }: { project: Project }) {
+function ProjectCard({
+  project,
+  hidden,
+}: {
+  project: Project;
+  hidden?: boolean;
+}) {
   return (
-    <article className="group" data-scramble-host>
+    <article className="group" data-scramble-host hidden={hidden}>
+      {/* Facet and year ride the panel's top rule together, the way the
+          hero's featured cell chips its own row. The year is not
+          decoration — it is how a reader dates the work, and the card
+          is the only place it appears. */}
       <div className="flex">
         <span className="-mb-px border border-line-strong bg-paper px-3 py-1.5 text-xs uppercase tracking-[0.12em]">
           {project.facet}
+        </span>
+        <span className="-mb-px -ml-px border border-line-strong bg-paper px-3 py-1.5 text-xs uppercase tracking-[0.12em] text-ink-faint">
+          {project.year}
         </span>
       </div>
 
@@ -88,6 +101,8 @@ export default function WorkGrid() {
   const [facet, setFacet] = useState<WorkFacet>("Featured");
   const [query, setQuery] = useState("");
 
+  // Names of the projects the current filter admits — not a filtered
+  // list. Every project is rendered either way; see below.
   const shown = useMemo(() => {
     const q = query.trim().toLowerCase();
     return projects.filter((p) => {
@@ -110,6 +125,8 @@ export default function WorkGrid() {
       );
     });
   }, [facet, query]);
+
+  const visible = useMemo(() => new Set(shown.map((p) => p.name)), [shown]);
 
   return (
     <section id="work" className="relative z-10">
@@ -177,8 +194,21 @@ export default function WorkGrid() {
         </div>
 
         <div className="rule-b grid gap-x-8 gap-y-10 p-4 sm:grid-cols-2 lg:gap-x-10 lg:p-6">
-          {shown.map((p) => (
-            <ProjectCard key={p.name} project={p} />
+          {/* Every project is rendered, always; the filter only hides.
+              Dropping the non-matching ones from the tree would take
+              them out of the server HTML too, and with Featured as the
+              default that means ten of the fourteen never reach a
+              crawler or a reader without JS. Same contract as
+              `.accordion-panel`: mounted, and hidden by CSS. `hidden`
+              also takes a filtered card out of the tab order and off
+              screen readers, which `display: none` alone would not
+              guarantee. */}
+          {projects.map((p) => (
+            <ProjectCard
+              key={p.name}
+              project={p}
+              hidden={!visible.has(p.name)}
+            />
           ))}
           {shown.length === 0 && (
             <p className="py-16 text-center text-ink-faint sm:col-span-2">
