@@ -85,14 +85,23 @@ function ProjectCard({ project }: { project: Project }) {
 }
 
 export default function WorkGrid() {
-  const [facet, setFacet] = useState<WorkFacet>("All");
+  const [facet, setFacet] = useState<WorkFacet>("Featured");
   const [query, setQuery] = useState("");
 
   const shown = useMemo(() => {
     const q = query.trim().toLowerCase();
     return projects.filter((p) => {
-      if (facet !== "All" && p.facet !== facet) return false;
-      if (!q) return true;
+      // A search looks across everything. The default tab shows four
+      // projects, so honouring the facet here would mean typing
+      // "python" and being told nothing matches while three Python
+      // projects sit one tab away.
+      if (!q) {
+        // Featured cuts across the facets rather than being one of
+        // them, so it is matched on its own flag, not on `p.facet`.
+        if (facet === "Featured") return Boolean(p.featured);
+        if (facet !== "All" && p.facet !== facet) return false;
+        return true;
+      }
       return (
         p.name.toLowerCase().includes(q) ||
         p.category.toLowerCase().includes(q) ||

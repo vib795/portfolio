@@ -11,6 +11,11 @@ import Wordmark from "./Wordmark";
  *
  * `aria-hidden` on the copies keeps a screen reader from reading the
  * mark twice; the accessible name lives on the first run only.
+ *
+ * The gap between repeats is a blank glyph slot, not padding. The space
+ * glyph is an empty path with a full advance, so the gap is exactly one
+ * character wide and scales with the mark — 40px of flex padding under a
+ * 168px-tall mark read as no gap at all, which is what it was.
  */
 export default function WordmarkMarquee({
   text,
@@ -25,11 +30,11 @@ export default function WordmarkMarquee({
     <div className={`overflow-hidden ${className ?? ""}`}>
       <div className="marquee-track">
         {[0, 1].map((run) => (
-          <div key={run} className="flex items-center gap-10 pr-10">
+          <div key={run} className="flex items-center">
             {[0, 1].map((copy) => (
               <Wordmark
                 key={copy}
-                text={text}
+                text={`${text} `}
                 title={run === 0 && copy === 0 ? title : undefined}
                 className="h-[10.5rem] w-auto shrink-0 text-ink lg:h-[11.5rem]"
               />

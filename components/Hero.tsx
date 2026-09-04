@@ -38,7 +38,7 @@ export default function Hero() {
         <div className="rule-b relative py-10 lg:py-14">
           <Drift />
           <WordmarkMarquee
-            text="PORT_FOLIO"
+            text="PORTFOLIO"
             title={`${profile.name} — portfolio`}
             className="relative"
           />

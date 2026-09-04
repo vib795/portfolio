@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import Lenis from "lenis";
+import { glideTo, setLenis } from "@/lib/scroll";
 
 /**
  * Lenis smooth scroll, matching the reference's scroll feel.
@@ -32,6 +33,10 @@ export default function SmoothScroll() {
       touchMultiplier: 1.6,
     });
 
+    // Published so the page transition can move the scroll behind its
+    // own curtain without desyncing Lenis.
+    setLenis(lenis);
+
     let frame = 0;
     const raf = (time: number) => {
       lenis.raf(time);
@@ -39,9 +44,14 @@ export default function SmoothScroll() {
     };
     frame = requestAnimationFrame(raf);
 
-    // Anchor links: Lenis owns the scroll position, so letting the
-    // browser jump would desync its internal offset.
+    // Anchor links that the page transition did not claim. It listens
+    // in the capture phase and stops propagation on the ones it takes,
+    // so anything reaching here is an ordinary in-page link and gets an
+    // ordinary smooth scroll. Lenis owns the scroll position either way,
+    // so letting the browser jump would desync its internal offset.
     const onClick = (e: MouseEvent) => {
+      // Already claimed by the page transition, which runs first.
+      if (e.defaultPrevented) return;
       const link = (e.target as HTMLElement)?.closest?.("a");
       if (!link) return;
       const href = link.getAttribute("href");
@@ -58,7 +68,7 @@ export default function SmoothScroll() {
       if (!target) return;
 
       e.preventDefault();
-      lenis.scrollTo(target as HTMLElement, { offset: -88 });
+      glideTo(target);
       history.pushState(null, "", hash);
     };
 
@@ -67,6 +77,7 @@ export default function SmoothScroll() {
     return () => {
       document.removeEventListener("click", onClick);
       cancelAnimationFrame(frame);
+      setLenis(null);
       lenis.destroy();
       root.classList.remove("lenis");
       root.style.scrollBehavior = previousBehavior;

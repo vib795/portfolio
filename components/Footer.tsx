@@ -42,14 +42,11 @@ export default function Footer() {
             </ul>
           </div>
 
-          <div className="border-line-strong p-6 lg:border-r">
-            <p className="label">Colophon</p>
-            <ul className="mt-5 space-y-3 text-sm text-ink-soft">
-              <li>Next.js · Tailwind</li>
-              <li>Roboto Mono</li>
-              <li>Wordmark drawn as SVG</li>
-            </ul>
-          </div>
+          {/* Deliberately empty, so the fixed rails show through and the
+              four-column ruling stays intact. The reference leaves cells
+              blank in its own footer for the same reason — a column of
+              build trivia is not what a reader needs here. */}
+          <div className="hidden border-line-strong lg:block lg:border-r" />
 
           <div className="p-6">
             <p className="label text-right">Elsewhere</p>
@@ -78,38 +75,52 @@ export default function Footer() {
           </p>
         </div>
 
-        {/* The mark is sliced by the column rules rather than centred in a
-            cell — the rules run behind it and reappear in the counters. */}
-        <div className="relative">
-          <div className="grid grid-cols-2 lg:grid-cols-4" aria-hidden="true">
-            <span className="aspect-[2/1] border-r border-line-strong lg:aspect-[3/4]" />
-            <span className="aspect-[2/1] border-line-strong lg:aspect-[3/4] lg:border-r" />
+        {/* The closing mark.
+
+            Roughly a third the height it was. The reference ends on the
+            same oversized logotype, but with a four-letter brand set one
+            glyph per column: its rules fall between letters and each one
+            reads as a graphic. A five-letter surname stretched across
+            four columns has neither property, so the pattern earns less
+            room here than it does there — enough to close the page,
+            rather than a full screen of it.
+
+            The mark sits in normal flow and the ruling is laid behind
+            it, so the block is exactly as tall as the mark. Sizing the
+            box independently is what let the two disagree: the SVG takes
+            its height from its own aspect ratio, so a shorter box did
+            not shorten the mark, it just let it spill over the footer. */}
+        <div className="relative overflow-hidden px-5 py-8 lg:px-10 lg:py-10">
+          <div
+            className="absolute inset-0 grid grid-cols-2 lg:grid-cols-4"
+            aria-hidden="true"
+          >
+            <span className="border-r border-line-strong" />
+            <span className="border-line-strong lg:border-r" />
             <span className="hidden border-r border-line-strong lg:block" />
             <span className="hidden lg:block" />
           </div>
 
-          <div className="absolute inset-0 flex items-center px-6 py-10 lg:px-10">
-            <Wordmark
-              text={profile.last}
-              title={profile.name}
-              className="w-full text-ink"
-            />
-          </div>
+          <Wordmark
+            text={profile.last}
+            title={profile.name}
+            className="relative h-16 w-auto text-ink sm:h-24 lg:h-36"
+          />
 
           <span
-            className="absolute left-5 top-5 size-2.5 bg-accent"
+            className="absolute left-4 top-4 size-2 bg-accent"
             aria-hidden="true"
           />
           <span
-            className="absolute right-5 top-5 size-2.5 bg-accent"
+            className="absolute right-4 top-4 size-2 bg-accent"
             aria-hidden="true"
           />
           <span
-            className="absolute bottom-5 left-5 size-2.5 bg-accent"
+            className="absolute bottom-4 left-4 size-2 bg-accent"
             aria-hidden="true"
           />
           <span
-            className="absolute bottom-5 right-5 size-2.5 bg-accent"
+            className="absolute bottom-4 right-4 size-2 bg-accent"
             aria-hidden="true"
           />
         </div>

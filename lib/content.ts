@@ -101,7 +101,21 @@ export const about = {
 };
 
 /** The four facets the work grid filters on. "All" is a UI-only value. */
-export const workFacets = ["All", "AI Systems", "Open Source", "Apps"] as const;
+/* Featured leads and is the default view — a first-time reader should
+   meet the four projects that actually carry the claim on the tin,
+   not an undifferentiated wall of fourteen. "All" sits last, as the
+   escape hatch it is.
+
+   Featured is orthogonal to the rest: a project has exactly one facet
+   and may separately be featured, so Agent Memory can be an AI system
+   and a headline at the same time. */
+export const workFacets = [
+  "Featured",
+  "AI Systems",
+  "Open Source",
+  "Apps",
+  "All",
+] as const;
 export type WorkFacet = (typeof workFacets)[number];
 
 /** One cell of a project card's 2x2 stat block. */
@@ -112,7 +126,10 @@ export type Project = {
   year: string;
   category: string;
   /** Which filter pill this project answers to. */
-  facet: Exclude<WorkFacet, "All">;
+  /** The one bucket this project belongs to. */
+  facet: Exclude<WorkFacet, "All" | "Featured">;
+  /** Shown under the Featured tab, whatever its facet. */
+  featured?: boolean;
   /** Exactly four, rendered as the card's 2x2 stat grid. */
   stats: Stat[];
   blurb: string;
@@ -125,7 +142,8 @@ export const projects: Project[] = [
     name: "Agent Memory",
     year: "2026",
     category: "npm Package",
-    facet: "Open Source",
+    featured: true,
+    facet: "AI Systems",
     stats: [
       { value: "0", label: "Runtime deps" },
       { value: "93", label: "Tests" },
@@ -141,6 +159,7 @@ export const projects: Project[] = [
     name: "Code Analyzer",
     year: "2025",
     category: "RAG Platform",
+    featured: true,
     facet: "AI Systems",
     stats: [
       { value: "600+", label: "Repositories" },
@@ -171,6 +190,7 @@ export const projects: Project[] = [
     name: "Costco Price Match",
     year: "2026",
     category: "AI Agent",
+    featured: true,
     facet: "AI Systems",
     stats: [
       { value: "Nova", label: "Receipt parsing" },
@@ -187,6 +207,7 @@ export const projects: Project[] = [
     name: "Yantra: Second Brain",
     year: "2026",
     category: "iOS App",
+    featured: true,
     facet: "Apps",
     stats: [
       { value: "3", label: "Languages" },

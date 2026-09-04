@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { seeded } from "@/lib/scramble";
+import { jumpTo } from "@/lib/scroll";
 
 /** Six columns: four over the module grid, one per gutter. */
 const COLS = 6;
@@ -10,11 +11,31 @@ const COLS = 6;
 /** Each column is a 3 × 6 mosaic. The reference's is exactly this. */
 const PIXELS = 18;
 
-/** ms — cols 1.1s + the 0.2s random stagger, plus the border's lead-in. */
-const COVER_MS = 1350;
+/**
+ * ms — columns 0.72s + the 0.14s random stagger, plus the border's lead.
+ *
+ * The reference runs 1.1s columns on a 0.2s stagger, but it is masking a
+ * real page load: every navigation there is a round trip, and the
+ * curtain is covering time the reader would spend waiting anyway. These
+ * routes are prerendered and arrive instantly, so the same timing is
+ * just a wall. Two thirds of it keeps the gesture and drops the wait.
+ */
+const COVER_MS = 900;
 
 /** ms — the same run in reverse, after which the layer stops painting. */
-const CLEAR_MS = 1500;
+const CLEAR_MS = 1000;
+
+/**
+ * A same-page jump runs the curtain at 0.6x.
+ *
+ * The full timing is calibrated to a route change, where the curtain is
+ * also covering a navigation the reader would otherwise wait through.
+ * Jumping to a section three screens down has no such wait to mask, and
+ * at full speed the ceremony costs more than the move is worth.
+ */
+const FAST = 0.6;
+const COVER_FAST_MS = Math.round(COVER_MS * FAST);
+const CLEAR_FAST_MS = Math.round(CLEAR_MS * FAST);
 
 /**
  * The share of pixels along a column's leading edge that dissolve rather
@@ -47,23 +68,35 @@ const DISSOLVE_P = 0.75;
  */
 export default function PageTransition() {
   const [state, setState] = useState<"cover" | "clear" | "idle">("clear");
+  const [fast, setFast] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
   const busy = useRef(false);
   const first = useRef(true);
+  /** Hash to land on once a route change completes, if the link had one. */
+  const pendingHash = useRef<string | null>(null);
 
-  // Let the load-clear finish, then stop painting the layer entirely.
+  // Let the clear finish, then stop painting the layer entirely.
   useEffect(() => {
     if (state !== "clear") return;
-    const t = window.setTimeout(() => setState("idle"), CLEAR_MS);
+    const t = window.setTimeout(
+      () => setState("idle"),
+      fast ? CLEAR_FAST_MS : CLEAR_MS,
+    );
     return () => clearTimeout(t);
-  }, [state]);
+  }, [state, fast]);
 
-  // A route landed. Uncover it.
+  // A route landed. Put the reader where the link pointed, then uncover.
   useEffect(() => {
     if (first.current) {
       first.current = false;
       return;
+    }
+    const hash = pendingHash.current;
+    pendingHash.current = null;
+    if (hash) {
+      const target = document.querySelector(hash);
+      if (target) jumpTo(target);
     }
     busy.current = false;
     setState("clear");
@@ -90,24 +123,59 @@ export default function PageTransition() {
       const href = link.getAttribute("href");
       if (!href) return;
 
-      // The reference's own predicate, verbatim in intent: same origin,
-      // not an in-page anchor, not a new tab, not where we already are.
-      // In-page anchors are excluded because they belong to the smooth
-      // scroll — curtaining a jump to #work would be absurd.
+      // Never ours: another origin, a new tab, a download.
       if (
-        href.includes("#") ||
         link.target === "_blank" ||
         link.hasAttribute("download") ||
-        link.origin !== window.location.origin ||
-        link.pathname === window.location.pathname
+        link.origin !== window.location.origin
       )
         return;
 
       if (busy.current) return;
       if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
+      const samePage = link.pathname === window.location.pathname;
+      const hash = link.hash && link.hash !== "#" ? link.hash : null;
+
+      // Already here, and pointing nowhere in particular.
+      if (samePage && !hash) return;
+
+      // A jump inside this page. The reference leaves these to its
+      // smooth scroll and curtains only route changes, which is why its
+      // nav behaves two different ways depending on which item you
+      // press. Covering both makes the bar answer consistently — and
+      // because the curtain hides the movement, the jump underneath is
+      // instant rather than a long scroll the reader cannot see anyway.
+      if (samePage) {
+        const destination = document.querySelector(hash as string);
+        if (!destination) return;
+
+        e.preventDefault();
+        // preventDefault, but never stop propagation. This listener
+        // is on the document in the capture phase, so it runs ahead of
+        // React's root listener — halting the event here would swallow
+        // the component's own onClick, and a mobile menu link would
+        // curtain without ever closing the menu behind it. SmoothScroll
+        // checks `defaultPrevented` instead, which stands it down.
+        busy.current = true;
+        setFast(true);
+        setState("cover");
+        window.setTimeout(() => {
+          jumpTo(destination);
+          history.pushState(null, "", hash);
+          busy.current = false;
+          setState("clear");
+        }, COVER_FAST_MS);
+        return;
+      }
+
+      // A real route change — including one carrying a hash, which is
+      // how the logo gets you home from /blog. Matching on the hash
+      // alone used to drop that case out of the transition entirely.
       e.preventDefault();
       busy.current = true;
+      pendingHash.current = hash;
+      setFast(false);
       setState("cover");
       window.setTimeout(
         () => router.push(link.pathname + link.search),
@@ -115,20 +183,25 @@ export default function PageTransition() {
       );
     };
 
-    document.addEventListener("click", onClick);
-    return () => document.removeEventListener("click", onClick);
+    document.addEventListener("click", onClick, true);
+    return () => document.removeEventListener("click", onClick, true);
   }, [router]);
 
   if (state === "idle") return null;
 
   return (
-    <div className="page-transition" data-state={state} aria-hidden="true">
+    <div
+      className="page-transition"
+      data-state={state}
+      data-speed={fast ? "fast" : undefined}
+      aria-hidden="true"
+    >
       {Array.from({ length: COLS }, (_, c) => (
         <div
           key={c}
           className="pt-col"
-          // 0–0.2s, the reference's `stagger: { from: "random", amount: 0.2 }`.
-          style={{ "--d": `${(seeded(c + 1) * 0.2).toFixed(3)}s` } as CSSProperties}
+          // 0–0.14s: the reference's random 0.2s stagger, scaled with the rest.
+          style={{ "--d": `${(seeded(c + 1) * 0.14).toFixed(3)}s` } as CSSProperties}
         >
           {Array.from({ length: PIXELS }, (_, p) => {
             const n = c * PIXELS + p;
