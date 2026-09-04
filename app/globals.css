@@ -960,30 +960,41 @@ button:focus-visible .link-line {
 }
 
 /* ── Page transition curtain ───────────────────────────────────────
-   The orange screen the reference pulls across a navigation.
+   The orange screen pulled across a navigation.
 
-   Six columns, aligned to the module grid: four over the content
-   columns and one per gutter, so the curtain's seams land exactly on
-   the hairlines already ruling the page. Each column is a 3 × 6
-   mosaic of accent squares plus a 1px rule in the deeper accent down
-   its right edge.
+   Six columns aligned to the module grid — four over the content
+   columns and one per gutter — so the curtain's seams land exactly on
+   the hairlines already ruling the page. Each column is a 3 × 6 mosaic
+   of accent squares plus a 1px rule in the deeper accent down its
+   right edge.
 
-   Two directions:
-     cover  — columns grow from the bottom, then the route changes
-     clear  — columns collapse to the top, uncovering the new page
+   ONE animation, in one direction. The columns travel up the viewport:
+   in from below, a held beat at full cover while the route changes
+   behind them, then out through the top. They never reverse and they
+   never restart.
 
-   The squares at a column's leading edge fade individually on a
-   randomised delay, so the edge dissolves into pixels rather than
-   arriving as a straight line. That single detail is most of what
-   distinguishes this from a plain wipe.
+   The earlier version ran a cover and a clear as two separate
+   animations with opposing transform origins, and the seam between
+   them read as a lurch — the second began from scratch instead of
+   continuing the first, and the eroded squares moved from one end of
+   the column to the other between phases, so half the mosaic popped in
+   place. A single keyframe cannot have a seam, which is the whole
+   argument for this shape.
 
-   The clear direction is in the server HTML and runs on CSS alone —
-   no bundle has to arrive for the page to uncover itself. */
+   Which squares are punched is decided at render and never changes;
+   only whether the punch is open moves, and it moves on the column's
+   own clock. So the leading edge is ragged going in, the cover is
+   solid at the moment the route swaps, and the trailing edge is ragged
+   going out — without any element ever switching roles mid-flight.
+
+   The load reveal is in the server HTML and runs on CSS alone — no
+   bundle has to arrive for the page to uncover itself. */
 .page-transition {
   position: fixed;
   inset: 0;
   z-index: 200;
   pointer-events: none;
+  overflow: hidden;
   display: grid;
   /* Gutters absorb whatever the shell doesn't use, so at 1440px they
      are 60px — the same 3.75rem the reference hard-codes there. */
@@ -998,15 +1009,48 @@ button:focus-visible .link-line {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(6, 1fr);
-  overflow: hidden;
   will-change: transform;
 }
 
 .pt-px {
   background-color: var(--accent);
-  /* The border is the same colour as the fill: it exists so a square
-     keeps its exact footprint while its colour animates away. */
+  /* Matching the fill, so a punched square leaves an exact hole rather
+     than an outline. */
   border: 1px solid var(--accent);
+}
+
+/* The punched squares open and close on the sweep's own clock: holes
+   while the curtain is entering, solid through the beat it holds at
+   full cover, holes again as it leaves. Leaving them open throughout
+   was wrong in a way only the moment matters for — the route swaps
+   underneath at exactly the point the curtain is supposed to be
+   opaque, and a permanent hole is a window onto the swap.
+
+   Same duration and same delay as the column that carries them, so
+   the two cannot drift apart. */
+@keyframes pt-punch-sweep {
+  0%,
+  32% {
+    opacity: 0;
+  }
+  42%,
+  58% {
+    opacity: 1;
+  }
+  68%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes pt-punch-clear {
+  0%,
+  22% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 
 .pt-border {
@@ -1018,106 +1062,61 @@ button:focus-visible .link-line {
   background-color: var(--accent-deep);
 }
 
-@keyframes pt-cover {
-  from {
-    transform: scaleY(0);
+/* In from below, hold, out through the top. The per-keyframe timing
+   functions are what keep the two halves crisp: a single ease across
+   the whole run would crawl through the middle, which is exactly the
+   drag this replaced. */
+@keyframes pt-sweep {
+  0% {
+    transform: translate3d(0, 100%, 0);
+    animation-timing-function: var(--ease-cubic);
   }
-  to {
-    transform: scaleY(1);
+  42% {
+    transform: translate3d(0, 0, 0);
+    animation-timing-function: linear;
+  }
+  58% {
+    transform: translate3d(0, 0, 0);
+    animation-timing-function: var(--ease-cubic);
+  }
+  100% {
+    transform: translate3d(0, -100%, 0);
   }
 }
 
+/* The back half on its own, for a cold load that starts covered. */
 @keyframes pt-clear {
   from {
-    transform: scaleY(1);
+    transform: translate3d(0, 0, 0);
   }
   to {
-    transform: scaleY(0);
+    transform: translate3d(0, -100%, 0);
   }
 }
 
-@keyframes pt-border-in {
-  from {
-    transform: translateY(100%);
-  }
-  to {
-    transform: translateY(0);
-  }
+.page-transition[data-state="sweep"] .pt-col {
+  animation: pt-sweep 0.78s linear var(--d, 0s) both;
 }
 
-@keyframes pt-border-out {
-  from {
-    transform: translateY(0);
-  }
-  to {
-    transform: translateY(-100%);
-  }
-}
-
-@keyframes pt-px-in {
-  from {
-    background-color: transparent;
-    border-color: transparent;
-  }
-}
-
-@keyframes pt-px-out {
-  to {
-    background-color: transparent;
-    border-color: transparent;
-  }
-}
-
-.page-transition[data-state="cover"] .pt-col {
-  transform-origin: bottom;
-  animation: pt-cover 0.72s var(--ease-cubic) var(--d, 0s) both;
+.page-transition[data-state="sweep"] .pt-px[data-punched] {
+  animation: pt-punch-sweep 0.78s linear var(--d, 0s) both;
 }
 
 .page-transition[data-state="clear"] .pt-col {
-  transform-origin: top;
-  /* The reference starts the columns 0.1s behind the border rule, so
-     the rule is already moving when the column follows it. */
-  animation: pt-clear 0.72s var(--ease-cubic) calc(var(--d, 0s) + 0.07s) both;
+  animation: pt-clear 0.56s var(--ease-cubic) var(--d, 0s) both;
 }
 
-.page-transition[data-state="cover"] .pt-border {
-  animation: pt-border-in 0.6s var(--ease-cubic) var(--d, 0s) both;
+.page-transition[data-state="clear"] .pt-px[data-punched] {
+  animation: pt-punch-clear 0.56s linear var(--d, 0s) both;
 }
 
-.page-transition[data-state="clear"] .pt-border {
-  animation: pt-border-out 0.6s var(--ease-cubic) var(--d, 0s) both;
-}
-
-.page-transition[data-state="cover"] .pt-px[data-dissolve] {
-  animation: pt-px-in 0.34s linear var(--pd, 0s) both;
-}
-
-.page-transition[data-state="clear"] .pt-px[data-dissolve] {
-  animation: pt-px-out 0.34s linear var(--pd, 0s) both;
-}
-
-/* A same-page jump runs the whole curtain at 0.6x. The full timing is
+/* A same-page jump runs the whole thing at 0.62x. The full timing is
    calibrated to a route change, where the curtain also covers a
-   navigation the reader would otherwise wait through; a jump to a
-   section on this page has no such wait to hide. Delays scale with it,
-   or the stagger would eat most of a shorter run. */
-.page-transition[data-speed="fast"] .pt-col {
-  animation-duration: 0.44s;
-  animation-delay: calc(var(--d, 0s) * 0.6);
-}
-
-.page-transition[data-speed="fast"][data-state="clear"] .pt-col {
-  animation-delay: calc(var(--d, 0s) * 0.6 + 0.04s);
-}
-
-.page-transition[data-speed="fast"] .pt-border {
-  animation-duration: 0.36s;
-  animation-delay: calc(var(--d, 0s) * 0.6);
-}
-
-.page-transition[data-speed="fast"] .pt-px[data-dissolve] {
-  animation-duration: 0.2s;
-  animation-delay: calc(var(--pd, 0s) * 0.6);
+   render; a jump to a section on this page has nothing to cover. */
+.page-transition[data-speed="fast"] .pt-col,
+.page-transition[data-speed="fast"] .pt-px[data-punched] {
+  animation-duration: 0.48s;
+  animation-delay: calc(var(--d, 0s) * 0.62);
 }
 
 /* ── Scroll reveal ─────────────────────────────────────────────────
