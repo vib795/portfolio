@@ -789,3 +789,147 @@ button:focus-visible .link-line {
   display: inline-block;
   white-space: pre-wrap;
 }
+
+/* ════════════════════════════════════════════════════════════════
+   MOTION SYSTEM
+
+   Timings measured off the reference rather than invented:
+     transform            0.3s ease      (68 uses — the default hover)
+     transform            0.5s ease      (36)
+     translate            0.2s linear    (34)
+     filter               0.3s ease      (28 — logo desaturation)
+     opacity              0.2s ease      (17)
+     opacity + transform  0.3s easeInOutQuad (16 — scroll reveals)
+   ════════════════════════════════════════════════════════════════ */
+@theme {
+  --ease-quad: cubic-bezier(0.455, 0.03, 0.515, 0.955);
+}
+
+/* ── Hero wordmark marquee ─────────────────────────────────────────
+   The reference scrolls its display mark horizontally, forever, at
+   50s linear. The track holds two identical runs and translates by
+   exactly -50%, so run B lands where run A began and the seam is
+   never visible. (-100% on a single run would gap.) */
+@keyframes wordmark-marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  animation: wordmark-marquee 50s linear infinite;
+}
+
+.marquee-track > * {
+  flex: none;
+}
+
+/* Pausing on hover lets someone actually read the mark. */
+@media (hover: hover) and (pointer: fine) {
+  .marquee-track:hover {
+    animation-play-state: paused;
+  }
+}
+
+/* ── Drifting particles ────────────────────────────────────────────
+   Each element gets its own duration (3–13s) and its own translate /
+   rotate / scale through custom properties, so one keyframe block
+   drives a whole field of them without repeating itself. */
+@keyframes drift {
+  0% {
+    transform: translate(0, 0) rotate(var(--r0, 0deg)) scale(var(--s, 1));
+    opacity: 0;
+  }
+  10% {
+    opacity: var(--peak, 1);
+  }
+  100% {
+    transform: translate(var(--tx, 0), var(--ty, -120px))
+      rotate(var(--r1, 90deg)) scale(var(--s, 1));
+    opacity: 0;
+  }
+}
+
+.drift {
+  animation: drift var(--dur, 8s) ease infinite;
+  animation-delay: var(--delay, 0s);
+}
+
+/* ── Page-load tile wipe ───────────────────────────────────────────
+   Accent tiles cover the viewport and retract on a stagger. The
+   overlay is removed from the tree once it finishes, so it can never
+   trap a pointer event. */
+@keyframes tile-out {
+  to {
+    transform: scaleY(0);
+  }
+}
+
+.wipe-tile {
+  transform-origin: top;
+  animation: tile-out 0.62s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+  animation-delay: var(--delay, 0s);
+}
+
+/* ── Scroll reveal ─────────────────────────────────────────────────
+   One-shot, not scroll-linked. The previous `animation-timeline:
+   view()` version tracked scroll position both ways, so scrolling
+   back up partially un-revealed content that had already arrived.
+
+   The hidden state is applied by the observer at runtime, never in
+   the server HTML — so the prerender still contains the real content
+   with no opacity:0 anywhere, and anything already on screen at
+   mount is marked shown without ever hiding. */
+[data-reveal="hidden"] {
+  opacity: 0;
+  transform: translateY(18px);
+}
+
+[data-reveal="shown"] {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s var(--ease-quad);
+  transition-delay: var(--reveal-delay, 0s);
+}
+
+/* ── Logo / tech rail desaturation ─────────────────────────────────
+   The reference holds partner logos at greyscale and brings them to
+   full colour on hover, on a 0.3s filter transition. */
+.desaturate {
+  filter: grayscale(1);
+  opacity: 0.55;
+  transition:
+    filter 0.3s ease,
+    opacity 0.3s ease;
+}
+
+.desaturate:hover {
+  filter: grayscale(0);
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track,
+  .drift,
+  .wipe-tile {
+    animation: none !important;
+  }
+
+  .marquee-track {
+    transform: none !important;
+  }
+
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}

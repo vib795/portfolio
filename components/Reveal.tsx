@@ -1,16 +1,19 @@
-import type { CSSProperties, ReactNode } from "react";
+"use client";
+
+import { useEffect, useRef, type ReactNode } from "react";
 
 /**
- * Scroll reveal.
+ * One-shot scroll reveal.
  *
- * Deliberately not a client component and deliberately not JS-driven.
- * The animation is a CSS `view()` timeline (see `.reveal` in globals.css),
- * so it costs no bundle, no hydration and no IntersectionObserver — and
- * where the timeline is unsupported the content simply renders visible.
+ * The previous version used `animation-timeline: view()`, which is
+ * scroll-*linked*: scrolling back up ran the animation backwards and
+ * partially un-revealed content that had already arrived. This fires
+ * once and stays put, which is how the reference behaves.
  *
- * The previous Framer Motion version put `opacity:0` in the server HTML,
- * which meant the whole of /blog was blank until the bundle executed.
- * Nothing here can hide content from a reader.
+ * The hidden state is never in the server HTML. On mount the element
+ * is measured first: anything already on screen is marked shown
+ * without ever being hidden, so there is no flash and the prerender
+ * still contains real, visible content.
  */
 export default function Reveal({
   children,
@@ -18,23 +21,45 @@ export default function Reveal({
   className,
 }: {
   children: ReactNode;
-  /**
-   * Stagger offset in seconds, kept for call-site compatibility. Scroll
-   * timelines advance with the scroll rather than the clock, so this maps
-   * onto a shift in the animation range: 0.05 → the reveal starts 5%
-   * further into the element's entry.
-   */
+  /** Seconds of stagger, applied as a CSS transition-delay. */
   delay?: number;
   className?: string;
 }) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    // Already visible at mount → show it, never hide it.
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight * 0.92) {
+      el.dataset.reveal = "shown";
+      return;
+    }
+
+    el.dataset.reveal = "hidden";
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        el.dataset.reveal = "shown";
+        observer.disconnect();
+      },
+      { rootMargin: "0px 0px -8% 0px" },
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div
-      className={className ? `reveal ${className}` : "reveal"}
-      style={
-        delay
-          ? ({ "--reveal-shift": `${Math.round(delay * 100)}%` } as CSSProperties)
-          : undefined
-      }
+      ref={ref}
+      className={className}
+      style={delay ? ({ "--reveal-delay": `${delay}s` } as never) : undefined}
     >
       {children}
     </div>

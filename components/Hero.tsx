@@ -1,6 +1,8 @@
 import { profile, projects } from "@/lib/content";
 import { ArrowRight } from "./icons";
-import Wordmark from "./Wordmark";
+import WordmarkMarquee from "./WordmarkMarquee";
+import Drift from "./Drift";
+import TechRail from "./TechRail";
 
 /** The cell the reference reserves for its newest incubation. */
 const featured = projects[0];
@@ -30,14 +32,15 @@ export default function Hero() {
   return (
     <section id="top" className="relative z-10 pt-16 lg:pt-[4.5rem]">
       <div className="shell">
-        {/* The mark scales to its container, so its height is a function
-            of the glyph count rather than a font-size that has to be
-            re-tuned at every breakpoint. */}
-        <div className="rule-b px-4 py-10 lg:px-6 lg:py-14">
-          <Wordmark
+        {/* The mark scrolls rather than sitting still — the reference
+            runs its display wordmark as a 50s linear marquee, and that
+            single decision is most of what the hero feels like. */}
+        <div className="rule-b relative py-10 lg:py-14">
+          <Drift />
+          <WordmarkMarquee
             text="PORT_FOLIO"
             title={`${profile.name} — portfolio`}
-            className="w-full text-ink"
+            className="relative"
           />
         </div>
 
@@ -122,6 +125,8 @@ export default function Hero() {
             )}
           </div>
         </div>
+
+        <TechRail />
       </div>
     </section>
   );

@@ -4,6 +4,9 @@ import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { profile } from "@/lib/content";
 import GridRails from "@/components/GridRails";
+import SmoothScroll from "@/components/SmoothScroll";
+import PageWipe from "@/components/PageWipe";
+import SocialRail from "@/components/SocialRail";
 import "./globals.css";
 
 // The reference sets 100% of its UI in Roboto Mono — body copy, nav,
@@ -69,6 +72,9 @@ export default function RootLayout({
           }}
         />
         <GridRails />
+        <SmoothScroll />
+        <PageWipe />
+        <SocialRail />
         {children}
         <Analytics />
         <SpeedInsights />
