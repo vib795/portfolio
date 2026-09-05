@@ -20,7 +20,7 @@ export const profile = {
   availability: "Open to new opportunities",
   email: "hello@singhcodes.dev",
   intro:
-    "I'm an AI engineer with 11 years building production systems in financial services — now designing GenAI and agentic systems end to end, from RAG and eval harnesses to the CI that ships them.",
+    "I'm an AI engineer with a decade+ building production systems in financial services — now designing GenAI and agentic systems end to end, from RAG and eval harnesses to the CI that ships them.",
 };
 
 
@@ -60,9 +60,9 @@ export const marquee = [
 ];
 
 export const about = {
-  heading: { lead: "Eleven years of backend.", tail: "Now building agents." },
+  heading: { lead: "A decade+ of backend.", tail: "Now building agents." },
   paragraphs: [
-    "I'm an AI engineer with 11 years building production backend systems in financial services — trading, money movement, and securities management — including four years embedded at Fidelity Investments as an EY consultant, delivering event-driven microservices and high-traffic investment platforms.",
+    "I'm an AI engineer with a decade+ building production backend systems in financial services — trading, money movement, and securities management — including four years embedded at Fidelity Investments as an EY consultant, delivering event-driven microservices and high-traffic investment platforms.",
     "Now I design and ship GenAI and agentic systems end to end: tool-calling agents, multi-step orchestration, and RAG with hybrid retrieval across dense, BM25, and graph signals. I build the evaluation harness that gates promotion — golden datasets, versioned baselines, regression gates — so every retrieval and model change is measured before it ships. I also lead AI enablement for 200+ engineers across the institutional vertical.",
   ],
   stack: [
