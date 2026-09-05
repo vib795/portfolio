@@ -886,13 +886,36 @@ button:focus-visible .link-line {
 /* The same effect on the hero mark, where a "character" is an SVG path
    rather than a span. Wordmark publishes the stagger to each path as
    --fd; the keyframes and the 0.4s are shared with the headings on
-   purpose, so the mark arrives the way every other heading does.
-
-   Wordmark keys its paths by position for this to work at all — keyed by
-   glyph, every scramble frame would remount the path and restart the
-   animation before it rendered a frame. */
-.mark-flicker[data-run="1"] path {
+   purpose, so the mark arrives the way every other heading does. */
+.mark-flicker[data-phase="in"] path {
   animation: char-flicker 0.4s var(--fd, 0s) both;
+}
+
+/* Once it has arrived the mark idles rather than replaying its entrance.
+   A looping char-flicker would blank the whole word to zero every cycle,
+   which is the pattern that bothers people — this is one soft dip per
+   glyph, floored at 0.45 so nothing ever approaches black, eased rather
+   than stepped, and only once every 14s.
+
+   The delay is tripled so the scatter spreads across 1.2s instead of
+   0.4s. At entrance speed the glyphs read as arriving together; stretched
+   out they read as a slow twinkle crossing the word, which is what makes
+   it bearable to sit next to. */
+@keyframes mark-shimmer {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  2% {
+    opacity: 0.45;
+  }
+  5% {
+    opacity: 1;
+  }
+}
+
+.mark-flicker[data-phase="loop"] path {
+  animation: mark-shimmer 14s calc(var(--fd, 0s) * 3) infinite;
 }
 
 /* ════════════════════════════════════════════════════════════════

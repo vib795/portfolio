@@ -18,6 +18,21 @@ import { glideTo, setLenis } from "@/lib/scroll";
  */
 export default function SmoothScroll() {
   useEffect(() => {
+    /* Reloading restores the previous scroll offset, which lands the page
+       a few dozen pixels down with the hero mark clipped under the fixed
+       nav and no gap above it — that reads as broken rather than as
+       "where you left off". Reset only on an actual reload, and only when
+       no hash is asking for a section: back/forward keeps its restored
+       position, which is the one case where restoring is the right call.
+
+       Runs before the reduced-motion bail below, so it applies whether or
+       not Lenis ends up driving the scroll. */
+    const [nav] = performance.getEntriesByType(
+      "navigation",
+    ) as PerformanceNavigationTiming[];
+    const wasReloaded = nav?.type === "reload" && !window.location.hash;
+    if (wasReloaded) window.scrollTo(0, 0);
+
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const root = document.documentElement;
@@ -36,6 +51,12 @@ export default function SmoothScroll() {
     // Published so the page transition can move the scroll behind its
     // own curtain without desyncing Lenis.
     setLenis(lenis);
+
+    /* The reset above happens during hydration, but the browser can still
+       apply its restored offset after that — enough to leave the page a
+       few pixels down with Lenis anchored there. Repeat it through Lenis
+       once it owns the scroll, so both agree on zero. */
+    if (wasReloaded) lenis.scrollTo(0, { immediate: true });
 
     let frame = 0;
     const raf = (time: number) => {
