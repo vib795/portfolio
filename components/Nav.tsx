@@ -56,8 +56,7 @@ export default function Nav() {
                 <Wordmark text="US" className="h-3 w-auto text-accent-ink" />
               </span>
               <span className="text-[0.95rem] font-medium tracking-tight">
-                <ScrambleLink text={profile.first.toLowerCase()} />
-                <span className="text-accent">_</span>
+                <ScrambleLink text={profile.handle} />
               </span>
             </a>
 

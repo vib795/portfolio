@@ -8,6 +8,13 @@ export const profile = {
   name: "Utkarsh Singh",
   first: "Utkarsh",
   last: "Singh",
+  /**
+   * The nav wordmark beside the US badge. Deliberately not `first`: that
+   * feeds `givenName` in the Person schema (lib/schema.ts) and the PWA
+   * short name (app/manifest.ts), both of which must stay the real given
+   * name. This is the brand handle, and it matches the domain.
+   */
+  handle: "singhcodes",
   role: "AI Engineer",
   location: "New York, NY",
   availability: "Open to new opportunities",
