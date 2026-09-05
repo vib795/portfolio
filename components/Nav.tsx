@@ -57,6 +57,7 @@ export default function Nav() {
               </span>
               <span className="text-[0.95rem] font-medium tracking-tight">
                 <ScrambleLink text={profile.handle} />
+                <span className="text-accent">_</span>
               </span>
             </a>
 
