@@ -1,6 +1,6 @@
 import { profile, projects } from "@/lib/content";
 import { ArrowRight } from "./icons";
-import WordmarkMarquee from "./WordmarkMarquee";
+import HeroWordmark from "./HeroWordmark";
 import Drift from "./Drift";
 import TechRail from "./TechRail";
 
@@ -32,12 +32,13 @@ export default function Hero() {
   return (
     <section id="top" className="relative z-10 pt-16 lg:pt-[4.5rem]">
       <div className="shell">
-        {/* The mark scrolls rather than sitting still — the reference
-            runs its display wordmark as a 50s linear marquee, and that
-            single decision is most of what the hero feels like. */}
+        {/* The mark holds still and scrambles into place. It used to run
+            as a 50s linear marquee; a static mark reads at a glance where
+            a moving one never quite did, and the settle gives the hero
+            its moment without asking for attention afterwards. */}
         <div className="rule-b relative py-7 lg:py-9">
           <Drift />
-          <WordmarkMarquee
+          <HeroWordmark
             text="PORTFOLIO"
             title={`${profile.name} — portfolio`}
             className="relative"

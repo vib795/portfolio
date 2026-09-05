@@ -903,11 +903,10 @@ button:focus-visible .link-line {
   --ease-cubic: cubic-bezier(0.65, 0, 0.35, 1);
 }
 
-/* ── Hero wordmark marquee ─────────────────────────────────────────
-   The reference scrolls its display mark horizontally, forever, at
-   50s linear. The track holds two identical runs and translates by
-   exactly -50%, so run B lands where run A began and the seam is
-   never visible. (-100% on a single run would gap.) */
+/* ── Tech rail marquee ─────────────────────────────────────────────
+   Still a marquee, still two identical runs translated by exactly
+   -50%, so run B lands where run A began and the seam is never
+   visible. (-100% on a single run would gap.) */
 @keyframes wordmark-marquee {
   from {
     transform: translate3d(0, 0, 0);
