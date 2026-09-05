@@ -883,6 +883,18 @@ button:focus-visible .link-line {
   animation: char-flicker 0.4s var(--fd, 0s) both;
 }
 
+/* The same effect on the hero mark, where a "character" is an SVG path
+   rather than a span. Wordmark publishes the stagger to each path as
+   --fd; the keyframes and the 0.4s are shared with the headings on
+   purpose, so the mark arrives the way every other heading does.
+
+   Wordmark keys its paths by position for this to work at all — keyed by
+   glyph, every scramble frame would remount the path and restart the
+   animation before it rendered a frame. */
+.mark-flicker[data-run="1"] path {
+  animation: char-flicker 0.4s var(--fd, 0s) both;
+}
+
 /* ════════════════════════════════════════════════════════════════
    MOTION SYSTEM
 
@@ -1169,7 +1181,8 @@ button:focus-visible .link-line {
     display: none !important;
   }
 
-  .scramble-char {
+  .scramble-char,
+  .mark-flicker path {
     animation: none !important;
     opacity: 1 !important;
   }

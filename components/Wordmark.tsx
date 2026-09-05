@@ -60,13 +60,23 @@ type Props = {
   /** Rendered as the accessible name. Pass nothing for a decorative mark
    *  that sits beside real text — the footer slice, for instance. */
   title?: string;
+  /** Per-glyph animation delays, indexed by character position, published
+   *  to each path as `--fd`. Lets a caller stagger a per-character effect
+   *  across the mark without this component knowing what the effect is.
+   *  Omit it and no style is set at all. */
+  charDelays?: string[];
 };
 
 /**
  * Renders `text` as one inline SVG. The viewBox is computed from the
  * glyph count so the mark always fills its container edge to edge.
  */
-export default function Wordmark({ text, className, title }: Props) {
+export default function Wordmark({
+  text,
+  className,
+  title,
+  charDelays,
+}: Props) {
   const chars = [...text.toUpperCase()];
   const width = (chars.length - 1) * ADVANCE + BODY;
 
@@ -87,10 +97,20 @@ export default function Wordmark({ text, className, title }: Props) {
         const d = GLYPHS[ch];
         if (!d) return null;
         return (
+          // Keyed by position, not by glyph. A key of `${ch}-${i}` changes
+          // the moment a character does, so React unmounts and remounts the
+          // path — which restarts any CSS animation on it. While the hero
+          // mark scrambles that happens every ~30ms, and a per-glyph
+          // flicker would be reset before it could play a single frame.
           <path
-            key={`${ch}-${i}`}
+            key={i}
             d={d}
             transform={`translate(${i * ADVANCE} 0)`}
+            style={
+              charDelays
+                ? ({ "--fd": charDelays[i] } as React.CSSProperties)
+                : undefined
+            }
           />
         );
       })}
