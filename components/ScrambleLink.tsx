@@ -81,13 +81,14 @@ export default function ScrambleLink({ text, className }: Props) {
   return (
     <span
       ref={ref}
-      className={`relative inline-block max-w-full align-top ${className ?? ""}`}
+      className={`relative inline-block max-w-full overflow-hidden align-top ${className ?? ""}`}
     >
       {/* The real string, invisible, owns the box — width and line
           breaks, so a long post title still wraps on a phone. The
           scrambling copy is laid over it at the same width, out of flow,
           so glyphs of a different width (Mona Sans is proportional) can
-          never resize the button, pill or nav item around it. A label
+          never resize the button, pill or nav item around it, and the
+          box clips it so a wider glyph never spills past the edge. A label
           that must stay on one line gets `whitespace-nowrap` from its
           parent, which both layers inherit. */}
       <span aria-hidden="true" className="invisible">
