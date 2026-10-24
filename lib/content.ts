@@ -16,7 +16,7 @@ export const profile = {
    */
   handle: "singhcodes",
   role: "AI Engineer",
-  location: "New York, NY",
+  location: "United States",
   availability: "Open to new opportunities",
   email: "hello@singhcodes.dev",
   intro:

@@ -21,10 +21,13 @@ export function jsonLd(value: unknown): string {
   return JSON.stringify(value).replace(/</g, "\\u003c");
 }
 
-/** "New York, NY" -> a PostalAddress, or undefined if the shape is unexpected. */
+/** "City, ST" -> a full PostalAddress; anything else (e.g. "United
+ *  States") -> a country-only one, so the country is never dropped. */
 function address() {
   const [locality, region] = profile.location.split(",").map((part) => part.trim());
-  if (!locality || !region) return undefined;
+  if (!locality || !region) {
+    return { "@type": "PostalAddress", addressCountry: "US" };
+  }
 
   return {
     "@type": "PostalAddress",
