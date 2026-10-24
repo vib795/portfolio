@@ -11,19 +11,16 @@ const POOL = 36;
 const MAX_FILL = 8;
 const TONES = ["--px-1", "--px-2", "--px-3", "--px-4", "--px-5"];
 
-/** Elements the trail stays off. Squares over a button or a field make
- *  them harder to read and to hit, and the header sits above the trail. */
-const IGNORE =
-  "button, input, textarea, select, label, header, [data-trail-ignore]";
-
-/** A link shorter than this is a control (a nav item, an inline link) and
- *  keeps the trail off it. Taller ones are whole rows or cards, like a
- *  blog post entry, where squares crossing them get in nobody's way. */
-const SMALL_LINK_PX = 64;
+/** Where the trail stops: text fields (squares over the caret get in the
+ *  way of typing), the header (it sits above the trail layer, so squares
+ *  there would be drawn underneath it) and anything marked
+ *  data-trail-ignore (the game board, so squares never pass for lit
+ *  cells). Buttons and links keep it, so it runs unbroken across the page. */
+const IGNORE = "input, textarea, select, header, [data-trail-ignore]";
 
 /**
  * Stamps coloured squares onto a 16px grid behind the pointer, anywhere on
- * the page except over the controls in IGNORE. The pool is rendered once;
+ * the page except the places listed in IGNORE. The pool is rendered once;
  * moving the pointer only rewrites a transform and restarts a CSS
  * animation, so nothing re-renders.
  *
@@ -57,12 +54,7 @@ export default function CursorTrail() {
 
     const onMove = (e: PointerEvent) => {
       const target = e.target as Element | null;
-      const link = target?.closest("a");
-      if (
-        !target ||
-        target.closest(IGNORE) ||
-        (link && link.getBoundingClientRect().height < SMALL_LINK_PX)
-      ) {
+      if (!target || target.closest(IGNORE)) {
         lastCol = lastRow = null;
         return;
       }
