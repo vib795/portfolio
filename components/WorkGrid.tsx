@@ -10,6 +10,7 @@ import {
 import { ArrowRight, ArrowUpRight } from "./icons";
 import Scramble from "./Scramble";
 import ScrambleLink from "./ScrambleLink";
+import PixelReveal from "./PixelReveal";
 
 /**
  * One project, drawn the way the reference draws a portfolio company: a
@@ -38,19 +39,21 @@ function ProjectCard({
         </span>
       </div>
 
-      <div className="flex min-h-[13rem] flex-col justify-center border border-line-strong bg-surface p-7 transition-colors duration-200 group-hover:bg-surface-sunken">
-        <p className="label">{project.category}</p>
-        <h3 className="mt-2 text-2xl tracking-tight">
-          <ScrambleLink text={project.name} />
-          {project.link && (
-            <ArrowUpRight className="ml-2 inline size-4 text-ink-faint transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent" />
-          )}
-        </h3>
-        <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-ink-soft">
-          {project.blurb}
-        </p>
-        <p className="mt-4 text-xs text-ink-faint">{project.stack.join(" · ")}</p>
-      </div>
+      <PixelReveal>
+        <div className="flex min-h-[13rem] flex-col justify-center border border-line-strong bg-surface p-7 transition-colors duration-200 group-hover:bg-surface-sunken">
+          <p className="label">{project.category}</p>
+          <h3 className="mt-2 text-2xl tracking-tight">
+            <ScrambleLink text={project.name} />
+            {project.link && (
+              <ArrowUpRight className="ml-2 inline size-4 text-ink-faint transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent" />
+            )}
+          </h3>
+          <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-ink-soft">
+            {project.blurb}
+          </p>
+          <p className="mt-4 font-mono text-xs text-ink-faint">{project.stack.join(" · ")}</p>
+        </div>
+      </PixelReveal>
 
       {/* Stats in a 2x2 with the arrow beside them, full height — the
           reference's exact cell arrangement. The stats are their own
@@ -133,18 +136,18 @@ export default function WorkGrid() {
       <div className="shell">
         <div className="rule-b grid lg:grid-cols-4">
           <div className="border-line-strong p-6 lg:border-r">
-            <p className="label">/ Selected work</p>
+            <p className="fn-tag">utkarsh.work()</p>
           </div>
           <div className="p-6 lg:col-span-3">
-            <h2 className="text-3xl tracking-tight lg:text-4xl">
-              <Scramble text="What I've shipped" />
+            <h2 className="slash-title text-4xl lg:text-6xl">
+              <Scramble text="selected-work" />
             </h2>
           </div>
         </div>
 
         {/* The filter row is sticky under the header, exactly as the
             reference keeps its pills in view while the grid scrolls. */}
-        <div className="rule-b sticky top-16 z-20 flex flex-col gap-4 bg-paper/95 p-4 backdrop-blur-md sm:flex-row sm:items-center sm:justify-between lg:top-[4.5rem] lg:p-5">
+        <div className="rule-b sticky top-24 z-20 flex flex-col gap-4 bg-paper/95 p-4 backdrop-blur-md sm:flex-row sm:items-center sm:justify-between lg:top-[6.5rem] lg:p-5">
           <div
             className="flex flex-wrap gap-2"
             role="group"

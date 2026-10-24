@@ -18,11 +18,11 @@ export default function Writing() {
       <div className="shell">
         <div className="rule-b grid lg:grid-cols-4">
           <div className="border-line-strong p-6 lg:border-r">
-            <p className="label">/ Writing</p>
+            <p className="fn-tag">utkarsh.writing()</p>
           </div>
           <div className="border-line-strong p-6 lg:col-span-2 lg:border-r">
-            <h2 className="text-3xl tracking-tight lg:text-4xl">
-              <Scramble text="Notes from building" />
+            <h2 className="slash-title text-4xl lg:text-6xl">
+              <Scramble text="notes-from-building" />
             </h2>
           </div>
           <div className="p-6">

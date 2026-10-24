@@ -1,133 +1,131 @@
 import { profile, projects } from "@/lib/content";
-import { ArrowRight } from "./icons";
+import { ArrowRight, ArrowUpRight } from "./icons";
 import HeroWordmark from "./HeroWordmark";
-import Drift from "./Drift";
-import TechRail from "./TechRail";
+import Ticker from "./Ticker";
 
-/** The cell the reference reserves for its newest incubation. */
 const featured = projects[0];
 
-/** Decorative isometric motif for the figure cell — the reference puts a
- *  wireframe object in a tick-framed box here. Drawn, not imported. */
-function Motif({ className }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 120 120"
-      className={className}
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.25"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M60 14 84 28v28L60 70 36 56V28Z" />
-      <path d="M60 42 84 28M60 42v28M60 42 36 28" />
-      <path d="M36 56 12 70v28l24 14 24-14V70" />
-      <path d="M84 56l24 14v28l-24 14-24-14" />
-    </svg>
-  );
-}
+/** Five flat squares hung off the wordmark's top-right corner, each
+ *  winking out on its own clock. */
+const CLUSTER = [
+  { x: 0, y: 0, tone: 1, dur: 5.2, delay: 0.4 },
+  { x: 1, y: 0, tone: 1, dur: 6.1, delay: 2.1 },
+  { x: 1, y: 1, tone: 1, dur: 4.7, delay: 1.2 },
+  { x: 2, y: 1, tone: 2, dur: 7.3, delay: 3.4 },
+  { x: 0, y: 2, tone: 4, dur: 5.9, delay: 0.9 },
+];
 
 export default function Hero() {
   return (
-    <section id="top" className="relative z-10 pt-16 lg:pt-[4.5rem]">
+    <section id="top" className="relative z-10 pt-24 lg:pt-[6.5rem]" data-trail>
       <div className="shell">
-        {/* The mark holds still and scrambles into place. It used to run
-            as a 50s linear marquee; a static mark reads at a glance where
-            a moving one never quite did, and the settle gives the hero
-            its moment without asking for attention afterwards. */}
         <div className="rule-b relative py-7 lg:py-9">
-          <Drift />
           <HeroWordmark
             text="PORTFOLIO"
             title={`${profile.name} — portfolio`}
             className="relative"
           />
-        </div>
-
-        <div className="rule-b grid lg:grid-cols-4">
-          <div className="flex flex-col justify-between gap-8 border-line-strong p-6 lg:border-r">
-            <p className="flex gap-3 text-lg leading-snug">
+          <span
+            aria-hidden="true"
+            className="absolute right-3 top-3 hidden grid-cols-3 sm:grid lg:right-6 lg:top-5"
+          >
+            {CLUSTER.map((p, i) => (
               <span
-                className="mt-2 size-2 shrink-0 bg-accent"
-                aria-hidden="true"
+                key={i}
+                className="px-wink size-3 lg:size-5"
+                style={
+                  {
+                    gridColumn: p.x + 1,
+                    gridRow: p.y + 1,
+                    background: `var(--px-${p.tone})`,
+                    "--dur": `${p.dur}s`,
+                    "--delay": `${p.delay}s`,
+                  } as React.CSSProperties
+                }
               />
-              <span>{profile.intro}</span>
-            </p>
-            <p className="label">
-              {profile.role} / {profile.location}
-            </p>
-          </div>
-
-          <div className="hidden items-center justify-center border-r border-line-strong p-6 lg:flex">
-            <span className="frame-ticks block p-7">
-              <Motif className="size-28 text-ink-faint" />
-            </span>
-          </div>
-
-          {/* Opaque. A cell that holds copy is a panel sitting on the
-              ruling, so the fixed rails must stop at its edge — only
-              deliberately empty cells let the rails show through. */}
-          <div className="bg-surface lg:col-span-2">
-            <div className="rule-b flex">
-              <span className="bg-accent px-4 py-2 text-xs uppercase tracking-[0.14em] text-accent-ink">
-                New
-              </span>
-              <span className="border-x border-line-strong px-4 py-2 text-xs uppercase tracking-[0.14em]">
-                {featured.facet}
-              </span>
-              <span className="px-4 py-2 text-xs uppercase tracking-[0.14em] text-ink-faint">
-                {featured.year}
-              </span>
-            </div>
-            <div className="p-6">
-              <h2 className="text-2xl tracking-tight">{featured.name}</h2>
-              <p className="mt-3 max-w-prose leading-relaxed text-ink-soft">
-                {featured.blurb}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="rule-b grid lg:grid-cols-4">
-          <div className="border-line-strong p-6 lg:border-r">
-            <p className="label">Projects</p>
-            <p className="mt-2 text-5xl tracking-tight tabular-nums">
-              {String(projects.length).padStart(2, "0")}
-            </p>
-          </div>
-
-          <div className="hidden border-r border-line-strong lg:block" />
-
-          {/* Three stats, not four. The block spans two grid columns, so a
-              fourth cell would push a label straight through the rail at
-              the halfway rule — the reference shows three here for the
-              same reason. */}
-          <div className="grid grid-cols-3 bg-surface lg:col-span-2 lg:grid-cols-[repeat(3,1fr)_auto]">
-            {featured.stats.slice(0, 3).map((s) => (
-              <div
-                key={s.label}
-                className="border-t border-line-strong p-5 first:border-l-0 sm:border-l lg:border-t-0"
-              >
-                <p className="text-xl tracking-tight tabular-nums">{s.value}</p>
-                <p className="label mt-1.5">{s.label}</p>
-              </div>
             ))}
-            {featured.link && (
+          </span>
+        </div>
+
+        <div className="rule-b grid lg:grid-cols-2">
+          <div className="flex flex-col justify-between gap-12 border-line-strong p-6 lg:border-r">
+            <p className="flex flex-wrap justify-between gap-x-6 gap-y-2 font-mono text-sm">
+              <span>
+                {profile.location.toLowerCase()} / {profile.role.toLowerCase()}
+              </span>
+              <span>
+                open-to-work
+                <span className="caret" aria-hidden="true" />
+              </span>
+            </p>
+            <h1 className="slash-title text-5xl leading-none sm:text-6xl lg:text-7xl">
+              now-shipping
+            </h1>
+          </div>
+
+          <div className="flex flex-col bg-paper" data-trail-ignore>
+            <p className="p-6 text-xl leading-snug text-ink-soft lg:text-2xl">
+              {profile.intro}
+            </p>
+            <div className="mt-auto flex flex-col gap-3 border-t border-line-strong p-6">
               <a
-                href={featured.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group col-span-3 flex items-center justify-center border-t border-line-strong p-5 transition-colors hover:bg-accent sm:border-l lg:col-span-1 lg:border-t-0 lg:px-8"
-                aria-label={`${featured.name} — open project`}
+                href="#work"
+                className="notch-lg group flex items-center justify-between bg-accent px-5 py-5 text-accent-ink transition-colors hover:bg-accent-deep"
               >
-                <ArrowRight className="size-5 transition-transform duration-300 group-hover:translate-x-1 group-hover:text-accent-ink" />
+                See what I&apos;ve shipped
+                <ArrowUpRight className="size-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
               </a>
-            )}
+              <a
+                href="#play"
+                className="notch-lg group flex items-center justify-between border border-line-strong bg-surface px-5 py-4 text-ink transition-colors hover:border-ink"
+              >
+                Play commit-streak
+                <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" />
+              </a>
+            </div>
           </div>
         </div>
 
-        <TechRail />
+        {/* The open field. Graph paper on the same 16px pitch the cursor
+            trail snaps to, so the squares land in the cells. */}
+        <div className="rule-b bg-paper-grid relative grid min-h-[18rem] lg:grid-cols-2">
+          <p className="hidden self-end p-6 font-mono text-xs text-ink-faint lg:block">
+            move your cursor here ↘
+          </p>
+          <div className="flex items-end p-4 lg:p-6">
+            <article
+              className="w-full border border-line-strong bg-surface"
+              data-trail-ignore
+            >
+              <div className="flex border-b border-line-strong font-mono text-xs">
+                <span className="bg-accent px-3 py-2 text-accent-ink">new</span>
+                <span className="border-r border-line-strong px-3 py-2">
+                  {featured.facet.toLowerCase()}
+                </span>
+                <span className="px-3 py-2 text-ink-faint">{featured.year}</span>
+              </div>
+              <div className="p-5">
+                <h2 className="text-2xl tracking-tight">{featured.name}</h2>
+                <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-ink-soft">
+                  {featured.blurb}
+                </p>
+              </div>
+              <div className="grid grid-cols-3 border-t border-line-strong">
+                {featured.stats.slice(0, 3).map((s, i) => (
+                  <div
+                    key={s.label}
+                    className={`p-4 ${i ? "border-l border-line-strong" : ""}`}
+                  >
+                    <p className="tracking-tight tabular-nums">{s.value}</p>
+                    <p className="label mt-1">{s.label}</p>
+                  </div>
+                ))}
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <Ticker />
       </div>
     </section>
   );

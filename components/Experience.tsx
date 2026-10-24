@@ -25,11 +25,11 @@ export default function Experience() {
       <div className="shell">
         <div className="rule-b grid lg:grid-cols-4">
           <div className="border-line-strong p-6 lg:border-r">
-            <p className="label">/ Experience</p>
+            <p className="fn-tag">utkarsh.experience()</p>
           </div>
           <div className="p-6 lg:col-span-3">
-            <h2 className="text-3xl tracking-tight lg:text-4xl">
-              <Scramble text="Where I've spent my time" />
+            <h2 className="slash-title text-4xl lg:text-6xl">
+              <Scramble text="experience" />
             </h2>
           </div>
         </div>

@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Roboto_Mono } from "next/font/google";
+import { Mona_Sans, Roboto_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { profile } from "@/lib/content";
@@ -7,16 +7,20 @@ import GridRails from "@/components/GridRails";
 import SmoothScroll from "@/components/SmoothScroll";
 import PageTransition from "@/components/PageTransition";
 import SocialRail from "@/components/SocialRail";
+import CursorTrail from "@/components/CursorTrail";
 import "./globals.css";
 
-// The reference sets 100% of its UI in Roboto Mono — body copy, nav,
-// labels, stats, all of it. One family, two weights. The display
-// wordmark is drawn as SVG (components/Wordmark.tsx) rather than set
-// in a typeface, so there is no second font to load.
-//
-// Both CSS variables point at the same family: --font-space-grotesk
-// and --font-jetbrains-mono are still the names globals.css reads, so
-// keeping them avoids touching every `font-mono` utility in the tree.
+// Mona Sans carries copy and headings; its width axis lets the slash
+// titles run slightly condensed. Roboto Mono is kept for the code-styled
+// labels. Both CSS variables are read in globals.css.
+const monaSans = Mona_Sans({
+  subsets: ["latin"],
+  weight: "variable",
+  axes: ["wdth"],
+  variable: "--font-mona-sans",
+  display: "swap",
+});
+
 const robotoMono = Roboto_Mono({
   subsets: ["latin"],
   weight: ["400", "500", "700"],
@@ -50,8 +54,8 @@ export const viewport: Viewport = {
   // Matches --paper in each theme so the mobile browser chrome blends
   // into the page instead of banding against it.
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#e4e4e4" },
-    { media: "(prefers-color-scheme: dark)", color: "#131313" },
+    { media: "(prefers-color-scheme: light)", color: "#e9edec" },
+    { media: "(prefers-color-scheme: dark)", color: "#0d1117" },
   ],
 };
 
@@ -59,12 +63,10 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={robotoMono.variable} suppressHydrationWarning>
+    <html lang="en" className={`${monaSans.variable} ${robotoMono.variable}`} suppressHydrationWarning>
       <body className="antialiased">
-        {/* Light is the design's home key — the reference ships light
-            only, and the flat #e4e4e4 ground is what the hairline grid
-            was drawn against. So an unset preference resolves to light,
-            and dark is honoured when the OS or the toggle asks for it. */}
+        {/* Light is the design's home key. An unset preference resolves
+            to light; dark is honoured when the OS or the toggle asks. */}
         <script
           dangerouslySetInnerHTML={{
             __html:
@@ -75,6 +77,7 @@ export default function RootLayout({
         <SmoothScroll />
         <PageTransition />
         <SocialRail />
+        <CursorTrail />
         {children}
         <Analytics />
         <SpeedInsights />

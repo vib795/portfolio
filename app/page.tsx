@@ -4,6 +4,7 @@ import About from "@/components/About";
 import WorkGrid from "@/components/WorkGrid";
 import Experience from "@/components/Experience";
 import Writing from "@/components/Writing";
+import CommitStreak from "@/components/CommitStreak";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import { homeSchema, jsonLd } from "@/lib/schema";
@@ -21,6 +22,7 @@ export default function Home() {
         <About />
         <WorkGrid />
         <Experience />
+        <CommitStreak />
         <Writing />
         <Contact />
       </main>

@@ -19,6 +19,48 @@ const socialIcons: Record<string, ComponentType<{ className?: string }>> = {
   Medium: MediumIcon,
 };
 
+/** New York time, ticking. Rendered as dashes on the server so the
+ *  first paint never disagrees with hydration. */
+function useClock() {
+  const [now, setNow] = useState<string | null>(null);
+  useEffect(() => {
+    const fmt = new Intl.DateTimeFormat("en-US", {
+      timeZone: "America/New_York",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: false,
+    });
+    const tick = () => setNow(fmt.format(new Date()));
+    tick();
+    const id = window.setInterval(tick, 1000);
+    return () => window.clearInterval(id);
+  }, []);
+  return now;
+}
+
+/** The black line above the nav: a path-style label and a live clock,
+ *  the way Universe runs its countdown. */
+function StatusStrip() {
+  const now = useClock();
+  const [h, m, s] = (now ?? "--:--:--").split(":");
+  return (
+    <div className="h-8 bg-[#0d1117] font-mono text-[0.78rem] text-[#e6edf3]">
+      <div className="shell flex h-full items-center justify-between gap-4 lg:px-6">
+        <span className="truncate">{profile.handle}/now-building</span>
+        <span className="shrink-0 tabular-nums" aria-label="Local time in New York">
+          <span className="mr-3 hidden text-[#7d8590] sm:inline">nyc</span>
+          <span className="text-[#5fed83]">{h}</span>
+          <span className="text-[#7d8590]"> : </span>
+          <span className="text-[#5fed83]">{m}</span>
+          <span className="text-[#7d8590]"> : </span>
+          <span className="text-[#5fed83]">{s}</span>
+        </span>
+      </div>
+    </div>
+  );
+}
+
 /**
  * The header is itself a row of the module grid: each group sits in its
  * own cell with a hairline between, and the bar carries a single bottom
@@ -44,6 +86,7 @@ export default function Nav() {
   return (
     <>
       <header className="fixed inset-x-0 top-0 z-50 border-b border-line-strong bg-paper/90 backdrop-blur-md">
+        <StatusStrip />
         <div className="shell">
           <nav className="flex h-16 items-stretch lg:h-[4.5rem]">
             <a
@@ -136,7 +179,7 @@ export default function Nav() {
         data-open={menuOpen}
         inert={!menuOpen}
       >
-        <div className="flex h-full flex-col justify-between px-5 pb-10 pt-24">
+        <div className="flex h-full flex-col justify-between px-5 pb-10 pt-32">
           <nav className="flex flex-col border-t border-line-strong">
             {navLinks.map((l, i) => (
               <a

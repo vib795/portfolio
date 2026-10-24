@@ -13,7 +13,7 @@ export default function About() {
       <div className="shell">
         <div className="rule-b grid lg:grid-cols-4">
           <div className="border-line-strong p-6 lg:border-r">
-            <p className="label">/ About</p>
+            <p className="fn-tag">utkarsh.about()</p>
           </div>
           <div className="p-6 lg:col-span-3">
             <h2 className="max-w-[20ch] text-3xl leading-tight tracking-tight lg:text-4xl">
@@ -35,7 +35,7 @@ export default function About() {
 
           <div className="bg-paper lg:col-span-2">
             <p className="label rule-b p-6">
-              <Scramble text="/ Toolkit" />
+              <Scramble text="toolkit/" />
             </p>
             <dl>
               {about.stack.map((g, i) => (
