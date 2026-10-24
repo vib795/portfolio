@@ -63,7 +63,7 @@ export default function Hero() {
             </h1>
           </div>
 
-          <div className="flex flex-col bg-paper" data-trail-ignore>
+          <div className="flex flex-col bg-paper">
             <p className="p-6 text-xl leading-snug text-ink-soft lg:text-2xl">
               {profile.intro}
             </p>
@@ -93,10 +93,7 @@ export default function Hero() {
             move your cursor here ↘
           </p>
           <div className="flex items-end p-4 lg:p-6">
-            <article
-              className="w-full border border-line-strong bg-surface"
-              data-trail-ignore
-            >
+            <article className="w-full border border-line-strong bg-surface">
               <div className="flex border-b border-line-strong font-mono text-xs">
                 <span className="bg-accent px-3 py-2 text-accent-ink">new</span>
                 <span className="border-r border-line-strong px-3 py-2">
