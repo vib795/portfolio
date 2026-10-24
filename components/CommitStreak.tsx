@@ -247,7 +247,7 @@ export default function CommitStreak() {
   const pad = (n: number, w = 3) => String(n).padStart(w, "0");
 
   return (
-    <section id="play" className="relative z-10" data-trail>
+    <section id="play" className="relative z-10">
       <div className="shell">
         <div className="rule-b grid lg:grid-cols-4">
           <div className="border-line-strong p-6 lg:border-r">

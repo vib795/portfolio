@@ -17,7 +17,7 @@ const CLUSTER = [
 
 export default function Hero() {
   return (
-    <section id="top" className="relative z-10 pt-24 lg:pt-[6.5rem]" data-trail>
+    <section id="top" className="relative z-10 pt-24 lg:pt-[6.5rem]">
       <div className="shell">
         <div className="rule-b relative py-7 lg:py-9">
           <HeroWordmark

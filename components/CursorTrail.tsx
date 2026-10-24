@@ -12,15 +12,20 @@ const MAX_FILL = 8;
 const TONES = ["--px-1", "--px-2", "--px-3", "--px-4", "--px-5"];
 
 /** Elements the trail stays off. Squares over a button or a field make
- *  them harder to read and to hit. */
+ *  them harder to read and to hit, and the header sits above the trail. */
 const IGNORE =
-  "a, button, input, textarea, select, label, [data-trail-ignore]";
+  "button, input, textarea, select, label, header, [data-trail-ignore]";
+
+/** A link shorter than this is a control (a nav item, an inline link) and
+ *  keeps the trail off it. Taller ones are whole rows or cards, like a
+ *  blog post entry, where squares crossing them get in nobody's way. */
+const SMALL_LINK_PX = 64;
 
 /**
- * Stamps coloured squares onto a 16px grid behind the pointer, inside any
- * element marked `data-trail`. The pool is rendered once; moving the
- * pointer only rewrites a transform and restarts a CSS animation, so
- * nothing re-renders.
+ * Stamps coloured squares onto a 16px grid behind the pointer, anywhere on
+ * the page except over the controls in IGNORE. The pool is rendered once;
+ * moving the pointer only rewrites a transform and restarts a CSS
+ * animation, so nothing re-renders.
  *
  * Off on touch screens (there is no hover to follow) and under reduced
  * motion.
@@ -52,7 +57,12 @@ export default function CursorTrail() {
 
     const onMove = (e: PointerEvent) => {
       const target = e.target as Element | null;
-      if (!target?.closest("[data-trail]") || target.closest(IGNORE)) {
+      const link = target?.closest("a");
+      if (
+        !target ||
+        target.closest(IGNORE) ||
+        (link && link.getBoundingClientRect().height < SMALL_LINK_PX)
+      ) {
         lastCol = lastRow = null;
         return;
       }

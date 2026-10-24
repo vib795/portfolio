@@ -842,12 +842,13 @@ button:focus-visible .link-line {
    Reserving the inline size stops the cycling glyphs from reflowing
    the line as they change width.
    ════════════════════════════════════════════════════════════════ */
-/* Inline, not inline-block. An inline-block is a shrink-to-fit box, and
-   a grid item's `min-width: auto` floors at its min-content width — so a
-   heading that never offers a break opportunity forces its whole track
-   wider than the viewport. Inline boxes wrap like the text they are. */
+/* The scrambling layer exists only while a heading animates and is laid
+   over the real text out of flow, so it can hold one line: wrapping it
+   would let its wider per-letter glyphs break the heading somewhere the
+   real text doesn't. Headings that genuinely need two lines skip the
+   animation (see components/Scramble.tsx). */
 .scramble {
-  white-space: pre-wrap;
+  white-space: nowrap;
 }
 
 /* ── Character flicker ────────────────────────────────────────────
