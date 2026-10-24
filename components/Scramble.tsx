@@ -88,10 +88,20 @@ export default function Scramble({ text, className, delay = 0 }: Props) {
   }, [text, delay]);
 
   return (
-    <span ref={ref} className={className}>
+    <span
+      ref={ref}
+      className={`relative inline-block max-w-full align-top ${className ?? ""}`}
+    >
+      {/* The real string, invisible, owns the box — width and line
+          breaks. The scrambling copy is drawn over it at the same width,
+          so proportional glyphs cycling through can never re-wrap the
+          heading or change the height of the cell it sits in. */}
+      <span aria-hidden="true" className="scramble invisible">
+        {text}
+      </span>
       <span
         aria-hidden="true"
-        className="scramble"
+        className="scramble absolute inset-0"
         data-run={running ? "1" : undefined}
       >
         {display.split("").map((ch, i) =>
