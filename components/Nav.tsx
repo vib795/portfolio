@@ -140,7 +140,7 @@ export default function Nav() {
               <ThemeToggle />
               <a
                 href="/#contact"
-                className="notch-sm hidden bg-accent px-5 py-3 text-[0.7rem] uppercase tracking-[0.14em] text-accent-ink transition-colors hover:bg-accent-deep sm:inline-block sm:px-7"
+                className="notch-sm hidden whitespace-nowrap bg-accent px-5 py-3 text-[0.7rem] uppercase tracking-[0.14em] text-accent-ink transition-colors hover:bg-accent-deep sm:inline-block sm:px-6"
               >
                 <ScrambleLink text="Get in touch" />
               </a>

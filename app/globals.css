@@ -1359,13 +1359,14 @@ button:focus-visible .link-line {
 .px-cover > span {
   background: var(--c);
 }
-@keyframes px-out {
-  to {
-    opacity: 0;
-  }
-}
+/* The cleared state is the declared value, not an animation's fill: a
+   0.01s keyframe fill left some blocks stuck at full opacity in
+   Chromium. Only *when* each block switches off is timed — a 0s
+   transition held by its own delay — so the worst case is the blocks
+   vanishing at once, never staying. */
 [data-px="go"] > .px-cover > span {
-  animation: px-out 0.01s steps(1) var(--d, 0s) forwards;
+  opacity: 0;
+  transition: opacity 0s linear var(--d, 0s);
 }
 
 /* ── Commit streak ─────────────────────────────────────────────────*/

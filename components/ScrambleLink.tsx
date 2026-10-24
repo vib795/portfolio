@@ -79,11 +79,18 @@ export default function ScrambleLink({ text, className }: Props) {
   }, [text]);
 
   return (
-    <span ref={ref} className={className}>
-      {/* Monospace throughout, and the scramble preserves length, so the
-          swapped glyphs occupy exactly the width the real ones did. No
-          measuring, and nothing around it can shift. */}
-      <span aria-hidden="true" className="scramble">
+    <span
+      ref={ref}
+      className={`relative inline-block whitespace-nowrap ${className ?? ""}`}
+    >
+      {/* The real string, invisible, owns the box. The scrambling copy is
+          laid over it out of flow, so glyphs of a different width (Mona
+          Sans is proportional) can never resize the button or nav item
+          around it. */}
+      <span aria-hidden="true" className="invisible">
+        {text}
+      </span>
+      <span aria-hidden="true" className="absolute left-0 top-0 whitespace-pre">
         {display}
       </span>
       <span className="sr-only">{text}</span>
