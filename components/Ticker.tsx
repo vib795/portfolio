@@ -10,7 +10,9 @@ export default function Ticker() {
   const items = [profile.availability.toLowerCase(), ...marquee.map((m) => m.toLowerCase())];
   return (
     <div className="rule-b overflow-hidden" aria-label="Core stack">
-      <div className="marquee-track [animation-duration:44s]">
+      {/* Inline, not a utility: the unlayered .marquee-track shorthand in
+          globals.css outranks Tailwind's layered utilities. */}
+      <div className="marquee-track" style={{ animationDuration: "44s" }}>
         {[0, 1].map((run) => (
           <div key={run} className="flex" aria-hidden={run === 1}>
             {items.map((item, i) => {
