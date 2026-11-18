@@ -399,95 +399,177 @@ export const projects: Project[] = [
   },
 ];
 
-export type Role = {
+/* Mirrors the resume's layout: an employer, the titles held there, and
+   (at EY) the client roles under each title. Bullets keep the resume's
+   bold lead-in as `lead`. */
+export type Bullet = { lead: string; text: string };
+
+export type ClientRole = {
   role: string;
-  company: string;
-  client?: string; // consulting engagement — omitted for direct employment
+  client: string;
   period: string;
-  summary: string;
-  points: string[];
+  points: Bullet[];
 };
 
-export const experience: Role[] = [
+export type Position = {
+  title: string;
+  period?: string;
+  /** Consulting titles carry client roles; other titles carry bullets. */
+  clientRoles?: ClientRole[];
+  points?: Bullet[];
+};
+
+export type Employer = {
+  company: string;
+  meta: string;
+  period?: string;
+  positions: Position[];
+};
+
+export const experience: Employer[] = [
   {
-    role: "Software Engineering Manager, AI & Platform",
     company: "EY",
-    client: "Financial-services client",
-    period: "Aug 2025 — Present",
-    summary:
-      "Manager, Technology Consulting at EY since Aug 2024. Building the retrieval platform behind engineering audits, the agents that automate application onboarding, and the Copilot tooling a 300+ person vertical runs on.",
-    points: [
-      "Built Code-Analyzer (proof of concept), a code-intelligence platform that makes large, unfamiliar codebases auditable on a consulting timeline. It treats retrieval over code as its own problem: tree-sitter and SCIP parsing chunk on AST boundaries rather than token windows, behind a per-client chunking registry with structural isolation between clients.",
-      "Architected a tri-store retrieval backbone: Qdrant for dense semantic search, Neo4j for call graphs, imports, and symbol references, and OpenSearch BM25 for the rare identifier tokens embeddings handle worst. Results are fused with Reciprocal Rank Fusion and cross-encoder reranking, and LLM synthesis is routed through LiteLLM so models swap across OpenAI, Claude, Gemini, and open-source providers without touching the pipeline.",
-      "Built the evaluation harness that gates promotion: 30 hand-curated questions across 15 public repositories, scored on keyword recall, file-pattern hit rate, cross-module recall, and citation rate against a versioned baseline. Hybrid retrieval holds 73% keyword recall at 516 ms, with every answer citing its sources.",
-      "Cut application onboarding from a sprint's worth of work to hours with the TerraCore Onboarding Agent: a GitHub Copilot reusable prompt whose Python-backed skills raise each request through the owning teams' APIs in a fixed order, with calls that are safe to repeat and a stop for a person wherever credentials are involved. Shared across teams through MCP.",
-      "Brought Copilot tooling to the client's 300+ person FI vertical: the onboarding agent, Jira and Confluence skills that let BSAs create stories in bulk, and report-generation automation for QA.",
-      "Enabled 200+ EY developers on GitHub Copilot through shared instructions, custom agents and skills, multi-model routing, hands-on labs, and office hours.",
+    meta: "Technology Consulting · Austin, TX",
+    period: "Mar 2021 – Present",
+    positions: [
+      {
+        title: "Manager, Technology Consulting",
+        period: "Aug 2024 – Present",
+        clientRoles: [
+          {
+            role: "Software Engineering Manager, AI & Platform",
+            client: "Financial-services client",
+            period: "Aug 2025 – Present",
+            points: [
+              {
+                lead: "Code-Analyzer (proof of concept)",
+                text: "Built Code-Analyzer, a code-intelligence platform inspired by a software audit, that makes large unfamiliar codebases auditable on a consulting timeline, where the code is long-lived and described more accurately by its source than its documentation. Treats retrieval over code as a distinct problem from retrieval over prose: tree-sitter and SCIP parsing chunk on AST boundaries rather than token windows, behind a per-client tunable chunking registry with structural isolation between clients.",
+              },
+              {
+                lead: "Tri-store hybrid retrieval",
+                text: "Architected a tri-store backbone because no single index answers code questions well: Qdrant for dense semantic search, Neo4j for call graphs, imports, and symbol references, and OpenSearch BM25 for the rare identifier tokens embeddings handle worst. Fused the three with Reciprocal Rank Fusion and cross-encoder reranking, with tool-calling LLM synthesis routed through LiteLLM so models swap across OpenAI, Anthropic Claude, Gemini, and open-source providers without touching the pipeline.",
+              },
+              {
+                lead: "Eval harness",
+                text: "Built the evaluation harness that gates promotion, with metrics written for code rather than borrowed from prose QA: 30 hand-curated questions across 15 public repositories scored on keyword recall, file-pattern hit rate, cross-module recall, and citation rate against a versioned baseline, so every retrieval, chunking, and model change is measured before it ships. Hybrid retrieval holds 73% keyword recall at 516 ms, with every answer citing its sources in a 15-question synthesis run.",
+              },
+              {
+                lead: "Agentic onboarding",
+                text: "Cut application onboarding from a sprint's worth of work to hours by designing TerraCore Onboarding Agent, a GitHub Copilot reusable prompt whose Python-backed skills raise each request through the owning teams' APIs in a fixed order of operations, with calls that are safe to repeat and a stop for a person wherever credentials are involved; shared across teams through MCP.",
+              },
+              {
+                lead: "Client-wide Copilot tooling",
+                text: "Brought Copilot tooling to the client's 300+ person FI vertical by shipping the onboarding agent, Jira and Confluence skills that let BSAs create stories in bulk, and report-generation automation for QA.",
+              },
+              {
+                lead: "AI enablement",
+                text: "Enabled 200+ EY developers on GitHub Copilot through shared instructions, custom agents and skills, multi-model routing (reasoning models for architecture, Claude for security review, long-context models for large codebases), hands-on labs, and office hours.",
+              },
+            ],
+          },
+          {
+            role: "Lead Engineer",
+            client: "Fidelity Investments",
+            period: "Jan 2023 – Aug 2025",
+            points: [
+              {
+                lead: "Mainframe retirement analysis",
+                text: "Cut mainframe retirement-impact analysis for Fidelity's PI business from months to minutes across thousands of modules (COBOL, JCL, PL/I, CICS, IMS, DLI) by leading design and delivery of a cloud-native Mainframe Analysis Tool in Go that maps dependencies as a PostgreSQL graph, replacing analysts' manual lookups; later added Gemini to explain modules.",
+              },
+              {
+                lead: "Institutional SMA platform",
+                text: "Launched Fidelity Institutional's Custom Separately Managed Accounts platform with 200–500 high-value institutional accounts (~$1B AUM) by leading design and development of event-driven microservices for advisor-driven onboarding, portfolio updates, compliance holds, terminations, and rebalancing.",
+              },
+              {
+                lead: "Event-driven workflows",
+                text: "Hardened trade allocations, securities servicing, and cash movements against malformed payloads by architecting AWS Lambda workflows on EventBridge pub/sub and SQS background processing, provisioned with Terraform and guarded by JSON schema validation and standardized git hooks.",
+              },
+            ],
+          },
+        ],
+      },
+      {
+        title: "Senior, Technology Consulting",
+        period: "Mar 2021 – Aug 2024",
+        clientRoles: [
+          {
+            role: "Senior Software Engineer",
+            client: "Fidelity Investments",
+            period: "Oct 2021 – Jan 2023",
+            points: [
+              {
+                lead: "Retail investing platform",
+                text: "Let consumers auto-invest from external bank accounts into mutual funds, ETFs, and equities on weekly, bi-weekly, and monthly schedules by modernizing Fidelity's high-traffic retail investing platform across the Periodic Investment Plan, baskets, and the 52-Week Challenge.",
+              },
+              {
+                lead: "Workflow orchestration",
+                text: "Made high-volume periodic cash transfers, securities purchases, and fund allocations observable end to end by building multi-step orchestration on AWS Step Functions, with Terraform, CI/CD, and Datadog logging, tracing, metrics, and alerting.",
+              },
+            ],
+          },
+          {
+            role: "Full Stack Developer",
+            client: "Capital Group",
+            period: "Mar 2021 – Sep 2021",
+            points: [
+              {
+                lead: "Securities master",
+                text: "Became Capital Group's source of truth for adding and removing securities and ticker symbols across enterprise platforms by building a securities management platform from scratch, migrating SharePoint to PostgreSQL, containerizing services, and shipping CI/CD across AWS DEV/QA/PROD.",
+              },
+            ],
+          },
+        ],
+      },
     ],
   },
   {
-    role: "Lead Engineer",
-    company: "EY",
-    client: "Fidelity Investments",
-    period: "Jan 2023 — Aug 2025",
-    summary:
-      "Led event-driven platforms and mainframe modernization for Fidelity.",
-    points: [
-      "Cut mainframe retirement-impact analysis for Fidelity's PI business from months to minutes across thousands of modules (COBOL, JCL, PL/I, CICS, IMS, DLI) by leading a cloud-native Mainframe Analysis Tool in Go that maps dependencies as a PostgreSQL graph; later added Gemini to explain modules.",
-      "Launched Fidelity Institutional's Custom Separately Managed Accounts platform with 200–500 high-value institutional accounts (~$1B AUM), leading event-driven microservices for advisor-driven onboarding, portfolio updates, compliance holds, terminations, and rebalancing.",
-      "Hardened trade allocations, securities servicing, and cash movements against malformed payloads with AWS Lambda workflows on EventBridge and SQS, provisioned with Terraform and guarded by JSON schema validation and standardized git hooks.",
-    ],
-  },
-  {
-    role: "Senior Software Engineer",
-    company: "EY",
-    client: "Fidelity Investments",
-    period: "Oct 2021 — Jan 2023",
-    summary: "Modernized Fidelity's high-traffic retail investing platform.",
-    points: [
-      "Let consumers auto-invest from external bank accounts into mutual funds, ETFs, and equities on weekly, bi-weekly, and monthly schedules by modernizing the platform across the Periodic Investment Plan, baskets, and the 52-Week Challenge.",
-      "Made high-volume periodic cash transfers, securities purchases, and fund allocations observable end to end with multi-step orchestration on AWS Step Functions, Terraform, CI/CD, and Datadog logging, tracing, metrics, and alerting.",
-    ],
-  },
-  {
-    role: "Full-Stack Developer",
-    company: "EY",
-    client: "Capital Group",
-    period: "Mar 2021 — Sep 2021",
-    summary: "Built a securities-management platform from scratch.",
-    points: [
-      "Built the platform that became Capital Group's source of truth for adding and removing securities and ticker symbols across enterprise platforms.",
-      "Migrated SharePoint to PostgreSQL, containerized services, and shipped CI/CD across AWS dev, QA, and production.",
-    ],
-  },
-  {
-    role: "Cloud DevOps Engineer",
     company: "Healthcare Triangle Inc.",
-    period: "Nov 2020 — Mar 2021",
-    summary: "Planned compliant AWS migrations for regulated health data.",
-    points: [
-      "Designed migration strategies with client stakeholders to move enterprise healthcare workloads onto AWS managed services in compliance with health-data regulations.",
+    meta: "Austin, TX",
+    positions: [
+      {
+        title: "Cloud DevOps Engineer",
+        period: "Nov 2020 – Mar 2021",
+        points: [
+          {
+            lead: "Regulated cloud migration",
+            text: "Planned compliant moves of enterprise healthcare workloads to AWS managed services for regulated health data by designing migration strategies with client stakeholders.",
+          },
+        ],
+      },
+      {
+        title: "Information Technology Intern",
+        period: "Jun 2020 – Aug 2020",
+        points: [
+          {
+            lead: "AWS migrations",
+            text: "Supported client workload and application migrations to AWS.",
+          },
+        ],
+      },
     ],
   },
   {
-    role: "Information Technology Intern",
-    company: "Healthcare Triangle Inc.",
-    period: "Jun 2020 — Aug 2020",
-    summary: "Supported client workload and application migrations to AWS.",
-    points: [
-      "Supported client workload and application migrations to AWS.",
-    ],
-  },
-  {
-    role: "Software Engineer",
-    company: "HCL Technologies",
-    period: "Jun 2014 — Nov 2018",
-    summary:
-      "Kept a regulated financial exchange's banking and insurance systems running, in India and Mexico.",
-    points: [
-      "Kept a Texas Department of Insurance-regulated financial exchange's banking and insurance applications running through 24x7 operations, owning critical production incidents and batch processing.",
-      "Saved $35,000 a year in manual effort and cut incident response time by automating incident handling and alerting in Python and Shell, feeding an Angular monitoring dashboard; built reconciliation jobs to keep member-data utilities accurate.",
-      "Achieved the organization's lowest 'pain minutes per team' incident metric leading offshore teams in Manila and Chennai across COBOL, PL/I, JCL, Java, Python, and Datastage, including IMS to UDB migration pipelines.",
+    company: "HCL Technologies Ltd.",
+    meta: "India & Mexico",
+    period: "Jun 2014 – Nov 2018",
+    positions: [
+      {
+        title: "Software Engineer",
+        points: [
+          {
+            lead: "Production ownership",
+            text: "Kept a Texas Department of Insurance-regulated financial exchange's banking and insurance applications running through 24x7 operations by owning critical production incidents and batch processing.",
+          },
+          {
+            lead: "Incident automation",
+            text: "Saved $35,000 a year in manual effort and cut incident response time by automating incident handling and alerting in Python and Shell, feeding an Angular monitoring dashboard; built reconciliation jobs to keep member-data utilities accurate.",
+          },
+          {
+            lead: "Team leadership",
+            text: "Achieved the organization's lowest “pain minutes per team” incident metric by leading offshore teams in Manila and Chennai across COBOL, PL/I, JCL, Java, Python, and Datastage, including IMS to UDB migration pipelines.",
+          },
+        ],
+      },
     ],
   },
 ];
