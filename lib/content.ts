@@ -63,47 +63,57 @@ export const marquee = [
 export const about = {
   heading: { lead: "A decade+ of backend.", tail: "Now building agents." },
   paragraphs: [
-    "I'm an AI engineer with a decade+ building production backend systems in financial services — trading, money movement, and securities management — including four years embedded at Fidelity Investments as an EY consultant, delivering event-driven microservices and high-traffic investment platforms.",
-    "Now I design and ship GenAI and agentic systems end to end: tool-calling agents, multi-step orchestration, and RAG with hybrid retrieval across dense, BM25, and graph signals. I build the evaluation harness that gates promotion — golden datasets, versioned baselines, regression gates — so every retrieval and model change is measured before it ships. I've also enabled 200+ EY developers on GitHub Copilot and brought Copilot tooling to a 300+ person client vertical.",
+    "I'm an AI engineer with a decade+ building production systems in financial services, four of those years embedded at Fidelity Investments as an EY consultant: event-driven microservices, an institutional managed-accounts platform holding ~$1B in assets, and a high-traffic retail investing platform.",
+    "Now I build GenAI and agentic systems end to end: an agentic onboarding system that took application provisioning from a sprint's worth of work to hours, GitHub Copilot enablement for 200+ developers, Copilot skills adopted across a 300+ person client vertical, and Code-Analyzer, a code-intelligence platform for auditing large codebases.",
+    "I own the whole path, from RAG architecture and the eval harness that gates every change, through Python services and AWS event-driven infrastructure, to the CI that ships it.",
   ],
   stack: [
-    { label: "Languages", items: ["Python", "TypeScript", "Go", "Java", "SQL"] },
+    { label: "Languages", items: ["Python", "Go", "Java", "TypeScript", "SQL"] },
     {
       label: "GenAI & Agents",
       items: [
         "RAG",
         "Hybrid retrieval",
-        "LangGraph",
-        "CrewAI",
+        "Reranking",
+        "Tool-calling agents",
         "MCP",
+        "GitHub Copilot",
+        "LangGraph",
         "LiteLLM",
-        "OpenAI SDK",
+        "Pydantic",
       ],
     },
     {
       label: "Evaluation",
       items: [
         "Golden datasets",
+        "Retrieval metrics",
         "Regression gates",
         "Guardrails",
+        "Human-in-the-loop",
         "PII-aware handling",
       ],
     },
     {
       label: "Backend",
-      items: ["FastAPI", "asyncio", "Kafka", "SSE streaming", "Microservices"],
+      items: ["FastAPI", "asyncio", "Spring Boot", "Microservices", "SSE streaming"],
     },
     {
       label: "Infra & Data",
       items: [
         "AWS",
-        "Kubernetes",
         "Terraform",
+        "Kubernetes",
+        "Kafka",
         "PostgreSQL",
         "Qdrant",
         "Neo4j",
         "OpenSearch",
       ],
+    },
+    {
+      label: "Delivery",
+      items: ["GitHub Actions", "Datadog", "Splunk", "Sigstore provenance"],
     },
   ],
 };
