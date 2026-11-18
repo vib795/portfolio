@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getAllPosts } from "@/lib/blog";
+import { book } from "@/lib/content";
 import PostRow from "./PostRow";
 import Scramble from "./Scramble";
 import ScrambleLink from "./ScrambleLink";
@@ -30,6 +31,19 @@ export default function Writing() {
             <p className="mt-2 text-5xl tracking-tight tabular-nums">
               {String(posts.length).padStart(2, "0")}
             </p>
+          </div>
+        </div>
+
+        <div className="rule-b grid bg-paper lg:grid-cols-4">
+          <div className="border-line-strong p-6 lg:border-r">
+            <p className="label">/ Book · in progress</p>
+          </div>
+          <div className="p-6 lg:col-span-3">
+            <p className="text-2xl tracking-tight lg:text-3xl">
+              <cite className="not-italic">{book.title}</cite>
+            </p>
+            <p className="mt-1 text-ink-soft">{book.subtitle}</p>
+            <p className="mt-3 text-sm text-ink-faint">{book.status}</p>
           </div>
         </div>
 

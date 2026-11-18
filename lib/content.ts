@@ -154,7 +154,7 @@ export const projects: Project[] = [
     facet: "AI Systems",
     stats: [
       { value: "0", label: "Runtime deps" },
-      { value: "93", label: "Tests" },
+      { value: "113", label: "Tests" },
       { value: "12", label: "CI jobs" },
       { value: "Sigstore", label: "Provenance" },
     ],
@@ -166,17 +166,17 @@ export const projects: Project[] = [
   {
     name: "Code Analyzer",
     year: "2025",
-    category: "RAG Platform",
+    category: "RAG Platform · PoC",
     featured: true,
     facet: "AI Systems",
     stats: [
-      { value: "600+", label: "Repositories" },
       { value: "73%", label: "Keyword recall" },
       { value: "516ms", label: "Latency" },
+      { value: "15", label: "Repos in eval" },
       { value: "3", label: "Retrieval stores" },
     ],
     blurb:
-      "A code-intelligence platform that ingests and queries large multi-repository codebases — 600+ repos at its first engagement — to power software-engineering audits. A tri-store backbone pairs Qdrant for dense semantic search, Neo4j for call graphs and symbol references, and OpenSearch for BM25 exact-match on the rare identifier tokens embeddings handle worst, fused with Reciprocal Rank Fusion and cross-encoder reranking.",
+      "A proof-of-concept code-intelligence platform, inspired by a software audit, that makes large unfamiliar codebases auditable on a consulting timeline. Tree-sitter and SCIP parsing chunk on AST boundaries; a tri-store backbone pairs Qdrant for dense semantic search, Neo4j for call graphs and symbol references, and OpenSearch BM25 for the rare identifier tokens embeddings handle worst, fused with Reciprocal Rank Fusion and cross-encoder reranking. An eval harness of 30 hand-curated questions across 15 public repositories gates every retrieval, chunking, and model change.",
     stack: ["Python", "Qdrant", "Neo4j", "OpenSearch", "LiteLLM"],
   },
   {
@@ -308,6 +308,22 @@ export const projects: Project[] = [
     link: "https://pypi.org/project/always-decimal/",
   },
   {
+    name: "Salt (SaltStack)",
+    year: "2026",
+    category: "Upstream Contribution",
+    facet: "Open Source",
+    stats: [
+      { value: "10×", label: "Inflation fixed" },
+      { value: "K–Y", label: "SI units corrected" },
+      { value: "Merged", label: "Upstream" },
+      { value: "pytest", label: "Parametrized tests" },
+    ],
+    blurb:
+      "A merged upstream fix to Salt: AIX disk.iostat readings were inflated 10× (1.0K parsed as 10,000). Fixed every SI-unit multiplier, K through Y, in the disk module's shared number parser (10E3 → 1E3), with parametrized unit tests added after maintainer review.",
+    stack: ["Python", "Salt", "pytest"],
+    link: "https://github.com/saltstack/salt/pull/65543",
+  },
+  {
     name: "Everyday Developer Tools",
     year: "2024",
     category: "Web App",
@@ -345,13 +361,13 @@ export const projects: Project[] = [
     category: "Dev Tooling",
     facet: "Open Source",
     stats: [
-      { value: "5", label: "Primitives" },
-      { value: "1", label: "Scaffold script" },
-      { value: "Interactive", label: "Visualisation" },
-      { value: "Polyglot", label: "Multi-model" },
+      { value: "84", label: "Skills" },
+      { value: "59", label: "Agent files" },
+      { value: "8", label: "CI governance checks" },
+      { value: "Plugin", label: "Agent packaging" },
     ],
     blurb:
-      "A reference implementation for configuring GitHub Copilot across a multi-model, polyglot team — every customisation primitive (instructions, prompts, skills, agents, chat modes) plus governance tooling. One script scaffolds the full .github/ structure into any repo, and an interactive browser visualisation maps how the pieces fit together.",
+      "An open-source reference for governed GitHub Copilot at team scale, covering every customisation primitive in one place: 84 skills, 59 agent files, path-scoped instructions, hooks, MCP configuration, and Agent Plugin packaging. Eight CI governance checks keep it honest, and a model-compatibility file tracks model retirements. Copilot How To is the companion 16-module tutorial.",
     stack: ["Shell", "GitHub Copilot", "HTML"],
     link: "https://vib795.github.io/copilot-anatomy/",
   },
@@ -489,6 +505,13 @@ export const certifications = [
   "Databricks Accredited Generative AI Fundamentals",
   "Developing Serverless Solutions on AWS",
 ];
+
+export const book = {
+  title: "The Permission Stack",
+  subtitle: "Engineering Production AI Inside Regulated Enterprises",
+  status:
+    "A complete 300-page, 12-chapter draft. Publisher proposals are underway.",
+};
 
 export const contact = {
   heading: { lead: "Let's build", tail: "something good." },
