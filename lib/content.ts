@@ -64,7 +64,7 @@ export const about = {
   heading: { lead: "A decade+ of backend.", tail: "Now building agents." },
   paragraphs: [
     "I'm an AI engineer with a decade+ building production backend systems in financial services — trading, money movement, and securities management — including four years embedded at Fidelity Investments as an EY consultant, delivering event-driven microservices and high-traffic investment platforms.",
-    "Now I design and ship GenAI and agentic systems end to end: tool-calling agents, multi-step orchestration, and RAG with hybrid retrieval across dense, BM25, and graph signals. I build the evaluation harness that gates promotion — golden datasets, versioned baselines, regression gates — so every retrieval and model change is measured before it ships. I also lead AI enablement for 200+ engineers across the institutional vertical.",
+    "Now I design and ship GenAI and agentic systems end to end: tool-calling agents, multi-step orchestration, and RAG with hybrid retrieval across dense, BM25, and graph signals. I build the evaluation harness that gates promotion — golden datasets, versioned baselines, regression gates — so every retrieval and model change is measured before it ships. I've also enabled 200+ EY developers on GitHub Copilot and brought Copilot tooling to a 300+ person client vertical.",
   ],
   stack: [
     { label: "Languages", items: ["Python", "TypeScript", "Go", "Java", "SQL"] },
@@ -172,7 +172,7 @@ export const projects: Project[] = [
     stats: [
       { value: "600+", label: "Repositories" },
       { value: "73%", label: "Keyword recall" },
-      { value: "520ms", label: "p95 latency" },
+      { value: "516ms", label: "Latency" },
       { value: "3", label: "Retrieval stores" },
     ],
     blurb:
@@ -384,17 +384,19 @@ export type Role = {
 
 export const experience: Role[] = [
   {
-    role: "Lead Engineer, AI & Platform",
+    role: "Software Engineering Manager, AI & Platform",
     company: "EY",
+    client: "Financial-services client",
     period: "Aug 2025 — Present",
     summary:
-      "Building the retrieval platform behind engineering audits, and the agents that automate enterprise onboarding.",
+      "Manager, Technology Consulting at EY since Aug 2024. Building the retrieval platform behind engineering audits, the agents that automate application onboarding, and the Copilot tooling a 300+ person vertical runs on.",
     points: [
-      "Built Code-Analyzer, a code-intelligence platform that makes large commercial financial-services codebases auditable on a consulting timeline, treating retrieval over code as a problem distinct from retrieval over prose.",
-      "Built the evaluation harness that gates promotion — 30 hand-curated Q&A pairs across 15 indexed repositories, scored on keyword recall, file-pattern hit rate, cross-module recall, and citation rate against a versioned baseline. Hybrid retrieval holds 73% keyword recall at 520 ms, with 100% of answers citing sources.",
-      "Designed the TerraCore Onboarding Agent — an agentic system driving Terraform, Jenkins, and account-servicing APIs as LLM tools, cutting application onboarding from weeks to hours with resumable, auditable workflow state.",
-      "Shipped the agent as an async FastAPI service with SSE progress streaming, and made destructive infrastructure operations safe to automate through input validation, allow-listed actions, dry-run modes, and human-in-the-loop approval gates.",
-      "Leads AI enablement for 200+ engineers across the institutional vertical, covering agentic frameworks and org-scale GitHub Copilot adoption.",
+      "Built Code-Analyzer (proof of concept), a code-intelligence platform that makes large, unfamiliar codebases auditable on a consulting timeline. It treats retrieval over code as its own problem: tree-sitter and SCIP parsing chunk on AST boundaries rather than token windows, behind a per-client chunking registry with structural isolation between clients.",
+      "Architected a tri-store retrieval backbone: Qdrant for dense semantic search, Neo4j for call graphs, imports, and symbol references, and OpenSearch BM25 for the rare identifier tokens embeddings handle worst. Results are fused with Reciprocal Rank Fusion and cross-encoder reranking, and LLM synthesis is routed through LiteLLM so models swap across OpenAI, Claude, Gemini, and open-source providers without touching the pipeline.",
+      "Built the evaluation harness that gates promotion: 30 hand-curated questions across 15 public repositories, scored on keyword recall, file-pattern hit rate, cross-module recall, and citation rate against a versioned baseline. Hybrid retrieval holds 73% keyword recall at 516 ms, with every answer citing its sources.",
+      "Cut application onboarding from a sprint's worth of work to hours with the TerraCore Onboarding Agent: a GitHub Copilot reusable prompt whose Python-backed skills raise each request through the owning teams' APIs in a fixed order, with calls that are safe to repeat and a stop for a person wherever credentials are involved. Shared across teams through MCP.",
+      "Brought Copilot tooling to the client's 300+ person FI vertical: the onboarding agent, Jira and Confluence skills that let BSAs create stories in bulk, and report-generation automation for QA.",
+      "Enabled 200+ EY developers on GitHub Copilot through shared instructions, custom agents and skills, multi-model routing, hands-on labs, and office hours.",
     ],
   },
   {
@@ -403,11 +405,11 @@ export const experience: Role[] = [
     client: "Fidelity Investments",
     period: "Jan 2023 — Aug 2025",
     summary:
-      "Led event-driven platforms and cloud-native modernization for Fidelity Institutional.",
+      "Led event-driven platforms and mainframe modernization for Fidelity.",
     points: [
-      "Led design and delivery of an event-driven microservices platform for Fidelity Institutional's Custom Separately Managed Accounts, launching with 200–500 high-value institutional accounts representing roughly $1B in assets under management.",
-      "Delivered a cloud-native Mainframe Analysis Tool that automatically maps dependencies across thousands of modules spanning COBOL, JCL, PL/I, CICS, IMS, and DLI — cutting retirement-impact analysis from weeks to minutes and replacing manual lookups for analysts.",
-      "Architected distributed workflows across AWS Lambda, EventBridge, and SQS for trade allocations, securities servicing, and cash movements; provisioned environments with Terraform and hardened data integrity with JSON schema validation and standardized git hooks.",
+      "Cut mainframe retirement-impact analysis for Fidelity's PI business from months to minutes across thousands of modules (COBOL, JCL, PL/I, CICS, IMS, DLI) by leading a cloud-native Mainframe Analysis Tool in Go that maps dependencies as a PostgreSQL graph; later added Gemini to explain modules.",
+      "Launched Fidelity Institutional's Custom Separately Managed Accounts platform with 200–500 high-value institutional accounts (~$1B AUM), leading event-driven microservices for advisor-driven onboarding, portfolio updates, compliance holds, terminations, and rebalancing.",
+      "Hardened trade allocations, securities servicing, and cash movements against malformed payloads with AWS Lambda workflows on EventBridge and SQS, provisioned with Terraform and guarded by JSON schema validation and standardized git hooks.",
     ],
   },
   {
@@ -417,9 +419,8 @@ export const experience: Role[] = [
     period: "Oct 2021 — Jan 2023",
     summary: "Modernized Fidelity's high-traffic retail investing platform.",
     points: [
-      "Modernized Fidelity's retail investing platform across the Periodic Investment Plan, baskets, and the 52-Week Challenge, letting consumers automatically invest from external bank accounts into mutual funds, ETFs, and equities on weekly, bi-weekly, and monthly schedules.",
-      "Built multi-step workflow orchestration on AWS Step Functions for periodic cash transfers, securities purchases, and fund allocations.",
-      "Automated infrastructure with Terraform, added CI/CD, and instrumented Datadog logging, tracing, metrics, and alerting for high-volume investment flows.",
+      "Let consumers auto-invest from external bank accounts into mutual funds, ETFs, and equities on weekly, bi-weekly, and monthly schedules by modernizing the platform across the Periodic Investment Plan, baskets, and the 52-Week Challenge.",
+      "Made high-volume periodic cash transfers, securities purchases, and fund allocations observable end to end with multi-step orchestration on AWS Step Functions, Terraform, CI/CD, and Datadog logging, tracing, metrics, and alerting.",
     ],
   },
   {
@@ -427,32 +428,40 @@ export const experience: Role[] = [
     company: "EY",
     client: "Capital Group",
     period: "Mar 2021 — Sep 2021",
-    summary: "Built a securities-management platform from the ground up.",
+    summary: "Built a securities-management platform from scratch.",
     points: [
-      "Built the source-of-truth platform for adding and removing securities and ticker symbols across enterprise systems.",
+      "Built the platform that became Capital Group's source of truth for adding and removing securities and ticker symbols across enterprise platforms.",
       "Migrated SharePoint to PostgreSQL, containerized services, and shipped CI/CD across AWS dev, QA, and production.",
     ],
   },
   {
-    role: "Cloud Engineer (Intern)",
+    role: "Cloud DevOps Engineer",
     company: "Healthcare Triangle Inc.",
-    period: "May 2020 — Mar 2021",
-    summary:
-      "Designed AWS migration strategies for regulated healthcare workloads.",
+    period: "Nov 2020 — Mar 2021",
+    summary: "Planned compliant AWS migrations for regulated health data.",
     points: [
-      "Partnered with client stakeholders to design AWS migration strategies for enterprise healthcare workloads, enabling secure and scalable adoption of managed services for regulated health data.",
+      "Designed migration strategies with client stakeholders to move enterprise healthcare workloads onto AWS managed services in compliance with health-data regulations.",
+    ],
+  },
+  {
+    role: "Information Technology Intern",
+    company: "Healthcare Triangle Inc.",
+    period: "Jun 2020 — Aug 2020",
+    summary: "Supported client workload and application migrations to AWS.",
+    points: [
+      "Supported client workload and application migrations to AWS.",
     ],
   },
   {
     role: "Software Engineer",
     company: "HCL Technologies",
-    period: "Jul 2014 — Nov 2018",
+    period: "Jun 2014 — Nov 2018",
     summary:
-      "Built resilient banking and insurance systems for a regulated financial exchange.",
+      "Kept a regulated financial exchange's banking and insurance systems running, in India and Mexico.",
     points: [
-      "Built and supported banking and insurance applications for a Texas Department of Insurance-regulated financial exchange, owning critical production incidents and 24x7 batch processing.",
-      "Automated incident handling and alerting with Python and Shell, feeding an Angular monitoring dashboard; built reconciliation jobs to maintain data accuracy across enterprise member-data utilities.",
-      "Led offshore teams in Manila and Chennai and achieved the lowest incident 'pain minutes' metric in the organization; delivered across COBOL, PL/I, JCL, Java, Python, and Datastage, including IMS to UDB migration pipelines.",
+      "Kept a Texas Department of Insurance-regulated financial exchange's banking and insurance applications running through 24x7 operations, owning critical production incidents and batch processing.",
+      "Saved $35,000 a year in manual effort and cut incident response time by automating incident handling and alerting in Python and Shell, feeding an Angular monitoring dashboard; built reconciliation jobs to keep member-data utilities accurate.",
+      "Achieved the organization's lowest 'pain minutes per team' incident metric leading offshore teams in Manila and Chennai across COBOL, PL/I, JCL, Java, Python, and Datastage, including IMS to UDB migration pipelines.",
     ],
   },
 ];
