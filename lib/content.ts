@@ -20,7 +20,7 @@ export const profile = {
   availability: "Open to new opportunities",
   email: "hello@singhcodes.dev",
   intro:
-    "I'm an AI engineer with a decade+ building production systems in financial services — now designing GenAI and agentic systems end to end, from RAG and eval harnesses to the CI that ships them.",
+    "I'm an AI engineer with 11 years building production systems in financial services — now designing GenAI and agentic systems end to end, from RAG and eval harnesses to the CI that ships them.",
 };
 
 
@@ -61,9 +61,9 @@ export const marquee = [
 ];
 
 export const about = {
-  heading: { lead: "A decade+ of backend.", tail: "Now building agents." },
+  heading: { lead: "11 years of backend.", tail: "Now building agents." },
   paragraphs: [
-    "I'm an AI engineer with a decade+ building production systems in financial services, four of those years embedded at Fidelity Investments as an EY consultant: event-driven microservices, an institutional managed-accounts platform holding ~$1B in assets, and a high-traffic retail investing platform.",
+    "I'm an AI engineer with 11 years building production systems in financial services, four of those years embedded at Fidelity Investments as an EY consultant: event-driven microservices, an institutional managed-accounts platform holding ~$1B in assets, and a high-traffic retail investing platform.",
     "Now I build GenAI and agentic systems end to end: an agentic onboarding system that took application provisioning from a sprint's worth of work to hours, GitHub Copilot enablement for 200+ developers, Copilot skills adopted across a 300+ person client vertical, and Code-Analyzer, a code-intelligence platform for auditing large codebases.",
     "I own the whole path, from RAG architecture and the eval harness that gates every change, through Python services and AWS event-driven infrastructure, to the CI that ships it.",
   ],
